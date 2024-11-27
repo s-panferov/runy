@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "runy": "../../../packages/runy-deno/core/index.ts",
+    "runy/": "../../../packages/runy-deno/"
+  }
+}

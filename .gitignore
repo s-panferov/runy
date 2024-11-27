@@ -1,0 +1,8 @@
+/target
+node_modules
+/packages/**/target
+*.sqlite
+.devenv
+dist
+tsdoc-metadata.json
+*.tsbuildinfo

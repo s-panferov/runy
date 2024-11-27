@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "noEmit": false,
+    "allowJs": false
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules", "runy.build.ts"],
+  "references": [{ "path": "../types" }]
+}

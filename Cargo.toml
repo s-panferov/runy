@@ -1,0 +1,11 @@
+[workspace]
+members = ["tests"]
+
+resolver = "2"
+
+[profile.release]
+lto = true
+
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3

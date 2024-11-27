@@ -1,0 +1,22 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "noEmit": false,
+    "rootDir": "..",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "allowJs": false
+  },
+  "include": [
+    "./*.ts",
+    "../runy.build.ts",
+    "../packages/schema/runy.build.ts",
+    "../packages/runtime/runy.build.ts"
+  ],
+  "exclude": ["node_modules"],
+  "references": [
+    { "path": "../packages/schema" },
+    { "path": "../packages/runtime" }
+  ]
+}

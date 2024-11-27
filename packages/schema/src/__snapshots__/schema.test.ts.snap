@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`output access output access 1`] = `
+{
+  "builds": {
+    "qa31oKIVmdcWoHMYDqnFB2uGLAM=": {
+      "ctx": {
+        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
+        "kind": "context",
+      },
+      "spec": {
+        "inout": {},
+        "inp": {
+          "a": [
+            {
+              "$ref": "tbTh7+8NZjPr0Ce2M+wJFFSh3Tk=",
+              "kind": "build",
+              "phase": "out",
+            },
+            {
+              "kind": "output",
+              "name": "data",
+            },
+            {
+              "kind": "output",
+              "name": "a",
+            },
+            {
+              "kind": "output",
+              "name": "b",
+            },
+            {
+              "kind": "output",
+              "name": "c",
+            },
+          ],
+          "b": {
+            "$ref": "tbTh7+8NZjPr0Ce2M+wJFFSh3Tk=",
+            "kind": "build",
+            "phase": "out",
+          },
+        },
+        "key": [],
+        "out": {
+          "data": [
+            {
+              "kind": "data",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "b": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "c": {
+                            "type": "string",
+                          },
+                        },
+                        "required": [
+                          "c",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                    "required": [
+                      "b",
+                    ],
+                    "type": "object",
+                  },
+                },
+                "required": [
+                  "a",
+                ],
+                "type": "object",
+              },
+            },
+          ],
+        },
+        "ready": {},
+      },
+      "target": {
+        "$ref": "nI0iLW0F+gK8frgT+UAtnajoLtc=",
+        "kind": "target",
+      },
+    },
+    "tbTh7+8NZjPr0Ce2M+wJFFSh3Tk=": {
+      "ctx": {
+        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
+        "kind": "context",
+      },
+      "spec": {
+        "inout": {},
+        "inp": {
+          "files": [
+            {
+              "kind": "fileset",
+              "path": [
+                "src/**/*",
+              ],
+            },
+          ],
+        },
+        "key": [],
+        "out": {
+          "data": [
+            {
+              "kind": "data",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "b": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "c": {
+                            "type": "string",
+                          },
+                        },
+                        "required": [
+                          "c",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                    "required": [
+                      "b",
+                    ],
+                    "type": "object",
+                  },
+                },
+                "required": [
+                  "a",
+                ],
+                "type": "object",
+              },
+            },
+          ],
+          "files": [
+            {
+              "kind": "fileset",
+              "path": [
+                "src/**/*",
+              ],
+            },
+          ],
+        },
+        "ready": {},
+      },
+      "target": {
+        "$ref": "S3fceUEJ6nUDlUIJoWOpH+FDdjw=",
+        "kind": "target",
+      },
+    },
+  },
+  "contexts": {
+    "U1wwAaqukwfarhkuFGe2QSaTdXY=": {
+      "flags": {},
+      "parent": undefined,
+    },
+  },
+  "flags": {},
+  "root": {
+    "$ref": "qa31oKIVmdcWoHMYDqnFB2uGLAM=",
+    "kind": "build",
+    "phase": "out",
+  },
+  "targets": {
+    "S3fceUEJ6nUDlUIJoWOpH+FDdjw=": {
+      "buildfile": "schema.test.ts",
+      "default": false,
+      "name": "a",
+    },
+    "nI0iLW0F+gK8frgT+UAtnajoLtc=": {
+      "buildfile": "schema.test.ts",
+      "default": false,
+      "name": "b",
+    },
+  },
+}
+`;

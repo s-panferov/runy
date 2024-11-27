@@ -1,0 +1,17 @@
+{
+  "name": "@runy-build/types",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {},
+  "devDependencies": {},
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

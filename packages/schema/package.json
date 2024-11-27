@@ -1,0 +1,31 @@
+{
+  "name": "@runy-build/schema",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@jest/globals": "^29.7.0",
+    "@runy-build/types": "workspace:*",
+    "@types/object-hash": "3.0.6",
+    "object-hash": "*",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.4"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./runy.build": "./runy.build.ts"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.js.map",
+    "dist/index.d.ts",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

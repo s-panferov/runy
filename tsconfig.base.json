@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "lib",
+    "jsx": "react",
+    "allowJs": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "emitDeclarationOnly": false,
+    "allowImportingTsExtensions": false,
+    "moduleResolution": "Bundler",
+    "typeRoots": [],
+    "types": []
+  }
+}

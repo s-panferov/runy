@@ -1,0 +1,5 @@
+{
+  "deno.enable": false
+  // "deno.importMap": "./runy.json",
+  // "deno.enable": true
+}

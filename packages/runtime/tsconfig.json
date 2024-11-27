@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "noEmit": false,
+    "allowJs": false,
+    "composite": true,
+    "allowImportingTsExtensions": false
+  },
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../schema" }, { "path": "../types" }]
+}

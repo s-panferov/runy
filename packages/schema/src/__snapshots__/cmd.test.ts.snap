@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`output access output access 1`] = `
+{
+  "builds": {
+    "QLcMYBBV1ic9UORKWVZBmP7IgDo=": {
+      "ctx": {
+        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
+        "kind": "context",
+      },
+      "spec": {
+        "command": {
+          "args": [
+            "bash -c "my command --in=",
+            [
+              {
+                "kind": "output",
+                "name": "inp",
+              },
+              {
+                "kind": "output",
+                "name": "files",
+              },
+              {
+                "kind": "output",
+                "name": "root",
+              },
+            ],
+            " --out=",
+            [
+              {
+                "kind": "output",
+                "name": "out",
+              },
+              {
+                "kind": "output",
+                "name": "data",
+              },
+              {
+                "kind": "output",
+                "name": "a",
+              },
+              {
+                "kind": "output",
+                "name": "b",
+              },
+              {
+                "kind": "output",
+                "name": "c",
+              },
+            ],
+            """,
+          ],
+        },
+        "inout": {},
+        "inp": {
+          "files": [
+            {
+              "kind": "fileset",
+              "path": [
+                "src/**/*",
+              ],
+            },
+          ],
+        },
+        "key": [],
+        "out": {
+          "data": [
+            {
+              "kind": "data",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "b": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "c": {
+                            "type": "string",
+                          },
+                        },
+                        "required": [
+                          "c",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                    "required": [
+                      "b",
+                    ],
+                    "type": "object",
+                  },
+                },
+                "required": [
+                  "a",
+                ],
+                "type": "object",
+              },
+            },
+          ],
+        },
+        "ready": {},
+      },
+      "target": {
+        "$ref": "lfxIRap9jc2Qz5qGi+80iVUWvY0=",
+        "kind": "target",
+      },
+    },
+  },
+  "contexts": {
+    "U1wwAaqukwfarhkuFGe2QSaTdXY=": {
+      "flags": {},
+      "parent": undefined,
+    },
+  },
+  "flags": {},
+  "root": {
+    "$ref": "QLcMYBBV1ic9UORKWVZBmP7IgDo=",
+    "kind": "build",
+    "phase": "out",
+  },
+  "targets": {
+    "lfxIRap9jc2Qz5qGi+80iVUWvY0=": {
+      "buildfile": "cmd.test.ts",
+      "default": false,
+      "name": "a",
+    },
+  },
+}
+`;

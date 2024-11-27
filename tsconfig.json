@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "noEmit": true
+  },
+  "references": [
+    { "path": "./build" },
+    { "path": "./packages/schema" },
+    { "path": "./packages/runtime" },
+    { "path": "./packages/types" }
+  ],
+  "include": [],
+  "files": []
+}
