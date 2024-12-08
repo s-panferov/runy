@@ -2,4 +2,5 @@ packages:
   - "packages/schema"
   - "packages/runtime"
   - "packages/types"
+  - "website"
   - "build"
