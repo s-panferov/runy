@@ -9,7 +9,7 @@ edition = "2021"
 serde_json = { version = "*", features = ["preserve_order"] }
 serde_yaml = "*"
 datatest-stable = "*"
-insta = { version = "1.34.0", features = ["yaml"] }
+insta = { version = "1.41.1", features = ["yaml"] }
 similar-asserts = "*"
 fxhash = "*"
 base64 = "*"
