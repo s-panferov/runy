@@ -1,14 +1,13 @@
-import { Compute, globalId } from "./index";
+import { Compute } from "./index";
 
 import { BuildContext, BuildContextModifier } from "./context";
 import { Schema } from "./schema";
 import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
 import { hash } from "./hash";
 
-export class Flag<
-  const K,
-  const T extends flag.FlagType<unknown>,
-> implements Compute {
+export class Flag<const K, const T extends flag.FlagType<unknown>>
+  implements Compute
+{
   [COMPUTE_SYM]!: true;
   [RESULT_SYM]!: flag.FlagVar<T>;
   [PROVIDE_SYM]!: flag.FlagVar<T>;
@@ -39,7 +38,7 @@ export class Flag<
       return ctx.ownFlags.get(this);
     } else {
       // FIXME: undefined
-      return ctx.parent ? this.in(ctx.parent) : undefined as any;
+      return ctx.parent ? this.in(ctx.parent) : (undefined as any);
     }
   }
 
@@ -65,33 +64,32 @@ export class Flag<
       Object.assign(obj, this.toJSON());
     }
 
-    return { kind: "flag", "$ref": this.hash };
+    return { kind: "flag", $ref: this.hash };
   }
-}
-
-export function flag<
-  const K extends symbol,
-  const T extends flag.FlagType<any>,
->(
-  meta: ImportMeta,
-  symbol: K,
-  ty: T,
-): Flag<K, T> {
-  const flag = new Flag<K, T>(meta, symbol, ty);
-  return flag;
 }
 
 // deno-lint-ignore no-namespace
 export namespace flag {
-  export function string<const S extends string>(allowed: S[]): StringFlag<S> {
-    return { kind: "string", allowed };
+  export function option<const S extends string>(allowed: S[]): OptionFlag<S> {
+    return { kind: "option", allowed };
+  }
+  export function string(): StringFlag {
+    return { kind: "string" };
   }
 
-  export type StringFlag<V> = {
+  export type StringFlag = {
     kind: "string";
+  };
+
+  export type OptionFlag<V> = {
+    kind: "option";
     allowed: V[];
   };
 
-  export type FlagType<V> = StringFlag<V>;
-  export type FlagVar<T> = T extends flag.StringFlag<infer S> ? S : never;
+  export type FlagType<V> = StringFlag | OptionFlag<V>;
+  export type FlagVar<T> = T extends flag.OptionFlag<infer S>
+    ? S
+    : T extends flag.StringFlag
+    ? string
+    : never;
 }

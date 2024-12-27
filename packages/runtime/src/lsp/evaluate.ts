@@ -8,6 +8,10 @@ import log from "winston";
 export function evaluate(params: TargetEvaluateParams) {
   const buildfile = registry.buildfiles.get(params.buildfile);
 
+  if (!buildfile) {
+    throw new RpcError(0, `buildfile not found: ${buildfile}`);
+  }
+
   let target =
     params.target == "<<default>>"
       ? buildfile?.defaultTarget
@@ -27,8 +31,14 @@ export function evaluate(params: TargetEvaluateParams) {
     }
   }
 
+  log.info(
+    "buildfiles " + JSON.stringify(Array.from(registry.buildfiles.keys()))
+  );
+
+  let ctx = new BuildContext();
+  ctx = resolveFlags(params, ctx);
+
   try {
-    const ctx = new BuildContext();
     const schema = Schema.convert(target.out(ctx) as any);
     return schema;
   } catch (e) {
@@ -41,3 +51,30 @@ export function evaluate(params: TargetEvaluateParams) {
 evaluate.ty = new rpc.RequestType<TargetEvaluateParams, Schema, void>(
   "runy/target/evaluate"
 );
+
+function resolveFlags(params: TargetEvaluateParams, ctx: BuildContext) {
+  let jsonFlags = params.flags as [[string, any]];
+  jsonFlags.map(([flagRef, value]) => {
+    let [buildfile, name] = flagRef.split("#");
+    let flagBuildfile = registry.buildfiles.get(buildfile);
+
+    if (!flagBuildfile) {
+      throw new RpcError(
+        0,
+        `flag buildfile not found: buildfile=${buildfile} flag=${name}`
+      );
+    }
+
+    const flag = flagBuildfile.flags.get(name);
+
+    if (!flag) {
+      throw new RpcError(
+        0,
+        `flag not found: buildfile=${buildfile} flag=${name}`
+      );
+    }
+
+    ctx = ctx.with(flag.is(value));
+  });
+  return ctx;
+}

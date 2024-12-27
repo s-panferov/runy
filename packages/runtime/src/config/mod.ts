@@ -1,4 +1,10 @@
-import { flag } from "@runy-build/schema";
+import { buildfile, flag } from "@runy-build/schema";
+
+let mod = buildfile(import.meta);
 
 const platformKey = Symbol("platform");
-export const platform = flag(import.meta, platformKey, flag.string(["wasm32"]));
+export const platform = mod.flag(
+  import.meta,
+  platformKey,
+  flag.option(["wasm32"])
+);

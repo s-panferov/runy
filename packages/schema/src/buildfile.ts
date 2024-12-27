@@ -26,6 +26,16 @@ export class BuildFile {
     return new Target(this, name, func as any);
   }
 
+  flag<const K extends symbol, const T extends flag.FlagType<any>>(
+    meta: ImportMeta,
+    symbol: K,
+    ty: T
+  ): Flag<K, T> {
+    const flag = new Flag<K, T>(meta, symbol, ty);
+    this.flags.set(symbol.description!, flag);
+    return flag;
+  }
+
   input<const T extends SpecT>(
     name: string,
     func: BuildSpecFactory<T>
