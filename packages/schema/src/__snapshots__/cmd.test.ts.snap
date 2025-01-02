@@ -3,7 +3,7 @@
 exports[`output access output access 1`] = `
 {
   "builds": {
-    "QLcMYBBV1ic9UORKWVZBmP7IgDo=": {
+    "Jqj73sBSWfhSyv2cyP2022OL+r4=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
@@ -105,7 +105,7 @@ exports[`output access output access 1`] = `
         "ready": {},
       },
       "target": {
-        "$ref": "lfxIRap9jc2Qz5qGi+80iVUWvY0=",
+        "$ref": "iudHtcziwswv3Q1rZ9jGnKoUSj4=",
         "kind": "target",
       },
     },
@@ -118,15 +118,15 @@ exports[`output access output access 1`] = `
   },
   "flags": {},
   "root": {
-    "$ref": "QLcMYBBV1ic9UORKWVZBmP7IgDo=",
+    "$ref": "Jqj73sBSWfhSyv2cyP2022OL+r4=",
     "kind": "build",
     "phase": "out",
   },
   "targets": {
-    "lfxIRap9jc2Qz5qGi+80iVUWvY0=": {
-      "buildfile": "cmd.test.ts",
+    "iudHtcziwswv3Q1rZ9jGnKoUSj4=": {
       "default": false,
       "name": "a",
+      "package": "",
     },
   },
 }

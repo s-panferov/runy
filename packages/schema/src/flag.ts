@@ -1,4 +1,4 @@
-import { Compute } from "./index";
+import { Compute, Package } from "./index";
 
 import { BuildContext, BuildContextModifier } from "./context";
 import { Schema } from "./schema";
@@ -15,19 +15,19 @@ export class Flag<const K, const T extends flag.FlagType<unknown>>
   chain: Compute[] = [];
   key!: K;
   ty!: T;
-  buildfile!: string;
+  package!: Package;
 
   hash: string;
 
-  constructor(meta: ImportMeta, key: K, ty: T) {
+  constructor(pkg: Package, key: K, ty: T) {
     this.key = key;
     this.ty = ty;
-    this.buildfile = meta.url;
+    this.package = pkg;
 
     this.hash = hash({
       key: this.key,
       ty: this.ty,
-      buildfile: this.buildfile,
+      package: this.package.path,
     });
 
     // registry.exportFlag(this);
@@ -53,7 +53,7 @@ export class Flag<const K, const T extends flag.FlagType<unknown>>
     return {
       key: name as string,
       ty: this.ty,
-      buildfile: this.buildfile,
+      package: this.package.path,
     };
   }
 

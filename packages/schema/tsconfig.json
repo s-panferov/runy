@@ -6,6 +6,6 @@
     "allowJs": false
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "runy.build.ts"],
+  "exclude": ["node_modules", "BUILD.ts"],
   "references": [{ "path": "../types" }]
 }

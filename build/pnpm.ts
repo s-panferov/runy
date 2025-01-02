@@ -1,8 +1,8 @@
-import { buildfile, file } from "@runy-build/schema";
+import { getPackage, file, target } from "@runy-build/schema";
 
-export const mod = buildfile(import.meta);
+const mod = getPackage(import.meta);
 
-export const pnpm = mod.target("pnpm", (ctx) => {
+export const pnpm = target(mod, "pnpm", (ctx) => {
   return ctx
     .define({
       inp: {

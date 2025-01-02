@@ -5,7 +5,7 @@ import { BuildRef } from "./build";
 import { Query } from "./output";
 import { Schema } from "./schema";
 import { BuildSpec, BuildSpecFactory } from "./spec";
-import { BuildFile } from "./buildfile";
+import { Package } from "./package";
 import { dynamic } from "./missing";
 import { hash } from "./hash";
 
@@ -39,7 +39,7 @@ const READY_CACHE = Symbol();
 const OUT_CACHE = Symbol();
 
 export class Target<const T extends TargetT> {
-  buildfile: BuildFile;
+  package: Package;
   name: string;
 
   factory: BuildSpecFactory<T>;
@@ -61,22 +61,18 @@ export class Target<const T extends TargetT> {
     return target as unknown as Target.Any;
   }
 
-  constructor(
-    buildfile: BuildFile,
-    name: string,
-    factory: BuildSpecFactory<T>
-  ) {
-    this.buildfile = buildfile;
+  constructor(pkg: Package, name: string, factory: BuildSpecFactory<T>) {
+    this.package = pkg;
     this.factory = factory;
     this.name = name;
 
     this.hash = hash({
-      buildfile: this.buildfile.urlPath,
+      package: this.package.path,
       factory: this.factory,
       name: this.name,
     });
 
-    buildfile.exportTarget(Target.any(this));
+    pkg.exportTarget(Target.any(this));
   }
 
   spec(ctx: BuildContext): BuildSpec<T> {
@@ -115,7 +111,7 @@ export class Target<const T extends TargetT> {
 
   toJSON() {
     return {
-      buildfile: this.buildfile.urlPath,
+      package: this.package.path,
       default: this.default,
       name: this.name,
     };
@@ -132,4 +128,12 @@ export class Target<const T extends TargetT> {
 
 export namespace Target {
   export type Any = Target<any>;
+}
+
+export function target<const T extends SpecT>(
+  pkg: Package,
+  name: string,
+  func: BuildSpecFactory<T>
+): Target<T & { Actions: {} }> {
+  return new Target(pkg, name, func as any);
 }

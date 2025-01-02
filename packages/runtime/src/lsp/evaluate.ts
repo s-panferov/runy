@@ -6,16 +6,20 @@ import * as rpc from "vscode-jsonrpc/node.js";
 import log from "winston";
 
 export function evaluate(params: TargetEvaluateParams) {
-  const buildfile = registry.buildfiles.get(params.buildfile);
+  const pkg = registry.packages.get(params.package);
 
-  if (!buildfile) {
-    throw new RpcError(0, `buildfile not found: ${buildfile}`);
+  if (!pkg) {
+    throw new RpcError(
+      0,
+      `package not found: '${params.package}' known packages: ` +
+        Array.from(registry.packages.keys())
+    );
   }
 
   let target =
     params.target == "<<default>>"
-      ? buildfile?.defaultTarget
-      : buildfile?.targets.get(params.target);
+      ? pkg?.defaultTarget
+      : pkg?.targets.get(params.target);
 
   if (!target) {
     throw new RpcError(0, `Target ${params.target} not found`);
@@ -31,9 +35,7 @@ export function evaluate(params: TargetEvaluateParams) {
     }
   }
 
-  log.info(
-    "buildfiles " + JSON.stringify(Array.from(registry.buildfiles.keys()))
-  );
+  log.info("packages " + JSON.stringify(Array.from(registry.packages.keys())));
 
   let ctx = new BuildContext();
   ctx = resolveFlags(params, ctx);
@@ -55,23 +57,20 @@ evaluate.ty = new rpc.RequestType<TargetEvaluateParams, Schema, void>(
 function resolveFlags(params: TargetEvaluateParams, ctx: BuildContext) {
   let jsonFlags = params.flags as [[string, any]];
   jsonFlags.map(([flagRef, value]) => {
-    let [buildfile, name] = flagRef.split("#");
-    let flagBuildfile = registry.buildfiles.get(buildfile);
+    let [pkg, name] = flagRef.split("#");
+    let flagPkg = registry.packages.get(pkg);
 
-    if (!flagBuildfile) {
+    if (!flagPkg) {
       throw new RpcError(
         0,
-        `flag buildfile not found: buildfile=${buildfile} flag=${name}`
+        `flag package not found: package=${pkg} flag=${name}`
       );
     }
 
-    const flag = flagBuildfile.flags.get(name);
+    const flag = flagPkg.flags.get(name);
 
     if (!flag) {
-      throw new RpcError(
-        0,
-        `flag not found: buildfile=${buildfile} flag=${name}`
-      );
+      throw new RpcError(0, `flag not found: buildfile=${pkg} flag=${name}`);
     }
 
     ctx = ctx.with(flag.is(value));

@@ -1,16 +1,20 @@
-import { BuildFile } from "./buildfile";
+import { Package } from "./package";
+
+import assert from "node:assert";
 
 export class Registry {
-  buildfiles = new Map<string, BuildFile>();
+  packages = new Map<string, Package>();
 
-  buildfile(meta: ImportMeta) {
-    let buildfile = this.buildfiles.get(meta.url);
-    if (!buildfile) {
-      buildfile = new BuildFile(meta);
-      this.buildfiles.set(meta.url, buildfile);
+  package(path: string) {
+    assert(path != ".");
+
+    let pkg = this.packages.get(path);
+    if (!pkg) {
+      pkg = new Package(path);
+      this.packages.set(path, pkg);
     }
 
-    return buildfile;
+    return pkg;
   }
 }
 

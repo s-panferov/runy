@@ -22,8 +22,4 @@ export function setWorkspaceRoot(path: string): void {
     // If it's not a valid URL, use the path as-is
     WORKSPACE_ROOT = path;
   }
-
-  if (WORKSPACE_ROOT.endsWith(".ts")) {
-    WORKSPACE_ROOT = dirname(WORKSPACE_ROOT);
-  }
 }

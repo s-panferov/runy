@@ -1,4 +1,4 @@
-import { Flag, Target } from "./index";
+import { flag, Flag, Target } from "./index";
 
 import { BuildSpecFactory } from "./spec";
 import { registry } from "./registry";
@@ -7,17 +7,16 @@ import { WORKSPACE_ROOT } from "./env";
 
 import path from "node:path";
 
-export class BuildFile {
-  meta: ImportMeta;
+export class Package {
+  constructor(path: string) {
+    this.path = path;
+  }
 
   targets = new Map<string, Target.Any>();
   flags = new Map<string, Flag<symbol, any>>();
+  path: string;
 
   #defaultTarget?: Target.Any;
-
-  constructor(meta: ImportMeta) {
-    this.meta = meta;
-  }
 
   target<const T extends SpecT>(
     name: string,
@@ -27,11 +26,10 @@ export class BuildFile {
   }
 
   flag<const K extends symbol, const T extends flag.FlagType<any>>(
-    meta: ImportMeta,
     symbol: K,
     ty: T
   ): Flag<K, T> {
-    const flag = new Flag<K, T>(meta, symbol, ty);
+    const flag = new Flag<K, T>(this, symbol, ty);
     this.flags.set(symbol.description!, flag);
     return flag;
   }
@@ -41,20 +39,6 @@ export class BuildFile {
     func: BuildSpecFactory<T>
   ): Target<T & { Actions: {} }> {
     return new Target(this, name, func as any);
-  }
-
-  get urlPath() {
-    const url = new URL(this.meta.url);
-    if (url.protocol === "file:") {
-      const filePath = decodeURIComponent(url.pathname);
-      if (WORKSPACE_ROOT) {
-        return path.relative(WORKSPACE_ROOT, filePath);
-      }
-      // If BUILD_ROOT is not set, return the absolute file path
-      return filePath;
-    }
-    // If it's not a file URL, return the original URL
-    return this.meta.url;
   }
 
   get defaultTarget(): Target.Any | undefined {
@@ -74,7 +58,7 @@ export class BuildFile {
     const exists = this.targets.get(target.name);
     if (exists) {
       throw new Error(
-        `Duplicated target: "${target.name}" in ${target.buildfile}`
+        `Duplicated target: "${target.name}" in ${target.package}`
       );
     }
 
@@ -85,13 +69,43 @@ export class BuildFile {
     const name = flag.key.description || "<flag>";
     const exists = this.flags.get(name);
     if (exists) {
-      throw new Error(`Duplicated flag: "${name}" in ${flag.buildfile}`);
+      throw new Error(`Duplicated flag: "${name}" in ${flag.package}`);
     }
 
     this.flags.set(name, flag);
   }
 }
 
-export function buildfile(meta: ImportMeta): BuildFile {
-  return registry.buildfile(meta);
+export function getPackage(meta: ImportMeta | URL | string): Package {
+  if (typeof meta === "string") {
+    return registry.package(meta);
+  }
+
+  let urlStr = "url" in meta ? meta.url : meta;
+  const url = new URL(urlStr);
+
+  let pkg = "";
+
+  const filePath = decodeURIComponent(url.pathname);
+
+  if (WORKSPACE_ROOT) {
+    pkg = path.relative(WORKSPACE_ROOT, filePath);
+  } else {
+    // If BUILD_ROOT is not set, use the absolute file path
+    pkg = filePath;
+  }
+
+  if (pkg.startsWith("./")) {
+    pkg = pkg.slice(2);
+  }
+
+  if (path.basename(pkg) == "BUILD.ts") {
+    pkg = path.dirname(pkg);
+  }
+
+  if (pkg == ".") {
+    pkg = "";
+  }
+
+  return registry.package(pkg);
 }

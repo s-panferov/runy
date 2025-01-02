@@ -1,8 +1,9 @@
-import { BuildFile, file, fileset } from "@runy-build/schema";
+import { Package, file, fileset } from "@runy-build/schema";
+
 import { tsconfigBase } from "./tsconfig";
 import { pnpm } from "./pnpm";
 
-export function runySDKLibrary(mod: BuildFile) {
+export function runySDKLibrary(mod: Package) {
   const tsconfig = mod.target("tsconfig", (ctx) => {
     return ctx.inout({
       tsconfig: file("tsconfig.json"),

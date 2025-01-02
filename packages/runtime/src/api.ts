@@ -110,7 +110,7 @@ setInterval(() => {
 
 export class BuildAPI<T extends SpecT> {
   public readonly id: number;
-  public readonly cwd: string;
+  public cwd: string;
 
   #runtime: BuildRuntime<T> = new BuildRuntime(this);
   $: execa.ExecaMethod<{}>;

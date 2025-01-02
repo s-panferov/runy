@@ -1,8 +1,8 @@
 import { BuildContext } from "./context";
 import { Schema, ToSchema } from "./schema";
-import { buildfile, BuildFile } from "./buildfile";
+import { getPackage, Package } from "./package";
 import { BuildSpec } from "./spec";
-import { SpecT, Target, type TargetT, type AnyTargetT } from "./target";
+import { SpecT, Target, type TargetT, type AnyTargetT, target } from "./target";
 import { FileSet, fileset } from "./fileset";
 import { Flag, flag } from "./flag";
 import { File, file } from "./file";
@@ -23,10 +23,10 @@ import { Output, type Query } from "./output";
 
 export {
   BuildContext,
-  buildfile,
+  getPackage,
   fileset,
   BuildSpec,
-  BuildFile,
+  Package,
   FileSet,
   Output,
   Query,
@@ -38,6 +38,7 @@ export {
   Schema,
   Target,
   AnyTargetT,
+  target,
   z,
 };
 

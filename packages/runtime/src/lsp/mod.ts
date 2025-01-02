@@ -1,6 +1,6 @@
 import { Declaration } from "@runy-build/types";
 
-import { buildfile, registry } from "@runy-build/schema";
+import { registry } from "@runy-build/schema";
 
 import { DeepReadonly } from "../utils";
 import { build } from "./build";
@@ -15,14 +15,14 @@ import { terminate } from "./terminate";
 
 export function prepareDeclarations() {
   const declarations: DeepReadonly<Declaration>[] = [];
-  for (const buildfile of registry.buildfiles.values()) {
-    for (const target of buildfile.targets.values()) {
+  for (const pkg of registry.packages.values()) {
+    for (const target of pkg.targets.values()) {
       declarations.push({
         kind: "target",
         ...target.toJSON(),
       });
     }
-    for (const flag of buildfile.flags.values()) {
+    for (const flag of pkg.flags.values()) {
       declarations.push({
         kind: "flag",
         ...flag.toJSON(),

@@ -3,7 +3,7 @@
 exports[`output access output access 1`] = `
 {
   "builds": {
-    "qa31oKIVmdcWoHMYDqnFB2uGLAM=": {
+    "7/iguxfh7Ckur+XvfEQ15ceBla0=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
@@ -13,7 +13,7 @@ exports[`output access output access 1`] = `
         "inp": {
           "a": [
             {
-              "$ref": "tbTh7+8NZjPr0Ce2M+wJFFSh3Tk=",
+              "$ref": "bSjnkPV0CrfXnY7gS5I8FtbxzgU=",
               "kind": "build",
               "phase": "out",
             },
@@ -35,7 +35,7 @@ exports[`output access output access 1`] = `
             },
           ],
           "b": {
-            "$ref": "tbTh7+8NZjPr0Ce2M+wJFFSh3Tk=",
+            "$ref": "bSjnkPV0CrfXnY7gS5I8FtbxzgU=",
             "kind": "build",
             "phase": "out",
           },
@@ -82,11 +82,11 @@ exports[`output access output access 1`] = `
         "ready": {},
       },
       "target": {
-        "$ref": "nI0iLW0F+gK8frgT+UAtnajoLtc=",
+        "$ref": "AjMsIC+6hQCH6YdKuj+nDMexa/g=",
         "kind": "target",
       },
     },
-    "tbTh7+8NZjPr0Ce2M+wJFFSh3Tk=": {
+    "bSjnkPV0CrfXnY7gS5I8FtbxzgU=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
@@ -102,6 +102,7 @@ exports[`output access output access 1`] = `
               ],
             },
           ],
+          "flag": "wasm",
         },
         "key": [],
         "out": {
@@ -153,33 +154,46 @@ exports[`output access output access 1`] = `
         "ready": {},
       },
       "target": {
-        "$ref": "S3fceUEJ6nUDlUIJoWOpH+FDdjw=",
+        "$ref": "2q8xjHgaUSKKhZNW3yeG5N1YGlQ=",
         "kind": "target",
       },
     },
   },
   "contexts": {
     "U1wwAaqukwfarhkuFGe2QSaTdXY=": {
-      "flags": {},
+      "flags": {
+        "sFs/GELcRw6ylRmiRX3yyg27E08=": "wasm",
+      },
       "parent": undefined,
     },
   },
-  "flags": {},
+  "flags": {
+    "sFs/GELcRw6ylRmiRX3yyg27E08=": {
+      "key": "flag",
+      "package": "",
+      "ty": {
+        "allowed": [
+          "wasm",
+        ],
+        "kind": "option",
+      },
+    },
+  },
   "root": {
-    "$ref": "qa31oKIVmdcWoHMYDqnFB2uGLAM=",
+    "$ref": "7/iguxfh7Ckur+XvfEQ15ceBla0=",
     "kind": "build",
     "phase": "out",
   },
   "targets": {
-    "S3fceUEJ6nUDlUIJoWOpH+FDdjw=": {
-      "buildfile": "schema.test.ts",
+    "2q8xjHgaUSKKhZNW3yeG5N1YGlQ=": {
       "default": false,
       "name": "a",
+      "package": "",
     },
-    "nI0iLW0F+gK8frgT+UAtnajoLtc=": {
-      "buildfile": "schema.test.ts",
+    "AjMsIC+6hQCH6YdKuj+nDMexa/g=": {
       "default": false,
       "name": "b",
+      "package": "",
     },
   },
 }

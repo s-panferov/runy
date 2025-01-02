@@ -1,4 +1,4 @@
-import { buildfile } from "./buildfile";
+import { getPackage } from "./package";
 import { BuildContext, fileset, Schema } from "./index";
 
 import { z } from "zod";
@@ -18,7 +18,7 @@ describe("output access", () => {
   test("output access", () => {
     setWorkspaceRoot(import.meta.url);
 
-    const mod = buildfile(import.meta);
+    const mod = getPackage(import.meta);
 
     const a = mod.target("a", (ctx) => {
       return ctx

@@ -18,7 +18,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./runy.build": "./runy.build.ts"
+    "./BUILD": "./BUILD.ts"
   },
   "files": [
     "dist/index.js",

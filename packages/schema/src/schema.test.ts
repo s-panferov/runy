@@ -1,5 +1,5 @@
-import { buildfile } from "./buildfile";
-import { BuildContext, fileset, Schema } from "./index";
+import { getPackage } from "./package";
+import { BuildContext, fileset, flag, Schema } from "./index";
 
 import { z } from "zod";
 
@@ -17,12 +17,17 @@ import { setWorkspaceRoot } from "./env";
 describe("output access", () => {
   test("output access", () => {
     setWorkspaceRoot(import.meta.url);
-    const mod = buildfile(import.meta);
+    const pkg = getPackage(import.meta);
 
-    const a = mod.target("a", (ctx) => {
+    const f = pkg.flag(Symbol("flag"), flag.option(["wasm"]));
+
+    const a = pkg.target("a", (ctx) => {
+      const flag = f.in(ctx);
+
       return ctx.define({
         inp: {
           files: fileset(["src/**/*"]),
+          flag,
         },
         out: {
           data: ctx.data(shape),
@@ -31,7 +36,7 @@ describe("output access", () => {
       });
     });
 
-    const b = mod.target("b", (ctx) => {
+    const b = pkg.target("b", (ctx) => {
       const a_out = a.out(ctx);
       return ctx.define({
         inp: {
@@ -44,7 +49,7 @@ describe("output access", () => {
       });
     });
 
-    const schema = Schema.convert(b.out(new BuildContext()));
+    const schema = Schema.convert(b.out(new BuildContext().with(f.is("wasm"))));
     expect(schema).toMatchSnapshot();
   });
 });
