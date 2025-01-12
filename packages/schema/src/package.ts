@@ -78,7 +78,7 @@ export class Package {
 
 export function getPackage(meta: ImportMeta | URL | string): Package {
   if (typeof meta === "string") {
-    return registry.package(meta);
+    return registry.definePackage(meta);
   }
 
   let urlStr = "url" in meta ? meta.url : meta;
@@ -99,13 +99,10 @@ export function getPackage(meta: ImportMeta | URL | string): Package {
     pkg = pkg.slice(2);
   }
 
-  if (path.basename(pkg) == "BUILD.ts") {
-    pkg = path.dirname(pkg);
-  }
 
   if (pkg == ".") {
     pkg = "";
   }
 
-  return registry.package(pkg);
+  return registry.definePackage(pkg);
 }

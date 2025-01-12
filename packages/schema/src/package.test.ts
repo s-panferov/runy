@@ -27,6 +27,6 @@ describe("getPackage", () => {
     const result = getPackage(
       new URL("file:///a/b/c/runy-sdk/packages/schema/src/BUILD.ts")
     );
-    expect(result.path).toEqual("packages/schema/src");
+    expect(result.path).toEqual("packages/schema/src/BUILD.ts");
   });
 });

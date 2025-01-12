@@ -6,15 +6,7 @@ import * as rpc from "vscode-jsonrpc/node.js";
 import log from "winston";
 
 export function evaluate(params: TargetEvaluateParams) {
-  const pkg = registry.packages.get(params.package);
-
-  if (!pkg) {
-    throw new RpcError(
-      0,
-      `package not found: '${params.package}' known packages: ` +
-        Array.from(registry.packages.keys())
-    );
-  }
+  const pkg = registry.resolvePackage(params.package);
 
   let target =
     params.target == "<<default>>"
@@ -58,14 +50,7 @@ function resolveFlags(params: TargetEvaluateParams, ctx: BuildContext) {
   let jsonFlags = params.flags as [[string, any]];
   jsonFlags.map(([flagRef, value]) => {
     let [pkg, name] = flagRef.split("#");
-    let flagPkg = registry.packages.get(pkg);
-
-    if (!flagPkg) {
-      throw new RpcError(
-        0,
-        `flag package not found: package=${pkg} flag=${name}`
-      );
-    }
+    let flagPkg = registry.resolvePackage(pkg);
 
     const flag = flagPkg.flags.get(name);
 

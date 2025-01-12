@@ -1,3 +1,4 @@
+import path from "node:path";
 import { Package } from "./package";
 
 import assert from "node:assert";
@@ -5,13 +6,33 @@ import assert from "node:assert";
 export class Registry {
   packages = new Map<string, Package>();
 
-  package(path: string) {
-    assert(path != ".");
+  definePackage(ref: string) {
+    assert(ref != ".");
 
-    let pkg = this.packages.get(path);
+    let pkg = this.packages.get(ref);
     if (!pkg) {
-      pkg = new Package(path);
-      this.packages.set(path, pkg);
+      pkg = new Package(ref);
+      this.packages.set(ref, pkg);
+    }
+
+    return pkg;
+  }
+
+  resolvePackage(ref: string): Package {
+    let pkg = this.packages.get(ref);
+
+    if (pkg) {
+      return pkg;
+    }
+
+    if (path.extname(ref) == "") {
+      ref = path.join(ref, "BUILD.ts");
+    }
+
+    pkg = this.packages.get(ref);
+
+    if (!pkg) {
+      throw new Error(`Package not found: ${ref}`);
     }
 
     return pkg;
