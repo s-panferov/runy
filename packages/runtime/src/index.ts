@@ -3,7 +3,7 @@ import { startLsp } from "./lsp/mod";
 import winston from "winston";
 import * as execa from "execa";
 
-import { Builder, runtime } from "./exec";
+import { Builder, runtime } from "./runtime";
 
 let __init = false;
 export function init() {

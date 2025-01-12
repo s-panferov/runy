@@ -9,7 +9,7 @@ import { RpcError } from "./error";
 import { delay } from "../util/delay";
 
 import * as rpc from "vscode-jsonrpc/node.js";
-import { BUILDER } from "../exec";
+import { BUILDER } from "../runtime";
 
 export const BUILD_MAP: Map<number, BuildAPI<AnyTargetT>> = new Map();
 

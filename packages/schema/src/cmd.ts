@@ -8,16 +8,28 @@ export interface CommandOptions {
 }
 
 export class Command implements ToSchema {
-  options: CommandOptions;
+  private options: CommandOptions;
+  private shell: boolean = false;
 
   constructor(options: CommandOptions) {
     this.options = options;
   }
 
+  get sh(): this {
+    this.shell = true;
+    return this;
+  }
+
   toSchema(schema: Schema) {
-    return {
+    let value: any = {
       args: this.options.args.map(schema.convert),
     };
+
+    if (this.shell) {
+      value.shell = this.shell;
+    }
+
+    return value;
   }
 }
 
@@ -36,5 +48,9 @@ export function cmd(strings: TemplateStringsArray, ...values: Var[]): Command {
     args: args.filter((v) => !!v),
   });
 }
+
+cmd.sh = ((strings: TemplateStringsArray, ...values: any[]) => {
+  return cmd(strings as any, ...values).sh;
+}) as any as typeof cmd;
 
 cmd.$ = cmd;

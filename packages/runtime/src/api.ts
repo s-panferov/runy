@@ -113,7 +113,9 @@ export class BuildAPI<T extends SpecT> {
   public cwd: string;
 
   #runtime: BuildRuntime<T> = new BuildRuntime(this);
-  $: execa.ExecaMethod<{}>;
+  $: execa.ExecaMethod<{}> & {
+    sh: execa.ExecaMethod<{}>;
+  };
   #ref: BuildRef;
 
   constructor(id: number, cwd: string) {
@@ -165,6 +167,14 @@ export class BuildAPI<T extends SpecT> {
       }
 
       return proc;
+    }) as any;
+
+    this.$.sh = ((_strings: TemplateStringsArray, ...values: any[]) => {
+      let strings = Array.from(_strings);
+      strings[0] += `bash -c "`;
+      strings[strings.length - 1] += `"`;
+      const array = strings as any as TemplateStringsArray;
+      return this.$(array, ...values);
     }) as any;
   }
 

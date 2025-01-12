@@ -50,6 +50,7 @@ export class BuildSpec<T extends SpecT> {
     $.$ = cmd;
     $.inp = new Output<Query<T["In"]>>(undefined, "inp").chain() as any;
     $.out = new Output<Query<T["Out"]>>(undefined, "out").chain() as any;
+    $.sh = cmd.sh;
 
     this.#command = func($);
     return this;
