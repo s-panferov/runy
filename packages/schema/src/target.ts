@@ -3,10 +3,9 @@ import { Actions, Inputs, Outputs } from "./index";
 import { BuildContext } from "./context";
 import { BuildRef } from "./build";
 import { Query } from "./output";
-import { Schema } from "./schema";
+import { Schema, TO_SCHEMA } from "./schema";
 import { BuildSpec, BuildSpecFactory } from "./spec";
 import { Package } from "./package";
-import { dynamic } from "./missing";
 import { hash } from "./hash";
 
 export interface SpecT {
@@ -87,29 +86,25 @@ export class Target<const T extends TargetT> {
 
   ready(ctx: BuildContext): Query<T["Ready"]> {
     const spec = this.spec(ctx);
-    const build = ((spec as any)[OUT_CACHE] ||= new BuildRef(
+    const build: Query<T["Ready"]> = ((spec as any)[OUT_CACHE] ||= BuildRef.dyn(
       ctx,
       this,
       spec,
       "ready"
     ));
 
-    return dynamic(build) as Query<T["Ready"]>;
+    return build;
   }
 
   out(ctx: BuildContext): Query<T["Out"]> {
     const spec = this.spec(ctx);
-    const build = ((spec as any)[READY_CACHE] ||= new BuildRef(
-      ctx,
-      this,
-      spec,
-      "out"
-    ));
+    const build: Query<T["Ready"]> = ((spec as any)[READY_CACHE] ||=
+      BuildRef.dyn(ctx, this, spec, "out"));
 
-    return dynamic(build) as Query<T["Out"]>;
+    return build;
   }
 
-  toJSON() {
+  private toJSON() {
     return {
       package: this.package.path,
       default: this.default,
@@ -117,7 +112,7 @@ export class Target<const T extends TargetT> {
     };
   }
 
-  toSchema(schema: Schema): object {
+  [TO_SCHEMA](schema: Schema): object {
     if (!schema.targets[this.hash]) {
       schema.targets[this.hash] = this.toJSON();
     }

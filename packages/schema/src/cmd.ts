@@ -1,5 +1,5 @@
 import { Query } from "./output";
-import { Schema, ToSchema } from "./schema";
+import { Schema, TO_SCHEMA, ToSchema } from "./schema";
 
 type Var = Query<string | number | object>;
 
@@ -20,7 +20,7 @@ export class Command implements ToSchema {
     return this;
   }
 
-  toSchema(schema: Schema) {
+  [TO_SCHEMA](schema: Schema) {
     let value: any = {
       args: this.options.args.map(schema.convert),
     };

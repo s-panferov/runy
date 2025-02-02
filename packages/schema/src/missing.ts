@@ -7,12 +7,7 @@ export interface Dynamic<T> {
 export function dynamic<O extends Dynamic<T>, T>(object: O): O & T {
   return new Proxy(object, {
     get(_, prop) {
-      const value = (object as any)[prop];
-      if (typeof value === "undefined") {
-        return object[DYNAMIC](prop as any);
-      } else {
-        return value;
-      }
+      return object[DYNAMIC](prop as any);
     },
   }) as any as O & T;
 }
@@ -20,14 +15,15 @@ export function dynamic<O extends Dynamic<T>, T>(object: O): O & T {
 export function missing<O extends object, T>(
   object: O,
   func: (prop: keyof T) => any,
+  allow: (string | symbol)[]
 ): O & T {
   return new Proxy(object, {
     get(_, prop) {
-      const value = (object as any)[prop];
-      if (typeof value === "undefined") {
-        return func(prop as any);
-      } else {
+      if (allow.includes(prop)) {
+        const value = (object as any)[prop];
         return value;
+      } else {
+        return func(prop as any);
       }
     },
   }) as any as O & T;

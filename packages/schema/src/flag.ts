@@ -1,7 +1,7 @@
 import { Compute, Package } from "./index";
 
 import { BuildContext, BuildContextModifier } from "./context";
-import { Schema } from "./schema";
+import { Schema, TO_SCHEMA } from "./schema";
 import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
 import { hash } from "./hash";
 
@@ -48,7 +48,7 @@ export class Flag<const K, const T extends flag.FlagType<unknown>>
     };
   }
 
-  toJSON() {
+  private toJSON() {
     const name = (this.key as symbol).description || this.key;
     return {
       key: name as string,
@@ -57,7 +57,7 @@ export class Flag<const K, const T extends flag.FlagType<unknown>>
     };
   }
 
-  toSchema(schema: Schema): object {
+  [TO_SCHEMA](schema: Schema): object {
     if (!schema.flags[this.hash]) {
       const obj = {} as any;
       schema.flags[this.hash] = obj;

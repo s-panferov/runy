@@ -3,7 +3,7 @@ import { Flag } from "./flag";
 import { File } from "./file";
 import { Folder } from "./folder";
 import { Data } from "./data";
-import { Schema } from "./schema";
+import { Schema, TO_SCHEMA } from "./schema";
 import { AnyTargetT, SpecT } from "./target";
 import { BuildSpec, BuildSpecArgs } from "./spec";
 import { hash } from "./hash";
@@ -128,15 +128,15 @@ export class BuildContext {
     return context;
   }
 
-  toSchema(schema: Schema): object {
+  [TO_SCHEMA](schema: Schema): object {
     if (!schema.contexts[this.hash]) {
       const obj = {} as any;
       schema.contexts[this.hash] = obj;
-      obj.parent = this.parent ? this.parent.toSchema(schema) : undefined;
+      obj.parent = this.parent ? this.parent[TO_SCHEMA](schema) : undefined;
 
       obj.flags = {} as any;
       for (const [flag, value] of this.ownFlags.entries()) {
-        flag.toSchema(schema);
+        schema.convert(flag);
         obj.flags[flag.hash] = value;
       }
     }

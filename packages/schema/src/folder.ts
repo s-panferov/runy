@@ -1,5 +1,5 @@
 import { Compute } from "./index";
-import { Schema } from "./schema";
+import { Schema, TO_SCHEMA } from "./schema";
 import { FileSetInfo } from "@runy-build/types";
 import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
 
@@ -20,13 +20,13 @@ export class Folder implements Compute {
     this.parent = parent;
   }
 
-  toSchema(schema: Schema) {
+  [TO_SCHEMA](schema: Schema) {
     if (schema.isInputMode && this.origin) {
-      return this.origin.toSchema(schema);
+      return schema.convert(this.origin);
     }
     return [
       typeof this.parent != "undefined"
-        ? this.parent.toSchema(schema)
+        ? schema.convert(this.parent)
         : undefined,
       {
         kind: "folder",

@@ -15,7 +15,7 @@ export class Schema {
 
   static convert(a: ToSchema): Schema {
     const schema = new Schema();
-    const root = a.toSchema(schema);
+    const root = a[TO_SCHEMA](schema);
     schema.root = root;
     return schema;
   }
@@ -31,7 +31,7 @@ export class Schema {
   }
 
   convert = <V>(obj: V): V extends ToSchema ? object : V => {
-    return hasSchema(obj) ? (obj as ToSchema).toSchema(this) : obj;
+    return hasSchema(obj) ? (obj as ToSchema)[TO_SCHEMA](this) : obj;
   };
 
   get isOutputMode(): boolean {
@@ -53,10 +53,12 @@ export class Schema {
   }
 }
 
+export const TO_SCHEMA = Symbol.for("toSchema");
+
 export interface ToSchema {
-  toSchema(schema: Schema): any;
+  [TO_SCHEMA](schema: Schema): any;
 }
 
 function hasSchema(v: unknown): v is ToSchema {
-  return !!v && typeof v === "object" && "toSchema" in v;
+  return !!v && typeof v === "object" && (v as any)[TO_SCHEMA]!!;
 }

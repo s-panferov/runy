@@ -1,6 +1,6 @@
 import { cmd, Command } from "./cmd";
 import { BuildContext, Output, Query } from "./index";
-import { Schema, SchemaMode } from "./schema";
+import { Schema, SchemaMode, TO_SCHEMA } from "./schema";
 import { SpecT } from "./target";
 
 export interface BuildSpecArgs<T extends SpecT> {
@@ -50,15 +50,15 @@ export class BuildSpec<T extends SpecT> {
     }
 
     $.$ = cmd;
-    $.inp = new Output<Query<T["In"]>>(undefined, "inp").chain() as any;
-    $.out = new Output<Query<T["Out"]>>(undefined, "out").chain() as any;
+    $.inp = Output.dyn<Query<T["In"]>>(undefined, "inp");
+    $.out = Output.dyn<Query<T["Out"]>>(undefined, "out");
     $.sh = cmd.sh;
 
     this.#command = func($, $.inp, $.out);
     return this;
   }
 
-  toSchema(schema: Schema) {
+  [TO_SCHEMA](schema: Schema) {
     const object = {
       key: this.key,
       inp: {} as Record<string, any>,
