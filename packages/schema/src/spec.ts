@@ -40,7 +40,9 @@ export class BuildSpec<T extends SpecT> {
         $: typeof cmd;
         inp: Query<T["In"]>;
         out: Query<T["Out"]>;
-      }
+      },
+      inp: Query<T["In"]>,
+      out: Query<T["Out"]>
     ) => Command
   ): this {
     function $(...args: any[]) {
@@ -52,7 +54,7 @@ export class BuildSpec<T extends SpecT> {
     $.out = new Output<Query<T["Out"]>>(undefined, "out").chain() as any;
     $.sh = cmd.sh;
 
-    this.#command = func($);
+    this.#command = func($, $.inp, $.out);
     return this;
   }
 
