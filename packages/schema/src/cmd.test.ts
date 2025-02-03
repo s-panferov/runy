@@ -21,13 +21,11 @@ describe("output access", () => {
 
     const a = mod.target("a", (ctx) => {
       return ctx
-        .define({
-          inp: {
-            files: fileset(["src/**/*"]),
-          },
-          out: {
-            data: ctx.data(shape),
-          },
+        .in({
+          files: fileset(["src/**/*"]),
+        })
+        .out({
+          data: ctx.data(shape),
         })
         .command(
           ({ $, inp: { files }, out: { data } }) =>

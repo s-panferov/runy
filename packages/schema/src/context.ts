@@ -103,6 +103,12 @@ export class BuildContext {
     return new BuildSpec(args);
   }
 
+  in<const I extends SpecT["In"]>(
+    inp: I
+  ): BuildSpec<{ In: I; Out: {}; InOut: {}; Ready: {} }> {
+    return new BuildSpec({ inp: inp, inout: {}, out: {} });
+  }
+
   with(...mods: BuildContextModifier[]): BuildContext {
     const context = new BuildContext();
 
