@@ -1,13 +1,12 @@
-import { Compute, Target } from "./index";
+import { Target } from "./index";
 import { Flag } from "./flag";
-import { Folder } from "./folder";
-import { Data } from "./data";
-import { Schema, TO_SCHEMA } from "./schema";
-import { AnyTargetT, SpecT } from "./target";
-import { BuildSpec, BuildSpecArgs } from "./spec";
+import { Schema } from "./schema";
+import { AnyTargetT } from "./target";
+import { BuildSpec } from "./spec";
 import { hash } from "./hash";
 
-import { z, ZodTypeAny } from "zod";
+import { z } from "zod";
+import { TO_SCHEMA } from "./symbols";
 
 export interface BuildContextModifier {
   modify(context: BuildContext): void;

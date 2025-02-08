@@ -1,7 +1,7 @@
 import { Compute } from "./index";
-import { Schema, TO_SCHEMA } from "./schema";
+import { Schema } from "./schema";
 import { FileSetInfo } from "@runy-build/types";
-import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
+import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM, TO_SCHEMA } from "./symbols";
 
 export class Folder implements Compute {
   __TYPE!: "FOLDER";

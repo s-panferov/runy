@@ -1,6 +1,12 @@
 import { Compute } from "./index";
-import { Schema, TO_SCHEMA } from "./schema";
-import { COMPUTE_SYM, PROVIDE_SYM, REQUIRED_SYM, RESULT_SYM } from "./symbols";
+import { Schema } from "./schema";
+import {
+  COMPUTE_SYM,
+  PROVIDE_SYM,
+  REQUIRED_SYM,
+  RESULT_SYM,
+  TO_SCHEMA,
+} from "./symbols";
 
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { z, ZodTypeAny } from "zod";

@@ -6,9 +6,10 @@ import { file, File } from "./file";
 import { fileset } from "./fileset";
 
 import { BuildContext, Output, Query, z } from "./index";
-import { Schema, SchemaMode, TO_SCHEMA } from "./schema";
+import { Schema, SchemaMode } from "./schema";
 import { AnySpecT, SpecT } from "./target";
 import { Runtime } from "./runtime";
+import { TO_SCHEMA } from "./symbols";
 
 export interface BuildSpecArgs<T extends SpecT> {
   key?: string[];

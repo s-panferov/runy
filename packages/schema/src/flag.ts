@@ -1,8 +1,14 @@
 import { Compute, Package } from "./index";
 
 import { BuildContext, BuildContextModifier } from "./context";
-import { Schema, TO_SCHEMA } from "./schema";
-import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
+import { Schema } from "./schema";
+import {
+  COMPUTE_SYM,
+  PROVIDE_SYM,
+  RESULT_SYM,
+  TO_JSON,
+  TO_SCHEMA,
+} from "./symbols";
 import { hash } from "./hash";
 
 export class Flag<const K, const T extends flag.FlagType<unknown>>
@@ -48,7 +54,7 @@ export class Flag<const K, const T extends flag.FlagType<unknown>>
     };
   }
 
-  private toJSON() {
+  [TO_JSON]() {
     const name = (this.key as symbol).description || this.key;
     return {
       key: name as string,
@@ -61,7 +67,7 @@ export class Flag<const K, const T extends flag.FlagType<unknown>>
     if (!schema.flags[this.hash]) {
       const obj = {} as any;
       schema.flags[this.hash] = obj;
-      Object.assign(obj, this.toJSON());
+      Object.assign(obj, this[TO_JSON]());
     }
 
     return { kind: "flag", $ref: this.hash };

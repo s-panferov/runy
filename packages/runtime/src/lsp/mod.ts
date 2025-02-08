@@ -1,6 +1,6 @@
 import { Declaration } from "@runy-build/types";
 
-import { registry } from "@runy-build/schema";
+import { registry, TO_JSON } from "@runy-build/schema";
 
 import { DeepReadonly } from "../utils";
 import { build } from "./build";
@@ -19,13 +19,13 @@ export function prepareDeclarations() {
     for (const target of pkg.targets.values()) {
       declarations.push({
         kind: "target",
-        ...target.toJSON(),
+        ...target[TO_JSON](),
       });
     }
     for (const flag of pkg.flags.values()) {
       declarations.push({
         kind: "flag",
-        ...flag.toJSON(),
+        ...flag[TO_JSON](),
       });
     }
   }

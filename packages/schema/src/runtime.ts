@@ -1,9 +1,6 @@
 import { Compute } from ".";
-import { Query } from "./output";
-import { Schema, TO_SCHEMA, ToSchema } from "./schema";
-import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
-
-type Var = Query<string | number | object>;
+import { Schema, ToSchema } from "./schema";
+import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM, TO_SCHEMA } from "./symbols";
 
 export interface RuntimeOptions {
   path: string;

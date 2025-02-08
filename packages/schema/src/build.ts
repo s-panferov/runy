@@ -1,10 +1,10 @@
 import { Compute, Provide, Result } from "./index";
 
 import { BuildContext } from "./context";
-import { Schema, TO_SCHEMA } from "./schema";
+import { Schema } from "./schema";
 import { BuildSpec } from "./spec";
 import { Target, TargetT } from "./target";
-import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
+import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM, TO_SCHEMA } from "./symbols";
 import { dynamic, DYNAMIC } from "./missing";
 import { Output, Query } from "./output";
 import { hash } from "./hash";

@@ -1,3 +1,5 @@
+import { TO_SCHEMA } from "./symbols";
+
 export enum SchemaMode {
   Input,
   Output,
@@ -52,8 +54,6 @@ export class Schema {
     return this;
   }
 }
-
-export const TO_SCHEMA = Symbol.for("toSchema");
 
 export interface ToSchema {
   [TO_SCHEMA](schema: Schema): any;

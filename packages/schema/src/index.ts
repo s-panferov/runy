@@ -17,6 +17,7 @@ import {
   PROVIDE_SYM,
   REQUIRED_SYM,
   RESULT_SYM,
+  TO_JSON,
 } from "./symbols";
 
 import { Output, type Query } from "./output";
@@ -40,6 +41,7 @@ export {
   AnyTargetT,
   target,
   z,
+  TO_JSON,
 };
 
 export type { SpecT, TargetT };

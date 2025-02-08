@@ -3,10 +3,11 @@ import { Actions, Inputs, Outputs } from "./index";
 import { BuildContext } from "./context";
 import { BuildRef } from "./build";
 import { Query } from "./output";
-import { Schema, TO_SCHEMA } from "./schema";
+import { Schema } from "./schema";
 import { BuildSpec, BuildSpecFactory } from "./spec";
 import { Package } from "./package";
 import { hash } from "./hash";
+import { TO_JSON, TO_SCHEMA } from "./symbols";
 
 export interface SpecT {
   In: Inputs;
@@ -103,7 +104,7 @@ export class Target<const T extends TargetT> {
     return build;
   }
 
-  private toJSON() {
+  [TO_JSON]() {
     return {
       package: this.package.path,
       default: this.default,
@@ -113,7 +114,7 @@ export class Target<const T extends TargetT> {
 
   [TO_SCHEMA](schema: Schema): object {
     if (!schema.targets[this.hash]) {
-      schema.targets[this.hash] = this.toJSON();
+      schema.targets[this.hash] = this[TO_JSON]();
     }
 
     return { kind: "target", $ref: this.hash };
