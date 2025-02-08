@@ -67,7 +67,6 @@ export class Target<const T extends TargetT> {
 
     this.hash = hash({
       package: this.package.path,
-      factory: this.factory,
       name: this.name,
     });
 
@@ -77,7 +76,7 @@ export class Target<const T extends TargetT> {
   spec(ctx: BuildContext): BuildSpec<T> {
     let spec = ctx.specs.get(Target.any(this));
     if (!spec) {
-      spec = this.factory.call(this, ctx);
+      spec = this.factory.call(this, new BuildSpec(), ctx);
       ctx.specs.set(Target.any(this), spec);
     }
 

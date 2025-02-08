@@ -1,6 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { Output, Query } from "./output";
-import { Schema } from "./schema";
+import { Output, Query } from "../output";
+import { Schema } from "../schema";
+import { expect, test, describe } from "vitest";
 
 describe("Output", () => {
   test("test", () => {

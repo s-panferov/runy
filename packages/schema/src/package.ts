@@ -99,7 +99,6 @@ export function getPackage(meta: ImportMeta | URL | string): Package {
     pkg = pkg.slice(2);
   }
 
-
   if (pkg == ".") {
     pkg = "";
   }

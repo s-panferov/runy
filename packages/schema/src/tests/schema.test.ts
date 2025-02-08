@@ -1,5 +1,6 @@
-import { getPackage } from "./package";
-import { BuildContext, fileset, flag, Schema } from "./index";
+import { getPackage } from "../package";
+import { BuildContext, BuildSpec, fileset, flag, Schema } from "../index";
+import { expect, test, describe } from "vitest";
 
 import { z } from "zod";
 
@@ -11,42 +12,44 @@ const shape = z.object({
   }),
 });
 
-import { describe, expect, test } from "@jest/globals";
-import { setWorkspaceRoot } from "./env";
+import { setTestRoot } from "../env";
 
 describe("output access", () => {
   test("output access", () => {
-    setWorkspaceRoot(import.meta.url);
+    setTestRoot(import.meta.url);
     const pkg = getPackage(import.meta);
 
     const f = pkg.flag(Symbol("flag"), flag.option(["wasm"]));
 
-    const a = pkg.target("a", (ctx) => {
+    const a = pkg.target("a", (spec: BuildSpec, ctx) => {
       const flag = f.in(ctx);
 
-      return ctx.define({
-        inp: {
-          files: fileset(["src/**/*"]),
-          flag,
-        },
-        out: {
-          data: ctx.data(shape),
-          files: fileset(["src/**/*"]),
-        },
+      spec.in({
+        files: fileset(["src/**/*"]),
+        flag,
       });
+
+      spec.out({
+        data: spec.data(shape),
+        files: fileset(["src/**/*"]),
+      });
+
+      return spec;
     });
 
-    const b = pkg.target("b", (ctx) => {
+    const b = pkg.target("b", (spec: BuildSpec, ctx) => {
       const a_out = a.out(ctx);
-      return ctx.define({
-        inp: {
-          a: a_out.data.a.b.c,
-          b: a_out,
-        },
-        out: {
-          data: ctx.data(shape),
-        },
+
+      spec.in({
+        a: a_out.data.a.b.c,
+        b: a_out,
       });
+
+      spec.out({
+        data: spec.data(shape),
+      });
+
+      return spec;
     });
 
     const schema = Schema.convert(b.out(new BuildContext().with(f.is("wasm"))));

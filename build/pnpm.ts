@@ -5,12 +5,12 @@ const mod = getPackage(import.meta);
 export const pnpm = target(mod, "pnpm", (ctx) => {
   return ctx
     .define({
-      inp: {
+      inputs: {
         lockfile: file("../pnpm-lock.yaml"),
         workspace: file("../pnpm-workspace.yaml"),
         package: file("../package.json"),
       },
-      out: {
+      outputs: {
         lockfile: file("../pnpm-lock.yaml"),
         // node_modules??
       },

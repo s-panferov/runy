@@ -16,12 +16,12 @@ export function runySDKLibrary(mod: Package) {
   const tsc = mod.target("tsc", (ctx) => {
     return ctx
       .define({
-        inp: {
+        inputs: {
           pnpm: pnpm.out(ctx),
           sources,
           tsconfig: tsconfig.out(ctx),
         },
-        out: {
+        outputs: {
           dist: ctx.outFolder("dist"),
         },
       })
@@ -32,17 +32,17 @@ export function runySDKLibrary(mod: Package) {
   const api = mod.target("api", (ctx) => {
     return ctx
       .define({
-        inp: {
+        inputs: {
           pnpm: pnpm.out(ctx),
           tsc: tsc.out(ctx),
           config: file("api-extractor.jsonc"),
         },
-        out: {
+        outputs: {
           types: ctx.outFile("dist/index.d.ts"),
         },
       })
       .command(
-        ({ $, inp }) => $`pnpm exec api-extractor run -c ${inp.config.path} -l`
+        ($, { config }) => $`pnpm exec api-extractor run -c ${config.path} -l`
       );
   });
 
@@ -50,18 +50,18 @@ export function runySDKLibrary(mod: Package) {
   const rollup = mod.target("rollup", (ctx) => {
     return ctx
       .define({
-        inp: {
+        inputs: {
           pnpm: pnpm.out(ctx),
           tsc: tsc.out(ctx),
           config: file("rollup.config.js"),
         },
-        out: {
+        outputs: {
           js: ctx.outFile("dist/index.js"),
           sourcemap: ctx.outFile("dist/index.js.map"),
         },
       })
       .command(
-        ({ $, inp: { config } }) => $`pnpm exec rollup -c ${config.path}`
+        ({ $, inputs: { config } }) => $`pnpm exec rollup -c ${config.path}`
       );
   });
 

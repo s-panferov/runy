@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`runtime input > runtime input 1`] = `
+{
+  "builds": {
+    "uVs0GtLQLI/lX18mDOMhYYVxEhA=": {
+      "ctx": {
+        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
+        "kind": "context",
+      },
+      "spec": {
+        "inout": {},
+        "inp": {
+          "files": [
+            {
+              "kind": "fileset",
+              "path": [
+                "src/**/*",
+              ],
+            },
+          ],
+        },
+        "key": [],
+        "out": {
+          "folder": [
+            {
+              "kind": "folder",
+              "path": undefined,
+            },
+          ],
+          "out": {
+            "kind": "runtime",
+            "path": "./runtime.rt",
+          },
+        },
+        "ready": {},
+      },
+      "target": {
+        "$ref": "sq5PL1u1j6Ac02MnPoRLDMtzpnw=",
+        "kind": "target",
+      },
+    },
+  },
+  "contexts": {
+    "U1wwAaqukwfarhkuFGe2QSaTdXY=": {
+      "flags": {},
+      "parent": undefined,
+    },
+  },
+  "flags": {},
+  "root": {
+    "$ref": "uVs0GtLQLI/lX18mDOMhYYVxEhA=",
+    "kind": "build",
+    "phase": "out",
+  },
+  "targets": {
+    "sq5PL1u1j6Ac02MnPoRLDMtzpnw=": {
+      "default": false,
+      "name": "target",
+      "package": "../runtime.build.ts",
+    },
+  },
+}
+`;

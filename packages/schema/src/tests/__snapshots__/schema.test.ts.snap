@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`output access output access 1`] = `
+exports[`output access > output access 1`] = `
 {
   "builds": {
-    "7/iguxfh7Ckur+XvfEQ15ceBla0=": {
+    "PmJcMLjf5REWgT9jnz7UI1g36qQ=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
@@ -13,7 +13,7 @@ exports[`output access output access 1`] = `
         "inp": {
           "a": [
             {
-              "$ref": "bSjnkPV0CrfXnY7gS5I8FtbxzgU=",
+              "$ref": "vBUu58+BoIrLfI/OHveJ1ipOU6A=",
               "kind": "build",
               "phase": "out",
             },
@@ -35,7 +35,7 @@ exports[`output access output access 1`] = `
             },
           ],
           "b": {
-            "$ref": "bSjnkPV0CrfXnY7gS5I8FtbxzgU=",
+            "$ref": "vBUu58+BoIrLfI/OHveJ1ipOU6A=",
             "kind": "build",
             "phase": "out",
           },
@@ -82,11 +82,11 @@ exports[`output access output access 1`] = `
         "ready": {},
       },
       "target": {
-        "$ref": "AjMsIC+6hQCH6YdKuj+nDMexa/g=",
+        "$ref": "OrCBKiL8SY5rt1caFpNyl7zMsv0=",
         "kind": "target",
       },
     },
-    "bSjnkPV0CrfXnY7gS5I8FtbxzgU=": {
+    "vBUu58+BoIrLfI/OHveJ1ipOU6A=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
@@ -154,7 +154,7 @@ exports[`output access output access 1`] = `
         "ready": {},
       },
       "target": {
-        "$ref": "2q8xjHgaUSKKhZNW3yeG5N1YGlQ=",
+        "$ref": "bQW85nYO3uECl4kgumgyqIe7vjk=",
         "kind": "target",
       },
     },
@@ -162,15 +162,15 @@ exports[`output access output access 1`] = `
   "contexts": {
     "U1wwAaqukwfarhkuFGe2QSaTdXY=": {
       "flags": {
-        "sFs/GELcRw6ylRmiRX3yyg27E08=": "wasm",
+        "bF5lE3uv8o4RRTm9UpdasjMOk9o=": "wasm",
       },
       "parent": undefined,
     },
   },
   "flags": {
-    "sFs/GELcRw6ylRmiRX3yyg27E08=": {
+    "bF5lE3uv8o4RRTm9UpdasjMOk9o=": {
       "key": "flag",
-      "package": "",
+      "package": "schema.test.ts",
       "ty": {
         "allowed": [
           "wasm",
@@ -180,20 +180,20 @@ exports[`output access output access 1`] = `
     },
   },
   "root": {
-    "$ref": "7/iguxfh7Ckur+XvfEQ15ceBla0=",
+    "$ref": "PmJcMLjf5REWgT9jnz7UI1g36qQ=",
     "kind": "build",
     "phase": "out",
   },
   "targets": {
-    "2q8xjHgaUSKKhZNW3yeG5N1YGlQ=": {
-      "default": false,
-      "name": "a",
-      "package": "",
-    },
-    "AjMsIC+6hQCH6YdKuj+nDMexa/g=": {
+    "OrCBKiL8SY5rt1caFpNyl7zMsv0=": {
       "default": false,
       "name": "b",
-      "package": "",
+      "package": "schema.test.ts",
+    },
+    "bQW85nYO3uECl4kgumgyqIe7vjk=": {
+      "default": false,
+      "name": "a",
+      "package": "schema.test.ts",
     },
   },
 }

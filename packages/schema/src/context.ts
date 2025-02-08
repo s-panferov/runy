@@ -1,6 +1,5 @@
 import { Compute, Target } from "./index";
 import { Flag } from "./flag";
-import { File } from "./file";
 import { Folder } from "./folder";
 import { Data } from "./data";
 import { Schema, TO_SCHEMA } from "./schema";
@@ -21,9 +20,6 @@ export class ObjectCache {
 const CONTEXTS: Map<string, BuildContext> = new Map();
 
 export class BuildContext {
-  // we put it here for simplicity
-  chain?: Compute;
-
   parent?: BuildContext;
 
   ownFlags: Map<Flag<any, any>, any> = new Map();
@@ -59,54 +55,6 @@ export class BuildContext {
 
     this.hash = hash(obj);
     return this.hash;
-  }
-
-  outFile(path: string): File {
-    return new File(path, this.chain);
-  }
-
-  outFolder(path?: string): Folder {
-    return new Folder(path, this.chain);
-  }
-
-  boolean() {
-    return new Data(z.boolean());
-  }
-
-  number() {
-    return new Data(z.number());
-  }
-
-  data<T extends ZodTypeAny>(schema: T) {
-    return new Data(schema);
-  }
-
-  inout<
-    const IO extends SpecT["InOut"],
-    const R extends SpecT["Ready"] = Record<never, never>
-  >(args: IO): BuildSpec<{ In: {}; Out: {}; InOut: IO; Ready: R }> {
-    return new BuildSpec({
-      inp: {},
-      out: {},
-      inout: args,
-    });
-  }
-
-  define<
-    const I extends SpecT["In"],
-    const O extends SpecT["Out"],
-    const IO extends SpecT["InOut"] = {},
-    const R extends SpecT["Ready"] = Record<never, never>
-  >(
-    args: BuildSpecArgs<{ In: I; Out: O; InOut: IO; Ready: R }>
-  ): BuildSpec<{ In: I; Out: O; InOut: IO; Ready: R }> {
-    return new BuildSpec(args);
-  }
-
-  in<const I extends SpecT["In"]>(
-    inp: I
-  ): BuildSpec<{ In: I; Out: {}; InOut: {}; Ready: {} }> {
-    return new BuildSpec({ inp: inp, inout: {}, out: {} });
   }
 
   with(...mods: BuildContextModifier[]): BuildContext {

@@ -9,7 +9,6 @@
     "check": "tsc -b"
   },
   "dependencies": {
-    "@jest/globals": "^29.7.0",
     "@microsoft/api-extractor": "^7.47.12",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-json": "^6.1.0",
@@ -22,9 +21,8 @@
     "@runy-build/self": "workspace:*",
     "@runy-build/types": "workspace:*",
     "@swc/helpers": "^0.5.15",
-    "@swc/jest": "^0.2.37",
     "@types/node": "^22.9.4",
-    "jest": "^29.7.0",
+    "vitest": "^3.0.5",
     "rollup": "^4.27.3",
     "typescript": "5.7.2"
   },

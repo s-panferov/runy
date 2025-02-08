@@ -1,6 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { getPackage } from "./package";
-import { setWorkspaceRoot } from "./env";
+import { getPackage } from "../package";
+import { setWorkspaceRoot } from "../env";
+import { expect, test, describe } from "vitest";
 
 describe("getPackage", () => {
   test("should return package for string input", () => {

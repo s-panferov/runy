@@ -1,5 +1,7 @@
+import { Compute } from ".";
 import { Query } from "./output";
 import { Schema, TO_SCHEMA, ToSchema } from "./schema";
+import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM } from "./symbols";
 
 type Var = Query<string | number | object>;
 
@@ -7,7 +9,11 @@ export interface CommandOptions {
   args: (string | Var)[];
 }
 
-export class Command implements ToSchema {
+export class Command implements ToSchema, Compute {
+  [COMPUTE_SYM]!: true;
+  [PROVIDE_SYM]!: { stdout: string; stderr: string; code: number };
+  [RESULT_SYM]!: string;
+
   private options: CommandOptions;
   private shell: boolean = false;
 
@@ -22,6 +28,7 @@ export class Command implements ToSchema {
 
   [TO_SCHEMA](schema: Schema) {
     let value: any = {
+      kind: "command",
       args: this.options.args.map(schema.convert),
     };
 
