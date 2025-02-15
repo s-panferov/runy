@@ -3,13 +3,42 @@
 exports[`output access > output access 1`] = `
 {
   "builds": {
-    "bFLvo2G+SKA/atPr30s3AMud1mQ=": {
+    "E7mEbJDyJYNnL12r6rXHGntNT88=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
       },
       "spec": {
-        "inout": {},
+        "inp": {
+          "stdout": [
+            {
+              "$ref": "PBvb+MCRjjeswmsbZ5EhBKW9W/E=",
+              "kind": "build",
+              "phase": "out",
+            },
+            {
+              "kind": "output",
+              "name": "out",
+            },
+            {
+              "kind": "output",
+              "name": "stderr",
+            },
+          ],
+        },
+        "key": [],
+      },
+      "target": {
+        "$ref": "eGrUYcGs068WGxHsW2C2sjA9gzg=",
+        "kind": "target",
+      },
+    },
+    "PBvb+MCRjjeswmsbZ5EhBKW9W/E=": {
+      "ctx": {
+        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
+        "kind": "context",
+      },
+      "spec": {
         "inp": {
           "files": [
             {
@@ -65,43 +94,9 @@ exports[`output access > output access 1`] = `
             "shell": true,
           },
         },
-        "ready": {},
       },
       "target": {
         "$ref": "8AKUcc6NzFiodYWBfzR2TFnXVak=",
-        "kind": "target",
-      },
-    },
-    "qRT6U4QnvDfv4iaX+fZk7iFWKcU=": {
-      "ctx": {
-        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
-        "kind": "context",
-      },
-      "spec": {
-        "inout": {},
-        "inp": {
-          "stdout": [
-            {
-              "$ref": "bFLvo2G+SKA/atPr30s3AMud1mQ=",
-              "kind": "build",
-              "phase": "out",
-            },
-            {
-              "kind": "output",
-              "name": "out",
-            },
-            {
-              "kind": "output",
-              "name": "stderr",
-            },
-          ],
-        },
-        "key": [],
-        "out": {},
-        "ready": {},
-      },
-      "target": {
-        "$ref": "eGrUYcGs068WGxHsW2C2sjA9gzg=",
         "kind": "target",
       },
     },
@@ -114,7 +109,7 @@ exports[`output access > output access 1`] = `
   },
   "flags": {},
   "root": {
-    "$ref": "qRT6U4QnvDfv4iaX+fZk7iFWKcU=",
+    "$ref": "E7mEbJDyJYNnL12r6rXHGntNT88=",
     "kind": "build",
     "phase": "out",
   },

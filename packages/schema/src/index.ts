@@ -56,7 +56,7 @@ export type Compute = ToSchema & {
 };
 
 export type Inputs = Record<string, Compute | Primitive | undefined>;
-export type Outputs = Record<string, Compute | undefined>;
+export type Outputs = Record<string, Compute | Primitive | undefined>;
 
 export type Primitive = string | number;
 

@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`flags 1`] = `
+{
+  "builds": {
+    "Ldo4NR+irhxU0yjv81erUWNhhAo=": {
+      "ctx": {
+        "$ref": "rgxRjKqBunOoHkrR0YGgen1DsYw=",
+        "kind": "context",
+      },
+      "spec": {
+        "key": [],
+        "out": {
+          "a": {
+            "$ref": "y3fNENeOP+cjAS45GnFnf1UBNfg=",
+            "kind": "build",
+            "phase": "out",
+          },
+          "fi": "original",
+        },
+      },
+      "target": {
+        "$ref": "lJ+Vvyx/l4y+WSA3cnd6QY3D1vU=",
+        "kind": "target",
+      },
+    },
+    "y3fNENeOP+cjAS45GnFnf1UBNfg=": {
+      "ctx": {
+        "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
+        "kind": "context",
+      },
+      "spec": {
+        "key": [],
+        "out": {
+          "f1": "override",
+        },
+      },
+      "target": {
+        "$ref": "PKV16cZy/DeLaifTrfeD9Zkt+Js=",
+        "kind": "target",
+      },
+    },
+  },
+  "contexts": {
+    "U1wwAaqukwfarhkuFGe2QSaTdXY=": {
+      "flags": {
+        "0L2zKz2jncrRJgITr64wWtgx8AY=": "override",
+      },
+      "parent": undefined,
+    },
+    "rgxRjKqBunOoHkrR0YGgen1DsYw=": {
+      "flags": {
+        "0L2zKz2jncrRJgITr64wWtgx8AY=": "original",
+      },
+      "parent": undefined,
+    },
+  },
+  "flags": {
+    "0L2zKz2jncrRJgITr64wWtgx8AY=": {
+      "key": "f1",
+      "package": "flags.test.ts",
+      "ty": {
+        "kind": "string",
+      },
+    },
+  },
+  "root": {
+    "$ref": "Ldo4NR+irhxU0yjv81erUWNhhAo=",
+    "kind": "build",
+    "phase": "out",
+  },
+  "targets": {
+    "PKV16cZy/DeLaifTrfeD9Zkt+Js=": {
+      "default": false,
+      "name": "a",
+      "package": "flags.test.ts",
+    },
+    "lJ+Vvyx/l4y+WSA3cnd6QY3D1vU=": {
+      "default": false,
+      "name": "b",
+      "package": "flags.test.ts",
+    },
+  },
+}
+`;

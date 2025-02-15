@@ -38,6 +38,10 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
     return new Runtime({ path });
   }
 
+  key(value: string[]) {
+    this.#key = value;
+  }
+
   in<const I extends SpecT["In"]>(
     this: BuildSpec<T>,
     inp: I
@@ -52,6 +56,7 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
   }
 
   out<const O extends SpecT["Out"]>(
+    this: BuildSpec<T>,
     out: O
   ): asserts this is BuildSpec<{
     In: T["In"];
@@ -63,7 +68,21 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
     return this as any;
   }
 
+  ready<const R extends SpecT["Ready"]>(
+    this: BuildSpec<T>,
+    ready: R
+  ): asserts this is BuildSpec<{
+    In: T["In"];
+    Out: T["Out"];
+    InOut: T["InOut"];
+    Ready: T["Ready"] & R;
+  }> {
+    this.#ready = { ...this.#ready, ...ready };
+    return this as any;
+  }
+
   inout<const IO extends SpecT["InOut"]>(
+    this: BuildSpec<T>,
     inout: IO
   ): BuildSpec<{
     In: T["In"];
@@ -144,6 +163,7 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
     const before = schema.mode;
 
     schema.withMode(SchemaMode.Input);
+
     for (const [k, v] of Object.entries(this.#in)) {
       if (!v) continue;
       object.inp[k] = schema.convert(v);
@@ -166,6 +186,26 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
         if (!v) continue;
         object.ready[k] = schema.convert(v);
       }
+    }
+
+    if (Object.keys(object.inp).length === 0) {
+      // @ts-expect-error
+      delete object.inp;
+    }
+
+    if (Object.keys(object.out).length === 0) {
+      // @ts-expect-error
+      delete object.out;
+    }
+
+    if (Object.keys(object.ready).length === 0) {
+      // @ts-expect-error
+      delete object.ready;
+    }
+
+    if (Object.keys(object.inout).length === 0) {
+      // @ts-expect-error
+      delete object.inout;
     }
 
     schema.withMode(before);

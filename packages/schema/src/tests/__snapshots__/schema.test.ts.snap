@@ -3,17 +3,16 @@
 exports[`output access > output access 1`] = `
 {
   "builds": {
-    "PmJcMLjf5REWgT9jnz7UI1g36qQ=": {
+    "WIGS/OQUcQshZjKD33J2I4VhiDw=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
       },
       "spec": {
-        "inout": {},
         "inp": {
           "a": [
             {
-              "$ref": "vBUu58+BoIrLfI/OHveJ1ipOU6A=",
+              "$ref": "rstVDjphQe3ehMsM/QW/i6ybB8g=",
               "kind": "build",
               "phase": "out",
             },
@@ -35,7 +34,7 @@ exports[`output access > output access 1`] = `
             },
           ],
           "b": {
-            "$ref": "vBUu58+BoIrLfI/OHveJ1ipOU6A=",
+            "$ref": "rstVDjphQe3ehMsM/QW/i6ybB8g=",
             "kind": "build",
             "phase": "out",
           },
@@ -79,20 +78,18 @@ exports[`output access > output access 1`] = `
             },
           ],
         },
-        "ready": {},
       },
       "target": {
         "$ref": "OrCBKiL8SY5rt1caFpNyl7zMsv0=",
         "kind": "target",
       },
     },
-    "vBUu58+BoIrLfI/OHveJ1ipOU6A=": {
+    "rstVDjphQe3ehMsM/QW/i6ybB8g=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
       },
       "spec": {
-        "inout": {},
         "inp": {
           "files": [
             {
@@ -151,7 +148,6 @@ exports[`output access > output access 1`] = `
             },
           ],
         },
-        "ready": {},
       },
       "target": {
         "$ref": "bQW85nYO3uECl4kgumgyqIe7vjk=",
@@ -180,7 +176,7 @@ exports[`output access > output access 1`] = `
     },
   },
   "root": {
-    "$ref": "PmJcMLjf5REWgT9jnz7UI1g36qQ=",
+    "$ref": "WIGS/OQUcQshZjKD33J2I4VhiDw=",
     "kind": "build",
     "phase": "out",
   },
