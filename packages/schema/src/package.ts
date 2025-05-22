@@ -5,7 +5,7 @@ import { registry } from "./registry";
 import { SpecT } from "./target";
 import { WORKSPACE_ROOT } from "./env";
 
-import path from "node:path";
+import path from "path";
 
 export class Package {
   constructor(path: string) {

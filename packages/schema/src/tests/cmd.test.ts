@@ -18,19 +18,17 @@ describe("output access", () => {
         folder: spec.outFolder(),
       });
 
-      spec.out({
-        out: spec.cmd(
-          ({ $, inp: { files }, out: { folder } }) =>
-            $`my command --in=${files.root} --out=${folder.root}`.sh
-        ),
-      });
+      spec.cmd(
+        ({ $, inp: { files }, out: { folder } }) =>
+          $`my command --in=${files.root} --out=${folder.root}`.sh
+      );
 
       return spec;
     });
 
     const b = mod.target("b", (spec: BuildSpec, ctx) => {
       spec.in({
-        stdout: a.out(ctx).out.stderr,
+        folder: a.out(ctx).folder,
       });
 
       return spec;

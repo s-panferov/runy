@@ -3,26 +3,22 @@
 exports[`output access > output access 1`] = `
 {
   "builds": {
-    "E7mEbJDyJYNnL12r6rXHGntNT88=": {
+    "0nCgT2QTe8kdULqVwvX9p70IEU0=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
       },
       "spec": {
         "inp": {
-          "stdout": [
+          "folder": [
             {
-              "$ref": "PBvb+MCRjjeswmsbZ5EhBKW9W/E=",
+              "$ref": "7oNbTm3DPuaAlWQiRr5D7NEEG3E=",
               "kind": "build",
               "phase": "out",
             },
             {
               "kind": "output",
-              "name": "out",
-            },
-            {
-              "kind": "output",
-              "name": "stderr",
+              "name": "folder",
             },
           ],
         },
@@ -33,12 +29,48 @@ exports[`output access > output access 1`] = `
         "kind": "target",
       },
     },
-    "PBvb+MCRjjeswmsbZ5EhBKW9W/E=": {
+    "7oNbTm3DPuaAlWQiRr5D7NEEG3E=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
       },
       "spec": {
+        "impl": {
+          "args": [
+            "my command --in=",
+            [
+              {
+                "kind": "output",
+                "name": "inp",
+              },
+              {
+                "kind": "output",
+                "name": "files",
+              },
+              {
+                "kind": "output",
+                "name": "root",
+              },
+            ],
+            " --out=",
+            [
+              {
+                "kind": "output",
+                "name": "out",
+              },
+              {
+                "kind": "output",
+                "name": "folder",
+              },
+              {
+                "kind": "output",
+                "name": "root",
+              },
+            ],
+          ],
+          "kind": "command",
+          "shell": true,
+        },
         "inp": {
           "files": [
             {
@@ -57,42 +89,6 @@ exports[`output access > output access 1`] = `
               "path": undefined,
             },
           ],
-          "out": {
-            "args": [
-              "my command --in=",
-              [
-                {
-                  "kind": "output",
-                  "name": "inp",
-                },
-                {
-                  "kind": "output",
-                  "name": "files",
-                },
-                {
-                  "kind": "output",
-                  "name": "root",
-                },
-              ],
-              " --out=",
-              [
-                {
-                  "kind": "output",
-                  "name": "out",
-                },
-                {
-                  "kind": "output",
-                  "name": "folder",
-                },
-                {
-                  "kind": "output",
-                  "name": "root",
-                },
-              ],
-            ],
-            "kind": "command",
-            "shell": true,
-          },
         },
       },
       "target": {
@@ -109,7 +105,7 @@ exports[`output access > output access 1`] = `
   },
   "flags": {},
   "root": {
-    "$ref": "E7mEbJDyJYNnL12r6rXHGntNT88=",
+    "$ref": "0nCgT2QTe8kdULqVwvX9p70IEU0=",
     "kind": "build",
     "phase": "out",
   },

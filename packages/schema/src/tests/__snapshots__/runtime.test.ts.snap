@@ -3,12 +3,16 @@
 exports[`runtime input > runtime input 1`] = `
 {
   "builds": {
-    "5hC1Co257MFTGOZ9UMjmG0k/AUQ=": {
+    "n1wwMf9GAjeZdpUmSOD029Tuez4=": {
       "ctx": {
         "$ref": "U1wwAaqukwfarhkuFGe2QSaTdXY=",
         "kind": "context",
       },
       "spec": {
+        "impl": {
+          "kind": "runtime",
+          "path": "./runtime.rt",
+        },
         "inp": {
           "files": [
             {
@@ -27,10 +31,6 @@ exports[`runtime input > runtime input 1`] = `
               "path": undefined,
             },
           ],
-          "out": {
-            "kind": "runtime",
-            "path": "./runtime.rt",
-          },
         },
       },
       "target": {
@@ -47,7 +47,7 @@ exports[`runtime input > runtime input 1`] = `
   },
   "flags": {},
   "root": {
-    "$ref": "5hC1Co257MFTGOZ9UMjmG0k/AUQ=",
+    "$ref": "n1wwMf9GAjeZdpUmSOD029Tuez4=",
     "kind": "build",
     "phase": "out",
   },

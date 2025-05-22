@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@runy-build/schema": "workspace:*",
-    "execa": "^9.5.1",
+    "execa": "^9.5.3",
     "vscode-jsonrpc": "^8.2.1",
     "winston": "^3.17.0"
   },

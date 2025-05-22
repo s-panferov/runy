@@ -1,7 +1,7 @@
-import path from "node:path";
+import path from "path";
 import { Package } from "./package";
 
-import assert from "node:assert";
+import assert from "assert";
 
 export class Registry {
   packages = new Map<string, Package>();

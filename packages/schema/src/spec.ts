@@ -26,6 +26,8 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
   #inout: T["InOut"];
   #ready?: T["Ready"];
 
+  #impl: Runtime | Command | undefined;
+
   constructor() {
     this.#in = {};
     this.#out = {};
@@ -34,8 +36,9 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
     this.#key = [];
   }
 
-  runtime<T extends { default: { SPEC: T } }>(path: string): Runtime {
-    return new Runtime({ path });
+  runtime<T extends { default: { SPEC: T } }>(path: string): this {
+    this.#impl = new Runtime({ path });
+    return this;
   }
 
   key(value: string[]) {
@@ -138,7 +141,7 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
       inp: Query<T["In"]>,
       out: Query<T["Out"]>
     ) => Command
-  ): Command {
+  ): this {
     function $(...args: any[]) {
       return cmd.apply(null, args as any);
     }
@@ -148,7 +151,8 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
     $.out = Output.dyn<Query<T["Out"]>>(undefined, "out");
     $.sh = cmd.sh;
 
-    return func($, $.inp, $.out);
+    this.#impl = func($, $.inp, $.out);
+    return this;
   }
 
   [TO_SCHEMA](schema: Schema) {
@@ -158,6 +162,7 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
       out: {} as Record<string, any>,
       inout: {} as Record<string, any>,
       ready: {} as Record<string, any>,
+      impl: [] as any[],
     };
 
     const before = schema.mode;
@@ -186,6 +191,13 @@ export class BuildSpec<T extends SpecT = AnySpecT> {
         if (!v) continue;
         object.ready[k] = schema.convert(v);
       }
+    }
+
+    if (this.#impl) {
+      object.impl.push(schema.convert(this.#impl));
+    } else {
+      // @ts-expect-error
+      delete object.impl;
     }
 
     if (Object.keys(object.inp).length === 0) {

@@ -1,18 +1,24 @@
 import * as path from "path";
 import { rspack } from "@rspack/core";
 
+import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
+
 /** @type {import('@rspack/cli').Configuration} */
 const config = {
   entry: {
     index: "./src/index.ts",
   },
+  target: "es2022",
   mode: "development",
   externalsPresets: {
-    node: true,
+    web: true, // Don't bundle web modules
   },
   output: {
     filename: "index.js",
     chunkFormat: "module",
+    library: {
+      type: "module",
+    },
   },
   experiments: {
     outputModule: true,
@@ -23,6 +29,7 @@ const config = {
     },
     extensions: ["...", ".ts"],
   },
+  plugins: [new NodePolyfillPlugin()],
   module: {
     rules: [
       {

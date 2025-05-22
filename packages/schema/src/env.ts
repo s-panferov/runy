@@ -1,11 +1,11 @@
-import { dirname } from "node:path";
-import process from "node:process";
-import assert from "node:assert";
+import { dirname } from "path";
+import assert from "assert";
 
 export let WORKSPACE_ROOT = "";
 
 try {
-  WORKSPACE_ROOT = process.env["BUILD_WORKSPACE"] || process.cwd();
+  WORKSPACE_ROOT =
+    global.process.env["BUILD_WORKSPACE"] || global.process.cwd();
 } catch {
   // no access
 }

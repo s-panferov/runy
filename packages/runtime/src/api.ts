@@ -116,6 +116,7 @@ export class BuildAPI<T extends SpecT> {
   $: execa.ExecaMethod<{}> & {
     sh: execa.ExecaMethod<{}>;
   };
+
   #ref: BuildRef;
 
   constructor(id: number, cwd: string) {

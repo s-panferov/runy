@@ -1,16 +1,11 @@
-import { Compute } from ".";
 import { Schema, ToSchema } from "./schema";
-import { COMPUTE_SYM, PROVIDE_SYM, RESULT_SYM, TO_SCHEMA } from "./symbols";
+import { TO_SCHEMA } from "./symbols";
 
 export interface RuntimeOptions {
   path: string;
 }
 
-export class Runtime implements ToSchema, Compute {
-  [COMPUTE_SYM]!: true;
-  [PROVIDE_SYM]!: string;
-  [RESULT_SYM]!: string;
-
+export class Runtime implements ToSchema {
   private options: RuntimeOptions;
 
   constructor(options: RuntimeOptions) {

@@ -12,9 +12,7 @@ export const target = () => {
       folder: spec.outFolder(),
     });
 
-    spec.out({
-      out: spec.runtime("./runtime.rt"),
-    });
+    spec.runtime("./runtime.rt");
 
     return spec;
   });

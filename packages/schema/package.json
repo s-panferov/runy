@@ -9,11 +9,12 @@
     "@runy-build/types": "workspace:*",
     "@types/object-hash": "3.0.6",
     "object-hash": "*",
-    "zod": "^3.23.8",
-    "zod-to-json-schema": "^3.23.5"
+    "zod": "^3.25.3",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
-    "@types/node": "^22.9.4"
+    "@types/node": "^22.15.19",
+    "node-polyfill-webpack-plugin": "*"
   },
   "exports": {
     ".": "./dist/index.js",
