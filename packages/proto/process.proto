@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package process;
+
+message ProcessMetadata {
+  string service = 1;
+  string alias = 2;
+  string cmd = 3;
+  optional string cwd = 4;
+  RestartStrategy restart = 5;
+  repeated string args = 6;
+  map<string, string> env = 7;
+}
+
+message RestartStrategy {
+  oneof restart_strategy_kind {
+    NeverRestart never = 1;
+    AlwaysRestart always = 2;
+    ExponentialRestart exponential = 3;
+    FixedRestart fixed = 4;
+  }
+}
+
+message NeverRestart {
+
+}
+
+message AlwaysRestart {
+
+}
+
+message ExponentialRestart {
+  uint64 initial_delay = 1;
+  uint64 max_delay = 2;
+  double multiplier = 3;
+  optional uint32 max_restarts = 4;
+}
+
+message FixedRestart {
+  uint64 delay = 1;
+  optional uint32 max_restarts = 2;
+}

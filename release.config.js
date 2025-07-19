@@ -7,7 +7,7 @@ export default {
     [
       "@semantic-release/exec",
       {
-        prepareCmd: "runy build",
+        // prepareCmd: "runy build",
         // publishCmd: "pnpm run publish-packages",
       },
     ],

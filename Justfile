@@ -1,6 +1,5 @@
-default: build
+proto: 
+  cd packages/proto && sh ./gen.sh
 
-build:
-  just -f packages/schema/Justfile
-  just -f packages/runtime/Justfile
-    
+core:
+  cd packages/core && pnpm exec rollup -c rollup.config.js

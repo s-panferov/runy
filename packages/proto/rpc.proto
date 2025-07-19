@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package rpc;
+
+import "process.proto";
+
+service RpcService {
+  rpc StreamRpc(stream RpcEnvelope) returns (stream RpcEnvelope);
+}
+ 
+message RpcRequest {
+  optional string id = 1;
+  oneof request {
+    Initialize initialize = 2;
+    Metadata metadata = 3;
+    RenderService render = 4;
+    StopService stop = 5;
+    process.ProcessMetadata process = 6;
+  }
+}
+
+message Initialize {
+  string workspace = 1;
+}
+
+message Metadata {
+  string workspace = 1;
+  string source = 2;
+  repeated ServiceMetadata services = 3;
+  repeated string alive = 4;
+}
+
+message ServiceMetadata {
+  string name = 1;
+  string cwd = 2;
+  bool autorun = 3;
+}
+
+message RenderService {
+  string service = 1;
+  string cwd = 2;
+}
+
+message StopService {
+  string service = 1;
+}
+
+message RenderServiceResponse {
+
+}
+
+message StopServiceResponse {
+
+}
+
+message Empty {
+
+}
+
+message RpcResponse {
+  string id = 1;
+  RpcError error = 2;
+  oneof response {
+    Empty empty = 3;
+    RenderServiceResponse render = 4;
+    StopServiceResponse stop = 5;
+  };
+}
+
+message RpcEnvelope {
+  oneof message {
+    RpcRequest request = 1;
+    RpcResponse response = 2;
+  }
+}
+
+message RpcError {
+  int32 code = 1;
+  string message = 2;
+  bytes data = 3;
+}

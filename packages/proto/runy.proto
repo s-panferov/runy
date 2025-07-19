@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package runy;
+
+import "google/protobuf/struct.proto";
+import "process.proto";
+
+// Service mapping the GraphQL RunySubscription
+service Runy {
+  rpc Terminate(TerminateRequest) returns (TerminateResponse);
+  rpc Version(VersionRequest) returns (VersionResponse);
+  rpc Command(ExecRequest) returns (stream CommandRecord);
+  rpc ClearJournal(ClearJournalRequest) returns (ClearJournalResponse);
+  rpc Tree(TreeRequest) returns (stream TreeResponse);
+  rpc Journal(JournalRequest) returns (stream JournalRecord);
+  rpc JournalEntries(JournalEntriesRequest) returns (JournalEntriesResponse);
+  rpc WorkspaceCreate(WorkspaceCreateRequest) returns (WorkspaceCreateResponse);
+  rpc WorkspaceRemove(WorkspaceRemoveRequest) returns (WorkspaceRemoveResponse);
+}
+
+message WorkspaceCreateRequest {
+  WorkspaceMetadata workspace = 1;
+}
+
+message WorkspaceCreateResponse {}
+
+message WorkspaceRemoveRequest {
+  string name = 1;
+}
+
+message WorkspaceRemoveResponse {}
+
+message JournalEntriesRequest {
+  string journal = 1;
+  repeated Range ranges = 2;
+}
+
+message Range {
+  uint64 start = 1;
+  uint64 end = 2;
+}
+
+message JournalEntriesResponse {
+  map<uint64, JournalEntry> entries = 1;
+}
+
+message JournalEntry {
+  uint64 ts = 1;
+  uint64 level = 2;
+  optional string workspace = 3;
+  optional string service = 4;
+  optional string message = 5;
+  bytes fields = 6;
+}
+
+message JournalRequest {
+  string workspace = 1;
+  optional string service = 2;
+  optional string query = 3;
+}
+
+message JournalRecord {
+  string uuid = 1;
+  uint64 length = 2;
+}
+
+message TreeRequest {}
+
+message TreeResponse {
+  repeated TreeWorkspace workspaces = 1;
+}
+
+message TreeWorkspace {
+  string name = 1;
+  repeated TreeProcess processes = 2;
+  repeated TreeService services = 3;
+}
+
+message TreeService {
+  string name = 1;
+  repeated TreeProcess processes = 2;
+}
+
+message TreeProcess {
+  string name = 1;
+}
+
+message Flag {
+  string label = 1;
+  google.protobuf.Value value = 2;
+}
+
+message ExecRequest {
+  string folder = 1;
+  bool watch = 3;
+  optional string uuid = 4;
+  optional bytes extra = 5;
+  oneof command_kind {
+    StartCommand start = 6;
+  }
+}
+
+message WorkspaceMetadata {
+  string name = 1;
+  optional string cwd = 3;
+}
+
+message StartCommand {
+  WorkspaceMetadata workspace = 2;
+  process.ProcessMetadata process = 3;
+}
+
+message ClearJournalRequest {}
+
+message ClearJournalResponse {}
+
+message TerminateRequest {}
+
+message TerminateResponse {}
+
+message VersionRequest {}
+
+message CommandRecord {
+  oneof BuildRecord {
+    Metadata metadata = 1;
+    LogEntry log = 2;
+    JsonResult result = 3;
+  }
+}
+
+message JsonResult {
+  bytes value = 1;
+  JsonError error = 2;
+}
+
+message JsonError {
+  string code = 1;
+  string message = 2;
+  optional JsonError source = 3;
+  repeated string backtrace = 4;
+}
+
+message Metadata {}
+
+message LogEntry {}
+
+message VersionResponse {
+  string version = 1;
+}

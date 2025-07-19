@@ -1,6 +1,6 @@
 packages:
-  - "packages/schema"
-  - "packages/runtime"
-  - "packages/types"
-  - "website"
-  - "build"
+  - packages/*
+  - website
+
+onlyBuiltDependencies:
+  - protoc-gen-js

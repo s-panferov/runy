@@ -1,0 +1,32 @@
+{
+  "name": "@runy-dev/proto",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "generate": "sh ./gen.sh"
+  },
+  "devDependencies": {
+    "ts-proto": "^2.7.5",
+    "@bufbuild/protobuf": "^2.6.1",
+    "@grpc/grpc-js": "^1.13.4",
+    "grpc-web": "^1.5.0",
+    "protoc-gen-js": "^3.21.4-4",
+    "@types/google-protobuf": "^3.15.12",
+    "google-protobuf": "^3.21.4",
+    "rxjs": "^7.8.2"
+  },
+  "exports": {
+    "./rpc": {
+      "default": "./src/rpc.ts"
+    },
+    "./browser": {
+      "default": "./src/browser.ts"
+    },
+    "./process": {
+      "default": "./src/process.ts"
+    },
+    ".": {
+      "default": "./src/index.ts"
+    }
+  }
+}
