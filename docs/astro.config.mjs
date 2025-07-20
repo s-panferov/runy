@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import starlightThemeBlack from "starlight-theme-black";
+// import starlightThemeBlack from "starlight-theme-black";
 
 import tailwindcss from "@tailwindcss/vite";
 
@@ -11,18 +11,18 @@ export default defineConfig({
     starlight({
       title: "My Docs",
       plugins: [
-        starlightThemeBlack({
-          navLinks: [
-            {
-              // optional
-              label: "Docs",
-              link: "/guides/example",
-            },
-          ],
-          //optional
-          footerText:
-            "Built & designed by [shadcn](https://twitter.com/shadcn). Ported to Astro Starlight by [Adrián UB](https://github.com/adrian-ub). The source code is available on [GitHub](https://github.com/adrian-ub/starlight-theme-black).",
-        }),
+        // starlightThemeBlack({
+        //   navLinks: [
+        //     {
+        //       // optional
+        //       label: "Docs",
+        //       link: "/guides/example",
+        //     },
+        //   ],
+        //   //optional
+        //   footerText:
+        //     "Built & designed by [shadcn](https://twitter.com/shadcn). Ported to Astro Starlight by [Adrián UB](https://github.com/adrian-ub). The source code is available on [GitHub](https://github.com/adrian-ub/starlight-theme-black).",
+        // }),
       ],
       customCss: ["./src/styles/global.css"],
       social: [
