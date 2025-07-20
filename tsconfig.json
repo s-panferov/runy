@@ -5,12 +5,7 @@
     "noEmit": true,
     "types": []
   },
-  "references": [
-    { "path": "./build" },
-    { "path": "./packages/schema" },
-    { "path": "./packages/runtime" },
-    { "path": "./packages/types" }
-  ],
+  "references": [{ "path": "./packages/core" }],
   "include": [],
   "files": []
 }
