@@ -6,5 +6,6 @@ packages:
 hoist: false
 
 onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
   - protoc-gen-js
   - sharp
