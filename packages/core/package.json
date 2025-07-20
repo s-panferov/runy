@@ -1,6 +1,7 @@
 {
   "name": "@runy-dev/core",
   "version": "0.0.1",
+  "private": false,
   "dependencies": {
     "@runy-dev/proto": "workspace:*",
     "@types/node": "^24.0.15",
