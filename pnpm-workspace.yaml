@@ -9,3 +9,6 @@ onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - protoc-gen-js
   - sharp
+  - '@swc/core'
+  - esbuild
+  - protobufjs
