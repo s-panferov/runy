@@ -9,24 +9,17 @@
     "check": "tsc -b"
   },
   "dependencies": {
+    "@changesets/cli": "^2.29.5",
     "@microsoft/api-extractor": "^7.52.8",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-swc": "^0.4.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rsbuild/core": "^1.4.8",
+    "@rollup/plugin-swc": "^0.4.0",
     "@swc/helpers": "^0.5.17",
     "@types/node": "^24.0.15",
     "rollup": "^4.45.1",
     "typescript": "5.8.3",
     "vitest": "^3.2.4"
   },
-  "devDependencies": {
-    "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/exec": "^7.1.0",
-    "@semantic-release/github": "^11.0.3",
-    "@semantic-release/release-notes-generator": "^14.0.3",
-    "semantic-release": "^24.2.7",
-    "semantic-release-pnpm": "^1.0.2"
-  }
+  "devDependencies": {}
 }

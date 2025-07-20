@@ -1,7 +1,5 @@
 [workspace]
-members = ["tests"]
-
-resolver = "2"
+members = []
 
 [profile.release]
 lto = true

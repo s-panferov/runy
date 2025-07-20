@@ -2,7 +2,7 @@ import "./lsp.ts";
 
 import { ExecaScriptMethod } from "execa";
 
-import { Module } from "./module.ts";
+import { Workspace } from "./module.ts";
 import type { JsonRpcProcess } from "./rpc.ts";
 import { RunningService } from "./lsp.ts";
 
@@ -43,7 +43,7 @@ export class Service implements IService {
   running?: RunningService;
 
   name: string;
-  module: Module;
+  module: Workspace;
 
   static isAutorun(service: Service): boolean {
     return service[$autorun];
@@ -57,7 +57,7 @@ export class Service implements IService {
     return service.#cwd;
   }
 
-  constructor(module: Module, name: string) {
+  constructor(module: Workspace, name: string) {
     this.name = name;
     this.module = module;
   }

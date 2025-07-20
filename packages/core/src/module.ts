@@ -6,8 +6,8 @@ import { logger } from "./logger.ts";
 import { RpcRequest, RpcResponse, ServiceMetadata } from "@runy-dev/proto/rpc";
 import { LspServiceContext, RunningService } from "./lsp.ts";
 
-let globalModule: Module;
-export function mainModule() {
+let globalModule: Workspace;
+export function mainWorkspace() {
   return globalModule;
 }
 
@@ -19,7 +19,7 @@ export function getService(name: string): Service {
   return service;
 }
 
-export class Module {
+export class Workspace {
   meta: ImportMeta;
   services: Map<string, Service> = new Map();
   proto = new Protocol("127.0.0.1:4122");
@@ -103,10 +103,10 @@ export class Module {
   fileset = (glob: string[]) => {};
 }
 
-export function module(meta: ImportMeta): Module {
+export function workspace(meta: ImportMeta): Workspace {
   if (globalModule) {
     throw new Error("Module already initialized");
   }
-  globalModule = new Module(meta);
+  globalModule = new Workspace(meta);
   return globalModule;
 }
