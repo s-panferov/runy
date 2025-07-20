@@ -18,6 +18,7 @@ import {
   type UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 import { ProcessMetadata } from "./process.ts";
+import { WorkspaceMetadata } from "./runy.ts";
 
 export const protobufPackage = "rpc";
 
@@ -31,7 +32,7 @@ export interface RpcRequest {
 }
 
 export interface Initialize {
-  workspace: string;
+  workspace: WorkspaceMetadata | undefined;
 }
 
 export interface Metadata {
@@ -242,13 +243,13 @@ export const RpcRequest: MessageFns<RpcRequest> = {
 };
 
 function createBaseInitialize(): Initialize {
-  return { workspace: "" };
+  return { workspace: undefined };
 }
 
 export const Initialize: MessageFns<Initialize> = {
   encode(message: Initialize, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.workspace !== "") {
-      writer.uint32(10).string(message.workspace);
+    if (message.workspace !== undefined) {
+      WorkspaceMetadata.encode(message.workspace, writer.uint32(10).fork()).join();
     }
     return writer;
   },
@@ -265,7 +266,7 @@ export const Initialize: MessageFns<Initialize> = {
             break;
           }
 
-          message.workspace = reader.string();
+          message.workspace = WorkspaceMetadata.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -278,13 +279,13 @@ export const Initialize: MessageFns<Initialize> = {
   },
 
   fromJSON(object: any): Initialize {
-    return { workspace: isSet(object.workspace) ? globalThis.String(object.workspace) : "" };
+    return { workspace: isSet(object.workspace) ? WorkspaceMetadata.fromJSON(object.workspace) : undefined };
   },
 
   toJSON(message: Initialize): unknown {
     const obj: any = {};
-    if (message.workspace !== "") {
-      obj.workspace = message.workspace;
+    if (message.workspace !== undefined) {
+      obj.workspace = WorkspaceMetadata.toJSON(message.workspace);
     }
     return obj;
   },
@@ -294,7 +295,9 @@ export const Initialize: MessageFns<Initialize> = {
   },
   fromPartial<I extends Exact<DeepPartial<Initialize>, I>>(object: I): Initialize {
     const message = createBaseInitialize();
-    message.workspace = object.workspace ?? "";
+    message.workspace = (object.workspace !== undefined && object.workspace !== null)
+      ? WorkspaceMetadata.fromPartial(object.workspace)
+      : undefined;
     return message;
   },
 };

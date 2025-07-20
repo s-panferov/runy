@@ -30,6 +30,11 @@ message WorkspaceRemoveRequest {
 
 message WorkspaceRemoveResponse {}
 
+message WorkspaceMetadata {
+  string name = 1;
+  optional string cwd = 2;
+}
+
 message JournalEntriesRequest {
   string journal = 1;
   repeated Range ranges = 2;
@@ -98,11 +103,6 @@ message ExecRequest {
   oneof command_kind {
     StartCommand start = 6;
   }
-}
-
-message WorkspaceMetadata {
-  string name = 1;
-  optional string cwd = 3;
 }
 
 message StartCommand {

@@ -6,6 +6,9 @@ import { logger } from "./logger.ts";
 import { RpcRequest, RpcResponse, ServiceMetadata } from "@runy-dev/proto/rpc";
 import { LspServiceContext, RunningService } from "./lsp.ts";
 
+import { basename, dirname } from "node:path";
+import { base36MD5 } from "./hash.ts";
+
 let globalModule: Workspace;
 export function mainWorkspace() {
   return globalModule;
@@ -19,6 +22,23 @@ export function getService(name: string): Service {
   return service;
 }
 
+export function getPathFromURL(urlOrPath: string): string {
+  // Handle URLs
+  if (urlOrPath.startsWith("file://")) {
+    urlOrPath = urlOrPath.slice(7); // Remove 'file://' prefix
+  } else if (urlOrPath.includes("://")) {
+    // For other protocols, extract the pathname
+    try {
+      const url = new URL(urlOrPath);
+      urlOrPath = url.pathname;
+    } catch {
+      // If URL parsing fails, treat as regular path
+    }
+  }
+
+  return urlOrPath;
+}
+
 export class Workspace {
   meta: ImportMeta;
   services: Map<string, Service> = new Map();
@@ -27,47 +47,27 @@ export class Workspace {
 
   constructor(meta: ImportMeta) {
     this.meta = meta;
-    this.workspace = process.env.RUNY_WORKSPACE || meta.filename || meta.url;
+
+    const fullLabel = meta.filename || meta.url;
+    const path = getPathFromURL(fullLabel);
+
+    this.workspace =
+      process.env.RUNY_WORKSPACE ||
+      `${basename(path)}-${base36MD5(dirname(path))}`;
+
+    this.proto.onRequest(this.onRequest.bind(this));
 
     setTimeout(async () => {
       logger.error("Initializing LSP...");
-
-      this.proto.onRequest(async (req) => {
-        if (req.render) {
-          logger.error("Received render request:", req.render);
-          const service = this.services.get(req.render.service)!;
-
-          if (!service.running) {
-            const context = new LspServiceContext(service, req.render);
-            const running = new RunningService(context, service);
-            service.running = running;
-          }
-
-          await service.running.cycle();
-
-          logger.error(
-            "Render request processed for service:",
-            req.render.service
-          );
-
-          return RpcResponse.create({
-            render: {},
-          });
-        } else {
-          return RpcResponse.create({
-            error: {
-              code: 400,
-              message: `Unknown request`,
-            },
-          });
-        }
-      });
 
       await this.proto.connect();
       await this.proto.notify(
         RpcRequest.create({
           initialize: {
-            workspace: this.workspace,
+            workspace: {
+              name: this.workspace,
+              cwd: dirname(path),
+            },
           },
         })
       );
@@ -101,6 +101,34 @@ export class Workspace {
   };
 
   fileset = (glob: string[]) => {};
+
+  private async onRequest(req: RpcRequest) {
+    if (req.render) {
+      logger.error("Received render request:", req.render);
+      const service = this.services.get(req.render.service)!;
+
+      if (!service.running) {
+        const context = new LspServiceContext(service, req.render);
+        const running = new RunningService(context, service);
+        service.running = running;
+      }
+
+      await service.running.cycle();
+
+      logger.error("Render request processed for service:", req.render.service);
+
+      return RpcResponse.create({
+        render: {},
+      });
+    } else {
+      return RpcResponse.create({
+        error: {
+          code: 400,
+          message: `Unknown request`,
+        },
+      });
+    }
+  }
 }
 
 export function workspace(meta: ImportMeta): Workspace {

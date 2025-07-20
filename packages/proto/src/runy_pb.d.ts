@@ -70,6 +70,35 @@ export namespace WorkspaceRemoveResponse {
   }
 }
 
+export class WorkspaceMetadata extends jspb.Message {
+  getName(): string;
+  setName(value: string): WorkspaceMetadata;
+
+  getCwd(): string;
+  setCwd(value: string): WorkspaceMetadata;
+  hasCwd(): boolean;
+  clearCwd(): WorkspaceMetadata;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): WorkspaceMetadata.AsObject;
+  static toObject(includeInstance: boolean, msg: WorkspaceMetadata): WorkspaceMetadata.AsObject;
+  static serializeBinaryToWriter(message: WorkspaceMetadata, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): WorkspaceMetadata;
+  static deserializeBinaryFromReader(message: WorkspaceMetadata, reader: jspb.BinaryReader): WorkspaceMetadata;
+}
+
+export namespace WorkspaceMetadata {
+  export type AsObject = {
+    name: string,
+    cwd?: string,
+  }
+
+  export enum CwdCase { 
+    _CWD_NOT_SET = 0,
+    CWD = 2,
+  }
+}
+
 export class JournalEntriesRequest extends jspb.Message {
   getJournal(): string;
   setJournal(value: string): JournalEntriesRequest;
@@ -443,35 +472,6 @@ export namespace ExecRequest {
   export enum ExtraCase { 
     _EXTRA_NOT_SET = 0,
     EXTRA = 5,
-  }
-}
-
-export class WorkspaceMetadata extends jspb.Message {
-  getName(): string;
-  setName(value: string): WorkspaceMetadata;
-
-  getCwd(): string;
-  setCwd(value: string): WorkspaceMetadata;
-  hasCwd(): boolean;
-  clearCwd(): WorkspaceMetadata;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): WorkspaceMetadata.AsObject;
-  static toObject(includeInstance: boolean, msg: WorkspaceMetadata): WorkspaceMetadata.AsObject;
-  static serializeBinaryToWriter(message: WorkspaceMetadata, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): WorkspaceMetadata;
-  static deserializeBinaryFromReader(message: WorkspaceMetadata, reader: jspb.BinaryReader): WorkspaceMetadata;
-}
-
-export namespace WorkspaceMetadata {
-  export type AsObject = {
-    name: string,
-    cwd?: string,
-  }
-
-  export enum CwdCase { 
-    _CWD_NOT_SET = 0,
-    CWD = 3,
   }
 }
 

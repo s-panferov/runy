@@ -3,11 +3,12 @@ syntax = "proto3";
 package rpc;
 
 import "process.proto";
+import "runy.proto";
 
 service RpcService {
   rpc StreamRpc(stream RpcEnvelope) returns (stream RpcEnvelope);
 }
- 
+
 message RpcRequest {
   optional string id = 1;
   oneof request {
@@ -20,7 +21,7 @@ message RpcRequest {
 }
 
 message Initialize {
-  string workspace = 1;
+  runy.WorkspaceMetadata workspace = 1;
 }
 
 message Metadata {
@@ -45,17 +46,11 @@ message StopService {
   string service = 1;
 }
 
-message RenderServiceResponse {
+message RenderServiceResponse {}
 
-}
+message StopServiceResponse {}
 
-message StopServiceResponse {
-
-}
-
-message Empty {
-
-}
+message Empty {}
 
 message RpcResponse {
   string id = 1;
@@ -64,7 +59,7 @@ message RpcResponse {
     Empty empty = 3;
     RenderServiceResponse render = 4;
     StopServiceResponse stop = 5;
-  };
+  }
 }
 
 message RpcEnvelope {
