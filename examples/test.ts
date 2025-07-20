@@ -10,7 +10,7 @@ ws.service("test", (s) => {
     await ctx.process({
       alias: "server",
       cmd: "python3",
-      args: ["-m", "http.server", "8400"],
+      args: ["-m", "http.server", "8500"],
     });
   });
 });

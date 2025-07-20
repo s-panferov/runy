@@ -1,7 +1,10 @@
 packages:
   - packages/*
   - examples
-  - website
+  - docs
+
+hoist: false
 
 onlyBuiltDependencies:
   - protoc-gen-js
+  - sharp
