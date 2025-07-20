@@ -1,35 +1,22 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-// import starlightThemeBlack from "starlight-theme-black";
+import starlightTheme from "starlight-theme-nova";
+import stylex from "vite-plugin-stylex";
 
 import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [
     starlight({
-      title: "My Docs",
-      plugins: [
-        // starlightThemeBlack({
-        //   navLinks: [
-        //     {
-        //       // optional
-        //       label: "Docs",
-        //       link: "/guides/example",
-        //     },
-        //   ],
-        //   //optional
-        //   footerText:
-        //     "Built & designed by [shadcn](https://twitter.com/shadcn). Ported to Astro Starlight by [Adrián UB](https://github.com/adrian-ub). The source code is available on [GitHub](https://github.com/adrian-ub/starlight-theme-black).",
-        // }),
-      ],
+      title: "RUNY",
+      plugins: [starlightTheme()],
       customCss: ["./src/styles/global.css"],
       social: [
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/withastro/starlight",
+          href: "https://github.com/s-panferov/runy",
         },
       ],
       sidebar: [
@@ -49,6 +36,7 @@ export default defineConfig({
   ],
 
   vite: {
-    plugins: [tailwindcss()],
+    // @ts-ignore
+    plugins: [tailwindcss(), stylex()],
   },
 });
