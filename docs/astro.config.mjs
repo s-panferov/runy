@@ -2,12 +2,13 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightTheme from "starlight-theme-nova";
-import stylex from "vite-plugin-stylex";
 import icon from "astro-icon";
 
 import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
+
+import d2 from "astro-d2";
 
 export default defineConfig({
   integrations: [
@@ -33,6 +34,10 @@ export default defineConfig({
           items: [
             // Each item here is one entry in the navigation menu.
             { label: "Installation", slug: "guides/installation" },
+            { label: "Workspace", slug: "guides/workspace" },
+            { label: "Process", slug: "guides/process" },
+            { label: "Web Console", slug: "guides/web-console" },
+            { label: "Daemon", slug: "guides/daemon" },
           ],
         },
         {
@@ -42,6 +47,7 @@ export default defineConfig({
       ],
     }),
     react(),
+    d2(),
   ],
 
   vite: {

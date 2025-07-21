@@ -1,0 +1,61 @@
+---
+title: Workspaces
+description: Learn how to manage workspaces.
+---
+
+This guide will walk you through the concept of Workspaces. Runy supports multiple different primitives:
+
+* [**Processes**](/guides/process) - commands that run in the background
+* **Services** - "logical" groups of processes that can be started and stopped together
+* [**Workspaces**](/guides/workspace) - a collection of services and processes
+
+## Creating a Workspace
+
+To run any process or service, you need to create a workspace first. A workspace is a logical grouping of services and processes to simplify management and organization. 
+
+Certain commands, like `runy start`, will infer the workspace name from a command and automatically create it if it doesn't exist, but sometimes you may want to create a workspace explicitly.
+
+```bash
+runy workspace create my-workspace 
+```
+
+This command will create a new workspace named `my-workspace`.
+
+## Removing a Workspace
+
+To remove a workspace, you can use the `runy workspace remove` command:
+
+```bash
+runy workspace remove my-workspace
+``` 
+
+This command will delete the workspace, its store, and all its associated processes and services. Be cautious, as this action cannot be undone.
+
+## Working Directory
+
+When creating a workspace, you can specify the current working directory using the `--cwd` option. This is useful if you want to create a workspace in a specific directory:
+
+```bash
+runy workspace create my-workspace --cwd /path/to/directory
+```
+
+By default, the workspace will be created in the current directory.
+
+## Workspace Store and Symlinks
+
+Runy creates a workspace store in a system cache folder. Each workspace is stored as a subdirectory under this path.
+
+When you create a workspace, Runy also creates a symlink in the current directory pointing to the workspace directory. This allows you to easily access the workspace store from your current location without needing to navigate to the workspace directory.
+
+import { FileTree } from '@astrojs/starlight/components';
+
+<FileTree>
+
+- /path/to/directory
+  - .runy/
+    - my-workspace/
+      - workspace
+        - journal.sqlite
+
+</FileTree>
+

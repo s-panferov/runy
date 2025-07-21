@@ -1,0 +1,30 @@
+---
+title: Processes
+description: Learn how to manage processes.
+---
+
+Runy provides a powerful process management system that allows you to run and manage tasks efficiently. This guide will walk you through the key features and how to use them.
+
+## Start
+
+To simply start a process, you can use the `runy start` command followed by the name of the process you want to run. For example:
+
+```bash
+runy start "python3 -m http.server"
+```
+
+By default, this will create a new [Workspace](/guides/workspace) named after the command you provided. If a workspace with that name already exists, it will reuse it.
+
+You can also specify a custom workspace name using the `--workspace` option:
+
+```bash
+runy start "python3 -m http.server" --workspace my-workspace
+```
+
+## Current Working Directory
+
+When you start a process, Runy will start a process in the current directory. If you want to specify a different working directory, you can use the `--cwd` option:
+
+```bash
+runy start "python3 -m http.server" --cwd /path/to/directory
+``` 

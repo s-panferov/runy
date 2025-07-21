@@ -1,0 +1,53 @@
+---
+title: Daemon
+description: Learn how to manage the runy daemon.
+---
+
+Runy runs as a background service called the "daemon". This guide will walk you through how to manage the runy daemon, including starting, stopping, and checking its status.
+
+## What is the Daemon?
+
+Runy follows a client-server architecture where the daemon acts as the server. It manages processes and services, allowing you to run tasks in the background without needing to keep your terminal open.
+
+```d2 sketch pad=10
+direction: right
+runy (cli) --> runy (daemon) { 
+  label: "GRPC"
+}
+```
+
+Runy uses gRPC protocol to communicate between the CLI and the daemon.
+
+## Should I run the Daemon?
+
+Runy CLI command will automatically start the daemon if it is not running. However, you can also run the daemon manually if you prefer to manage it yourself.
+
+## Starting the Daemon
+
+To start the runy daemon, use the following command:
+
+```bash
+runy daemon start
+```
+
+This command will start the daemon in the background, allowing it to manage processes and services.
+
+## Stopping the Daemon
+
+To stop the runy daemon, use the following command:
+
+```bash
+runy daemon stop
+```
+
+This command will gracefully stop the daemon and all managed processes.
+
+## Killing the Daemon
+
+If the daemon is not responding or you need to forcefully stop it, you can use the `kill` command:
+
+```bash
+runy daemon stop --kill
+```
+
+Be cautious with this command, as it will immediately terminate the daemon without gracefully stopping processes. Some processes may not be cleaned up properly and can remain running.
