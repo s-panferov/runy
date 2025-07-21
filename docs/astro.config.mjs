@@ -36,20 +36,24 @@ export default defineConfig({
             { label: "Installation", slug: "guides/installation" },
             { label: "Workspace", slug: "guides/workspace" },
             { label: "Process", slug: "guides/process" },
+            { label: "Service", slug: "guides/service" },
             { label: "Web Console", slug: "guides/web-console" },
             { label: "Daemon", slug: "guides/daemon" },
           ],
         },
         {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
+          label: "SDK",
+          items: [
+            { label: "Getting Started", slug: "sdk/getting-started" },
+            { label: "Service Lifecycle", slug: "sdk/service-lifecycle" },
+          ],
         },
       ],
     }),
     react(),
     d2({
       sketch: true,
-      skipGeneration: true,
+      skipGeneration: false,
     }),
   ],
 

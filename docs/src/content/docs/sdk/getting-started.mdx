@@ -1,0 +1,75 @@
+---
+title: "Getting Started with Runy SDK"
+description: "Learn how to get started with the Runy SDK for building services."
+---
+
+## SDK Runtime
+
+Runy SDK works best in combination with [Bun](https://bun.com/) or [Deno](https://deno.com/) Javascript runtimes. It can also run on Node.js, but Bun or Deno are recommended for better performance and features.
+
+This guide will be using Bun, but the concepts apply similarly to Deno.
+
+## Creating a Workspace file
+
+To create a managed Workspace, you need to define a TypeScript file `my-workspace.ts` using the `@runy-dev/core` SDK.
+
+```typescript
+#!/usr/bin/env -S bun --watch
+
+import { workspace } from "@runy-dev/core";
+
+const ws = workspace(import.meta);
+
+ws.service("test", (s) => {
+  s.autorun();
+  s.run(async (ctx) => {
+    await ctx.process({
+      alias: "server",
+      cmd: "python3",
+      args: ["-m", "http.server", "8500"],
+    });
+  });
+});
+```
+
+This part of the code defines a workspace with a service named "test". The service runs a simple HTTP server using Python.
+
+## Running the managed Workspace
+
+Before running the workspace you need to make your TypeScript file executable. You can do this by running the following command in your terminal:
+
+```bash
+chmod +x my-workspace.ts
+```
+
+To run the workspace, use the following command:
+
+```bash
+runy start my-workspace.ts
+```
+
+This command will start the workspace defined in `workspace.ts`. Once started, Runy will analyze the workspace, start the defined services, and manage their lifecycle.
+
+## How it works
+
+When you run the `runy start` command, the following happens:
+
+1. Runy creates a new workspace `my-workspace` based on the file name.
+2. It starts a new process inside the workspace, which runs the TypeScript file. The TypeScript is an executable (because of the `#!/usr/bin/env -S bun --watch` line) that executes the code using Bun.
+3. The `@runy-dev/core` SDK is imported, which provides the `workspace` function to define services and manage their lifecycle.
+4. The SDK communicates with the Runy daemon to manage the services defined in the workspace.
+
+```d2 sketch pad=10 layout=elk
+direction: right
+runy: Runy
+bun: Bun/Deno {
+  ts: "my-workspace.ts"
+  sdk: Runy SDK
+
+  ts -> sdk: Import Runy SDK
+}
+
+runy -> bun: Start my-workspace.ts
+
+bun.sdk -> runy: Define services and manage lifecycle (via gRPC)
+```

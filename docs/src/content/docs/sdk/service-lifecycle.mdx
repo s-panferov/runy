@@ -1,0 +1,26 @@
+---
+title: Service lifecycle
+description: Learn about the lifecycle of services in Runy.
+---
+
+Services in Runy SDK are defined using the `ws.service` method. Inside the service definition we can specify static properties, autorun behavior and define a `run` function that will be executed when the service is started
+
+```typescript
+ws.service("test", (s) => {
+  // Static properties, like service name, description, etc.
+  // This function body is executed on service creation
+  s.autorun();
+
+  // This function is executed when the service is started
+  s.run(async (ctx) => {
+    // Here we can definy any process, like starting a server
+    await ctx.process({
+      alias: "server",
+      cmd: "python3",
+      args: ["-m", "http.server", "8500"],
+    });
+  });
+});
+```
+
+The body of the `service` function is executed when the service is created, and the `s.run` function is executed when the service is started. The `ctx` parameter provides access to the service context, which allows you to define resources that will be managed by Runy.
