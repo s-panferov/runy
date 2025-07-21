@@ -1,24 +1,38 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash
-hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
-  actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+title: Runy is a developer console and process manager
+description: Tired of juggling multiple terminal windows and tabs? Runy is here to help you manage your development processes with ease. It provides a unified interface for running, monitoring, and controlling your applications.
+template: doc
+hero: 
+  title: ''
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import Logo from '../../components/index.astro'
+import Card from '../../components/card.astro'
 
-## Next steps
+<div class="p-5">
+	<Logo />
+
+	<div class='flex flex-col gap-4 mt-8'>
+		<Card
+			icon="mdi:cog"
+			title="Process Management"
+			description='Runy allows you to easily start, stop, and monitor your development processes in one place. No more switching between terminal windows!'
+		/>
+		<Card
+			icon="mdi:web"
+			title="Web Interface"
+			description='Access a beautiful web-based dashboard to visualize and control your processes from any browser. Monitor logs, performance metrics, and system status in real-time.'
+		/>
+		<Card
+			icon="mdi:language-typescript"
+			title="TypeScript SDK"
+			description='Write your configuration files using our modern TypeScript SDK. Get full type safety, autocompletion, and validation for your process configurations.'
+		/>
+	</div>
+	
+</div>
+
+{/* ## Next steps
 
 <CardGrid stagger>
 	<Card title="Update content" icon="pencil">
@@ -33,4 +47,5 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 	<Card title="Read the docs" icon="open-book">
 		Learn more in [the Starlight Docs](https://starlight.astro.build/).
 	</Card>
-</CardGrid>
+</CardGrid> */}
+

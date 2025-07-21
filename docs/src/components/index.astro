@@ -1,0 +1,22 @@
+---
+import { Image } from "astro:assets";
+import screenshot from "../assets/screen.png";
+---
+
+<h1 class="pb-0 mb-0 text-6xl text-gray-800 dark:text-gray-100 text-left">
+  <span class="text-accent-400">Runy</span> is a developer console
+  and process manager
+</h1>
+
+<div class="mb-5 text-gray-700 dark:text-gray-300">
+  Tired of juggling multiple terminal windows and tabs? Runy is here to help you
+  manage your development processes with ease. It provides a unified interface
+  for running, monitoring, and controlling your applications.
+</div>
+
+<Image
+  src={screenshot}
+  alt="Runy logo"
+  class="border mt-2 border-gray-200 shadow-sm rounded"
+  style={{ display: "block", margin: "0 auto" }}
+/>

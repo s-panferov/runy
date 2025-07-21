@@ -3,13 +3,21 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightTheme from "starlight-theme-nova";
 import stylex from "vite-plugin-stylex";
+import icon from "astro-icon";
 
 import tailwindcss from "@tailwindcss/vite";
 
+import react from "@astrojs/react";
+
 export default defineConfig({
   integrations: [
+    icon(),
     starlight({
       title: "RUNY",
+      logo: {
+        src: "./src/assets/runy.png",
+        replacesTitle: true,
+      },
       plugins: [starlightTheme()],
       customCss: ["./src/styles/global.css"],
       social: [
@@ -33,10 +41,11 @@ export default defineConfig({
         },
       ],
     }),
+    react(),
   ],
 
   vite: {
     // @ts-ignore
-    plugins: [tailwindcss(), stylex()],
+    plugins: [tailwindcss()],
   },
 });
