@@ -53,7 +53,7 @@ export default defineConfig({
     react(),
     d2({
       sketch: true,
-      skipGeneration: false,
+      skipGeneration: true,
     }),
   ],
 
