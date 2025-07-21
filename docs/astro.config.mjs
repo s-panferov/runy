@@ -47,7 +47,10 @@ export default defineConfig({
       ],
     }),
     react(),
-    d2(),
+    d2({
+      sketch: true,
+      skipGeneration: true,
+    }),
   ],
 
   vite: {
