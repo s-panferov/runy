@@ -7,7 +7,7 @@ This guide will walk you through the different ways to install runy on your syst
 
 ## Installation Methods
 
-There are two primary ways to install runy:
+There are three primary ways to install runy:
 
 ### 1. Install Script
 
@@ -30,6 +30,29 @@ If you're using macOS or Linux and prefer using Homebrew, you can install runy f
 ```bash
 brew tap runy-dev/runy
 brew install runy
+```
+
+### 3. Manual Binary Download
+
+You can also download the pre-compiled binaries directly from our GitHub releases page:
+
+1. Go to the [runy releases page](https://github.com/s-panferov/runy/releases)
+2. Download the appropriate archive for your system:
+   - `runy-x86_64-apple-darwin.tar.xz` - macOS (Intel)
+   - `runy-aarch64-apple-darwin.tar.xz` - macOS (Apple Silicon)
+   - `runy-x86_64-unknown-linux-gnu.tar.xz` - Linux (glibc)
+   - `runy-x86_64-unknown-linux-musl.tar.xz` - Linux (musl)
+3. Extract the archive and move the `runy` binary to a directory in your PATH
+
+Example for macOS:
+
+```bash
+# Download and extract (replace with your architecture)
+curl -L -o runy.tar.xz https://github.com/s-panferov/runy/releases/latest/download/runy-aarch64-apple-darwin.tar.xz
+tar -xf runy.tar.xz
+
+# Move to a directory in your PATH
+sudo mv runy /usr/local/bin/
 ```
 
 ## Verify Installation
