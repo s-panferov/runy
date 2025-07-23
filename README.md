@@ -4,6 +4,8 @@
 
 Runy is a developer console and process manager designed to simplify development workflows by providing a unified interface for running, monitoring, and controlling applications.
 
+Read documentation at [runy.dev](https://runy.dev).
+
 ## Overview
 
 ![Runy screenshot](./docs/src/assets/screen.png)
