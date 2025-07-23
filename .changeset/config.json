@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@runy-dev/website"]
+  "ignore": ["@runy-dev/website", "@runy-dev/examples"]
 }

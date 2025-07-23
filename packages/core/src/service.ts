@@ -1,10 +1,8 @@
 import "./lsp.ts";
 
-import { ExecaScriptMethod } from "execa";
-
 import { Workspace } from "./module.ts";
-import type { JsonRpcProcess } from "./rpc.ts";
 import { RunningService } from "./lsp.ts";
+import { RestartStrategy as ProtoRestartStrategy } from "@runy-dev/proto/process";
 
 export interface ServiceRunFunc<A, R> {
   (ctx: ServiceContext, args: A): Promise<R>;
@@ -14,11 +12,42 @@ export interface ServiceSpecFunc {
   (ctx: Service): void;
 }
 
+export type RestartAlways = {
+  kind: "always";
+} & ProtoRestartStrategy["always"];
+
+export type RestartFixed = {
+  kind: "fixed";
+} & ProtoRestartStrategy["fixed"];
+
+export type RestartExponential = {
+  kind: "exponential";
+} & ProtoRestartStrategy["exponential"];
+
+export type RestartNever = {
+  kind: "never";
+} & ProtoRestartStrategy["never"];
+
+export type RestartStrategy =
+  | RestartAlways
+  | RestartFixed
+  | RestartExponential
+  | RestartNever;
+
+export interface ProcessSpec {
+  alias: string;
+  cmd: string;
+  args?: string[];
+  env?: Partial<{ [key in string]: string }> | null;
+  cwd?: string | null;
+  restart?: RestartStrategy;
+}
+
 export interface ServiceContext {
   cwd: string;
   fileset(glob: string[]): Promise<string[]>;
   ready(): Promise<void>;
-  process(process: JsonRpcProcess): Promise<void>;
+  process(process: ProcessSpec): Promise<void>;
   // $: ExecaScriptMethod;
 }
 

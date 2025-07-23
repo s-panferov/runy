@@ -1,13 +1,13 @@
 import winston from "winston";
 
-import { Service, ServiceContext } from "./service.ts";
+import { ProcessSpec, Service, ServiceContext } from "./service.ts";
 import * as ex from "execa";
 
-import type { JsonRpcFilesetRequest, JsonRpcProcess } from "./rpc.ts";
+import type { JsonRpcFilesetRequest } from "./rpc.ts";
 
 import { RpcRequest } from "./proto.ts";
 import { logger } from "./logger.ts";
-import { ProcessMetadata } from "@runy-dev/proto/process";
+import { ProcessMetadata, RestartStrategy } from "@runy-dev/proto/process";
 import { RenderService } from "@runy-dev/proto/rpc";
 
 let __init = false;
@@ -211,9 +211,41 @@ export class LspServiceContext implements ServiceContext {
     }) as any;
   }
 
-  async process(process: JsonRpcProcess): Promise<void> {
+  async process(process: ProcessSpec): Promise<void> {
     if (!process.cwd) {
       process.cwd = this.cwd;
+    }
+
+    let restart: RestartStrategy | undefined;
+    switch (process.restart?.kind) {
+      case "always": {
+        const { kind, ...rest } = process.restart;
+        restart = RestartStrategy.fromPartial({
+          always: rest,
+        });
+        break;
+      }
+      case "fixed": {
+        const { kind, ...rest } = process.restart;
+        restart = RestartStrategy.fromPartial({
+          fixed: rest,
+        });
+        break;
+      }
+      case "exponential": {
+        const { kind, ...rest } = process.restart;
+        restart = RestartStrategy.fromPartial({
+          exponential: rest,
+        });
+        break;
+      }
+      case "never": {
+        const { kind, ...rest } = process.restart;
+        restart = RestartStrategy.fromPartial({
+          never: rest,
+        });
+        break;
+      }
     }
 
     await this.service.module.proto.notify(
@@ -224,6 +256,7 @@ export class LspServiceContext implements ServiceContext {
           args: process.args,
           cwd: process.cwd,
           alias: process.alias,
+          restart: restart,
           env: process.env || {},
         }),
       })
