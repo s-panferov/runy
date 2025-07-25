@@ -3,6 +3,7 @@ syntax = "proto3";
 package runy;
 
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 import "process.proto";
 
 // Service mapping the GraphQL RunySubscription
@@ -86,8 +87,18 @@ message TreeService {
   repeated TreeProcess processes = 2;
 }
 
+enum TreeProcessState {
+  TREE_PROCESS_STATE_UNSPECIFIED = 0;
+  TREE_PROCESS_STATE_RUNNING = 1;
+  TREE_PROCESS_STATE_FAILED = 2;
+}
+
 message TreeProcess {
   string name = 1;
+  uint64 pid = 2;
+  uint64 restart_count = 3;
+  optional google.protobuf.Timestamp last_restart = 4;
+  TreeProcessState state = 5;
 }
 
 message Flag {

@@ -9,6 +9,12 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "process";
 
+export interface Watch {
+  prefix: string;
+  include: string[];
+  exclude: string[];
+}
+
 export interface ProcessMetadata {
   service: string;
   alias: string;
@@ -17,6 +23,7 @@ export interface ProcessMetadata {
   restart: RestartStrategy | undefined;
   args: string[];
   env: { [key: string]: string };
+  watch?: Watch | undefined;
 }
 
 export interface ProcessMetadata_EnvEntry {
@@ -49,8 +56,100 @@ export interface FixedRestart {
   maxRestarts?: number | undefined;
 }
 
+function createBaseWatch(): Watch {
+  return { prefix: "", include: [], exclude: [] };
+}
+
+export const Watch: MessageFns<Watch> = {
+  encode(message: Watch, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.prefix !== "") {
+      writer.uint32(10).string(message.prefix);
+    }
+    for (const v of message.include) {
+      writer.uint32(18).string(v!);
+    }
+    for (const v of message.exclude) {
+      writer.uint32(26).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Watch {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWatch();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.prefix = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.include.push(reader.string());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.exclude.push(reader.string());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Watch {
+    return {
+      prefix: isSet(object.prefix) ? globalThis.String(object.prefix) : "",
+      include: globalThis.Array.isArray(object?.include) ? object.include.map((e: any) => globalThis.String(e)) : [],
+      exclude: globalThis.Array.isArray(object?.exclude) ? object.exclude.map((e: any) => globalThis.String(e)) : [],
+    };
+  },
+
+  toJSON(message: Watch): unknown {
+    const obj: any = {};
+    if (message.prefix !== "") {
+      obj.prefix = message.prefix;
+    }
+    if (message.include?.length) {
+      obj.include = message.include;
+    }
+    if (message.exclude?.length) {
+      obj.exclude = message.exclude;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Watch>, I>>(base?: I): Watch {
+    return Watch.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Watch>, I>>(object: I): Watch {
+    const message = createBaseWatch();
+    message.prefix = object.prefix ?? "";
+    message.include = object.include?.map((e) => e) || [];
+    message.exclude = object.exclude?.map((e) => e) || [];
+    return message;
+  },
+};
+
 function createBaseProcessMetadata(): ProcessMetadata {
-  return { service: "", alias: "", cmd: "", cwd: undefined, restart: undefined, args: [], env: {} };
+  return { service: "", alias: "", cmd: "", cwd: undefined, restart: undefined, args: [], env: {}, watch: undefined };
 }
 
 export const ProcessMetadata: MessageFns<ProcessMetadata> = {
@@ -76,6 +175,9 @@ export const ProcessMetadata: MessageFns<ProcessMetadata> = {
     Object.entries(message.env).forEach(([key, value]) => {
       ProcessMetadata_EnvEntry.encode({ key: key as any, value }, writer.uint32(58).fork()).join();
     });
+    if (message.watch !== undefined) {
+      Watch.encode(message.watch, writer.uint32(66).fork()).join();
+    }
     return writer;
   },
 
@@ -145,6 +247,14 @@ export const ProcessMetadata: MessageFns<ProcessMetadata> = {
           }
           continue;
         }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.watch = Watch.decode(reader, reader.uint32());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -168,6 +278,7 @@ export const ProcessMetadata: MessageFns<ProcessMetadata> = {
           return acc;
         }, {})
         : {},
+      watch: isSet(object.watch) ? Watch.fromJSON(object.watch) : undefined,
     };
   },
 
@@ -200,6 +311,9 @@ export const ProcessMetadata: MessageFns<ProcessMetadata> = {
         });
       }
     }
+    if (message.watch !== undefined) {
+      obj.watch = Watch.toJSON(message.watch);
+    }
     return obj;
   },
 
@@ -222,6 +336,7 @@ export const ProcessMetadata: MessageFns<ProcessMetadata> = {
       }
       return acc;
     }, {});
+    message.watch = (object.watch !== undefined && object.watch !== null) ? Watch.fromPartial(object.watch) : undefined;
     return message;
   },
 };

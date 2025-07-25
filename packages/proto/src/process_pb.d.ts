@@ -2,6 +2,36 @@ import * as jspb from 'google-protobuf'
 
 
 
+export class Watch extends jspb.Message {
+  getPrefix(): string;
+  setPrefix(value: string): Watch;
+
+  getIncludeList(): Array<string>;
+  setIncludeList(value: Array<string>): Watch;
+  clearIncludeList(): Watch;
+  addInclude(value: string, index?: number): Watch;
+
+  getExcludeList(): Array<string>;
+  setExcludeList(value: Array<string>): Watch;
+  clearExcludeList(): Watch;
+  addExclude(value: string, index?: number): Watch;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Watch.AsObject;
+  static toObject(includeInstance: boolean, msg: Watch): Watch.AsObject;
+  static serializeBinaryToWriter(message: Watch, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Watch;
+  static deserializeBinaryFromReader(message: Watch, reader: jspb.BinaryReader): Watch;
+}
+
+export namespace Watch {
+  export type AsObject = {
+    prefix: string,
+    includeList: Array<string>,
+    excludeList: Array<string>,
+  }
+}
+
 export class ProcessMetadata extends jspb.Message {
   getService(): string;
   setService(value: string): ProcessMetadata;
@@ -30,6 +60,11 @@ export class ProcessMetadata extends jspb.Message {
   getEnvMap(): jspb.Map<string, string>;
   clearEnvMap(): ProcessMetadata;
 
+  getWatch(): Watch | undefined;
+  setWatch(value?: Watch): ProcessMetadata;
+  hasWatch(): boolean;
+  clearWatch(): ProcessMetadata;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ProcessMetadata.AsObject;
   static toObject(includeInstance: boolean, msg: ProcessMetadata): ProcessMetadata.AsObject;
@@ -47,11 +82,17 @@ export namespace ProcessMetadata {
     restart?: RestartStrategy.AsObject,
     argsList: Array<string>,
     envMap: Array<[string, string]>,
+    watch?: Watch.AsObject,
   }
 
   export enum CwdCase { 
     _CWD_NOT_SET = 0,
     CWD = 4,
+  }
+
+  export enum WatchCase { 
+    _WATCH_NOT_SET = 0,
+    WATCH = 8,
   }
 }
 

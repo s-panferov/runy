@@ -21,21 +21,63 @@ import {
   type UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 import { Value } from "./google/protobuf/struct.ts";
+import { Timestamp } from "./google/protobuf/timestamp.ts";
 import { ProcessMetadata } from "./process.ts";
 
 export const protobufPackage = "runy";
+
+export enum TreeProcessState {
+  TREE_PROCESS_STATE_UNSPECIFIED = 0,
+  TREE_PROCESS_STATE_RUNNING = 1,
+  TREE_PROCESS_STATE_FAILED = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function treeProcessStateFromJSON(object: any): TreeProcessState {
+  switch (object) {
+    case 0:
+    case "TREE_PROCESS_STATE_UNSPECIFIED":
+      return TreeProcessState.TREE_PROCESS_STATE_UNSPECIFIED;
+    case 1:
+    case "TREE_PROCESS_STATE_RUNNING":
+      return TreeProcessState.TREE_PROCESS_STATE_RUNNING;
+    case 2:
+    case "TREE_PROCESS_STATE_FAILED":
+      return TreeProcessState.TREE_PROCESS_STATE_FAILED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return TreeProcessState.UNRECOGNIZED;
+  }
+}
+
+export function treeProcessStateToJSON(object: TreeProcessState): string {
+  switch (object) {
+    case TreeProcessState.TREE_PROCESS_STATE_UNSPECIFIED:
+      return "TREE_PROCESS_STATE_UNSPECIFIED";
+    case TreeProcessState.TREE_PROCESS_STATE_RUNNING:
+      return "TREE_PROCESS_STATE_RUNNING";
+    case TreeProcessState.TREE_PROCESS_STATE_FAILED:
+      return "TREE_PROCESS_STATE_FAILED";
+    case TreeProcessState.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 
 export interface WorkspaceCreateRequest {
   workspace: WorkspaceMetadata | undefined;
 }
 
-export interface WorkspaceCreateResponse {}
+export interface WorkspaceCreateResponse {
+}
 
 export interface WorkspaceRemoveRequest {
   name: string;
 }
 
-export interface WorkspaceRemoveResponse {}
+export interface WorkspaceRemoveResponse {
+}
 
 export interface WorkspaceMetadata {
   name: string;
@@ -81,7 +123,8 @@ export interface JournalRecord {
   length: number;
 }
 
-export interface TreeRequest {}
+export interface TreeRequest {
+}
 
 export interface TreeResponse {
   workspaces: TreeWorkspace[];
@@ -100,6 +143,10 @@ export interface TreeService {
 
 export interface TreeProcess {
   name: string;
+  pid: number;
+  restartCount: number;
+  lastRestart?: Date | undefined;
+  state: TreeProcessState;
 }
 
 export interface Flag {
@@ -120,15 +167,20 @@ export interface StartCommand {
   process: ProcessMetadata | undefined;
 }
 
-export interface ClearJournalRequest {}
+export interface ClearJournalRequest {
+}
 
-export interface ClearJournalResponse {}
+export interface ClearJournalResponse {
+}
 
-export interface TerminateRequest {}
+export interface TerminateRequest {
+}
 
-export interface TerminateResponse {}
+export interface TerminateResponse {
+}
 
-export interface VersionRequest {}
+export interface VersionRequest {
+}
 
 export interface CommandRecord {
   metadata?: Metadata | undefined;
@@ -148,9 +200,11 @@ export interface JsonError {
   backtrace: string[];
 }
 
-export interface Metadata {}
+export interface Metadata {
+}
 
-export interface LogEntry {}
+export interface LogEntry {
+}
 
 export interface VersionResponse {
   version: string;
@@ -161,25 +215,15 @@ function createBaseWorkspaceCreateRequest(): WorkspaceCreateRequest {
 }
 
 export const WorkspaceCreateRequest: MessageFns<WorkspaceCreateRequest> = {
-  encode(
-    message: WorkspaceCreateRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: WorkspaceCreateRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.workspace !== undefined) {
-      WorkspaceMetadata.encode(
-        message.workspace,
-        writer.uint32(10).fork()
-      ).join();
+      WorkspaceMetadata.encode(message.workspace, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): WorkspaceCreateRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): WorkspaceCreateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWorkspaceCreateRequest();
     while (reader.pos < end) {
@@ -203,11 +247,7 @@ export const WorkspaceCreateRequest: MessageFns<WorkspaceCreateRequest> = {
   },
 
   fromJSON(object: any): WorkspaceCreateRequest {
-    return {
-      workspace: isSet(object.workspace)
-        ? WorkspaceMetadata.fromJSON(object.workspace)
-        : undefined,
-    };
+    return { workspace: isSet(object.workspace) ? WorkspaceMetadata.fromJSON(object.workspace) : undefined };
   },
 
   toJSON(message: WorkspaceCreateRequest): unknown {
@@ -218,19 +258,14 @@ export const WorkspaceCreateRequest: MessageFns<WorkspaceCreateRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<WorkspaceCreateRequest>, I>>(
-    base?: I
-  ): WorkspaceCreateRequest {
+  create<I extends Exact<DeepPartial<WorkspaceCreateRequest>, I>>(base?: I): WorkspaceCreateRequest {
     return WorkspaceCreateRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<WorkspaceCreateRequest>, I>>(
-    object: I
-  ): WorkspaceCreateRequest {
+  fromPartial<I extends Exact<DeepPartial<WorkspaceCreateRequest>, I>>(object: I): WorkspaceCreateRequest {
     const message = createBaseWorkspaceCreateRequest();
-    message.workspace =
-      object.workspace !== undefined && object.workspace !== null
-        ? WorkspaceMetadata.fromPartial(object.workspace)
-        : undefined;
+    message.workspace = (object.workspace !== undefined && object.workspace !== null)
+      ? WorkspaceMetadata.fromPartial(object.workspace)
+      : undefined;
     return message;
   },
 };
@@ -240,19 +275,12 @@ function createBaseWorkspaceCreateResponse(): WorkspaceCreateResponse {
 }
 
 export const WorkspaceCreateResponse: MessageFns<WorkspaceCreateResponse> = {
-  encode(
-    _: WorkspaceCreateResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: WorkspaceCreateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): WorkspaceCreateResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): WorkspaceCreateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWorkspaceCreateResponse();
     while (reader.pos < end) {
@@ -276,14 +304,10 @@ export const WorkspaceCreateResponse: MessageFns<WorkspaceCreateResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<WorkspaceCreateResponse>, I>>(
-    base?: I
-  ): WorkspaceCreateResponse {
+  create<I extends Exact<DeepPartial<WorkspaceCreateResponse>, I>>(base?: I): WorkspaceCreateResponse {
     return WorkspaceCreateResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<WorkspaceCreateResponse>, I>>(
-    _: I
-  ): WorkspaceCreateResponse {
+  fromPartial<I extends Exact<DeepPartial<WorkspaceCreateResponse>, I>>(_: I): WorkspaceCreateResponse {
     const message = createBaseWorkspaceCreateResponse();
     return message;
   },
@@ -294,22 +318,15 @@ function createBaseWorkspaceRemoveRequest(): WorkspaceRemoveRequest {
 }
 
 export const WorkspaceRemoveRequest: MessageFns<WorkspaceRemoveRequest> = {
-  encode(
-    message: WorkspaceRemoveRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: WorkspaceRemoveRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): WorkspaceRemoveRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): WorkspaceRemoveRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWorkspaceRemoveRequest();
     while (reader.pos < end) {
@@ -344,14 +361,10 @@ export const WorkspaceRemoveRequest: MessageFns<WorkspaceRemoveRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<WorkspaceRemoveRequest>, I>>(
-    base?: I
-  ): WorkspaceRemoveRequest {
+  create<I extends Exact<DeepPartial<WorkspaceRemoveRequest>, I>>(base?: I): WorkspaceRemoveRequest {
     return WorkspaceRemoveRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<WorkspaceRemoveRequest>, I>>(
-    object: I
-  ): WorkspaceRemoveRequest {
+  fromPartial<I extends Exact<DeepPartial<WorkspaceRemoveRequest>, I>>(object: I): WorkspaceRemoveRequest {
     const message = createBaseWorkspaceRemoveRequest();
     message.name = object.name ?? "";
     return message;
@@ -363,19 +376,12 @@ function createBaseWorkspaceRemoveResponse(): WorkspaceRemoveResponse {
 }
 
 export const WorkspaceRemoveResponse: MessageFns<WorkspaceRemoveResponse> = {
-  encode(
-    _: WorkspaceRemoveResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: WorkspaceRemoveResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): WorkspaceRemoveResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): WorkspaceRemoveResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWorkspaceRemoveResponse();
     while (reader.pos < end) {
@@ -399,14 +405,10 @@ export const WorkspaceRemoveResponse: MessageFns<WorkspaceRemoveResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<WorkspaceRemoveResponse>, I>>(
-    base?: I
-  ): WorkspaceRemoveResponse {
+  create<I extends Exact<DeepPartial<WorkspaceRemoveResponse>, I>>(base?: I): WorkspaceRemoveResponse {
     return WorkspaceRemoveResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<WorkspaceRemoveResponse>, I>>(
-    _: I
-  ): WorkspaceRemoveResponse {
+  fromPartial<I extends Exact<DeepPartial<WorkspaceRemoveResponse>, I>>(_: I): WorkspaceRemoveResponse {
     const message = createBaseWorkspaceRemoveResponse();
     return message;
   },
@@ -417,10 +419,7 @@ function createBaseWorkspaceMetadata(): WorkspaceMetadata {
 }
 
 export const WorkspaceMetadata: MessageFns<WorkspaceMetadata> = {
-  encode(
-    message: WorkspaceMetadata,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: WorkspaceMetadata, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -431,8 +430,7 @@ export const WorkspaceMetadata: MessageFns<WorkspaceMetadata> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): WorkspaceMetadata {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseWorkspaceMetadata();
     while (reader.pos < end) {
@@ -481,14 +479,10 @@ export const WorkspaceMetadata: MessageFns<WorkspaceMetadata> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<WorkspaceMetadata>, I>>(
-    base?: I
-  ): WorkspaceMetadata {
+  create<I extends Exact<DeepPartial<WorkspaceMetadata>, I>>(base?: I): WorkspaceMetadata {
     return WorkspaceMetadata.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<WorkspaceMetadata>, I>>(
-    object: I
-  ): WorkspaceMetadata {
+  fromPartial<I extends Exact<DeepPartial<WorkspaceMetadata>, I>>(object: I): WorkspaceMetadata {
     const message = createBaseWorkspaceMetadata();
     message.name = object.name ?? "";
     message.cwd = object.cwd ?? undefined;
@@ -501,10 +495,7 @@ function createBaseJournalEntriesRequest(): JournalEntriesRequest {
 }
 
 export const JournalEntriesRequest: MessageFns<JournalEntriesRequest> = {
-  encode(
-    message: JournalEntriesRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JournalEntriesRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.journal !== "") {
       writer.uint32(10).string(message.journal);
     }
@@ -514,12 +505,8 @@ export const JournalEntriesRequest: MessageFns<JournalEntriesRequest> = {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): JournalEntriesRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): JournalEntriesRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJournalEntriesRequest();
     while (reader.pos < end) {
@@ -553,9 +540,7 @@ export const JournalEntriesRequest: MessageFns<JournalEntriesRequest> = {
   fromJSON(object: any): JournalEntriesRequest {
     return {
       journal: isSet(object.journal) ? globalThis.String(object.journal) : "",
-      ranges: globalThis.Array.isArray(object?.ranges)
-        ? object.ranges.map((e: any) => Range.fromJSON(e))
-        : [],
+      ranges: globalThis.Array.isArray(object?.ranges) ? object.ranges.map((e: any) => Range.fromJSON(e)) : [],
     };
   },
 
@@ -570,14 +555,10 @@ export const JournalEntriesRequest: MessageFns<JournalEntriesRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<JournalEntriesRequest>, I>>(
-    base?: I
-  ): JournalEntriesRequest {
+  create<I extends Exact<DeepPartial<JournalEntriesRequest>, I>>(base?: I): JournalEntriesRequest {
     return JournalEntriesRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JournalEntriesRequest>, I>>(
-    object: I
-  ): JournalEntriesRequest {
+  fromPartial<I extends Exact<DeepPartial<JournalEntriesRequest>, I>>(object: I): JournalEntriesRequest {
     const message = createBaseJournalEntriesRequest();
     message.journal = object.journal ?? "";
     message.ranges = object.ranges?.map((e) => Range.fromPartial(e)) || [];
@@ -590,10 +571,7 @@ function createBaseRange(): Range {
 }
 
 export const Range: MessageFns<Range> = {
-  encode(
-    message: Range,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: Range, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.start !== 0) {
       writer.uint32(8).uint64(message.start);
     }
@@ -604,8 +582,7 @@ export const Range: MessageFns<Range> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Range {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRange();
     while (reader.pos < end) {
@@ -670,25 +647,15 @@ function createBaseJournalEntriesResponse(): JournalEntriesResponse {
 }
 
 export const JournalEntriesResponse: MessageFns<JournalEntriesResponse> = {
-  encode(
-    message: JournalEntriesResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JournalEntriesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     Object.entries(message.entries).forEach(([key, value]) => {
-      JournalEntriesResponse_EntriesEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork()
-      ).join();
+      JournalEntriesResponse_EntriesEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
     });
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): JournalEntriesResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): JournalEntriesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJournalEntriesResponse();
     while (reader.pos < end) {
@@ -699,10 +666,7 @@ export const JournalEntriesResponse: MessageFns<JournalEntriesResponse> = {
             break;
           }
 
-          const entry1 = JournalEntriesResponse_EntriesEntry.decode(
-            reader,
-            reader.uint32()
-          );
+          const entry1 = JournalEntriesResponse_EntriesEntry.decode(reader, reader.uint32());
           if (entry1.value !== undefined) {
             message.entries[entry1.key] = entry1.value;
           }
@@ -720,12 +684,10 @@ export const JournalEntriesResponse: MessageFns<JournalEntriesResponse> = {
   fromJSON(object: any): JournalEntriesResponse {
     return {
       entries: isObject(object.entries)
-        ? Object.entries(object.entries).reduce<{
-            [key: number]: JournalEntry;
-          }>((acc, [key, value]) => {
-            acc[globalThis.Number(key)] = JournalEntry.fromJSON(value);
-            return acc;
-          }, {})
+        ? Object.entries(object.entries).reduce<{ [key: number]: JournalEntry }>((acc, [key, value]) => {
+          acc[globalThis.Number(key)] = JournalEntry.fromJSON(value);
+          return acc;
+        }, {})
         : {},
     };
   },
@@ -744,23 +706,20 @@ export const JournalEntriesResponse: MessageFns<JournalEntriesResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<JournalEntriesResponse>, I>>(
-    base?: I
-  ): JournalEntriesResponse {
+  create<I extends Exact<DeepPartial<JournalEntriesResponse>, I>>(base?: I): JournalEntriesResponse {
     return JournalEntriesResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JournalEntriesResponse>, I>>(
-    object: I
-  ): JournalEntriesResponse {
+  fromPartial<I extends Exact<DeepPartial<JournalEntriesResponse>, I>>(object: I): JournalEntriesResponse {
     const message = createBaseJournalEntriesResponse();
-    message.entries = Object.entries(object.entries ?? {}).reduce<{
-      [key: number]: JournalEntry;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[globalThis.Number(key)] = JournalEntry.fromPartial(value);
-      }
-      return acc;
-    }, {});
+    message.entries = Object.entries(object.entries ?? {}).reduce<{ [key: number]: JournalEntry }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[globalThis.Number(key)] = JournalEntry.fromPartial(value);
+        }
+        return acc;
+      },
+      {},
+    );
     return message;
   },
 };
@@ -769,113 +728,90 @@ function createBaseJournalEntriesResponse_EntriesEntry(): JournalEntriesResponse
   return { key: 0, value: undefined };
 }
 
-export const JournalEntriesResponse_EntriesEntry: MessageFns<JournalEntriesResponse_EntriesEntry> =
-  {
-    encode(
-      message: JournalEntriesResponse_EntriesEntry,
-      writer: BinaryWriter = new BinaryWriter()
-    ): BinaryWriter {
-      if (message.key !== 0) {
-        writer.uint32(8).uint64(message.key);
-      }
-      if (message.value !== undefined) {
-        JournalEntry.encode(message.value, writer.uint32(18).fork()).join();
-      }
-      return writer;
-    },
+export const JournalEntriesResponse_EntriesEntry: MessageFns<JournalEntriesResponse_EntriesEntry> = {
+  encode(message: JournalEntriesResponse_EntriesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== 0) {
+      writer.uint32(8).uint64(message.key);
+    }
+    if (message.value !== undefined) {
+      JournalEntry.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
 
-    decode(
-      input: BinaryReader | Uint8Array,
-      length?: number
-    ): JournalEntriesResponse_EntriesEntry {
-      const reader =
-        input instanceof BinaryReader ? input : new BinaryReader(input);
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBaseJournalEntriesResponse_EntriesEntry();
-      while (reader.pos < end) {
-        const tag = reader.uint32();
-        switch (tag >>> 3) {
-          case 1: {
-            if (tag !== 8) {
-              break;
-            }
-
-            message.key = longToNumber(reader.uint64());
-            continue;
+  decode(input: BinaryReader | Uint8Array, length?: number): JournalEntriesResponse_EntriesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseJournalEntriesResponse_EntriesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
           }
-          case 2: {
-            if (tag !== 18) {
-              break;
-            }
 
-            message.value = JournalEntry.decode(reader, reader.uint32());
-            continue;
+          message.key = longToNumber(reader.uint64());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
           }
+
+          message.value = JournalEntry.decode(reader, reader.uint32());
+          continue;
         }
-        if ((tag & 7) === 4 || tag === 0) {
-          break;
-        }
-        reader.skip(tag & 7);
       }
-      return message;
-    },
-
-    fromJSON(object: any): JournalEntriesResponse_EntriesEntry {
-      return {
-        key: isSet(object.key) ? globalThis.Number(object.key) : 0,
-        value: isSet(object.value)
-          ? JournalEntry.fromJSON(object.value)
-          : undefined,
-      };
-    },
-
-    toJSON(message: JournalEntriesResponse_EntriesEntry): unknown {
-      const obj: any = {};
-      if (message.key !== 0) {
-        obj.key = Math.round(message.key);
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
       }
-      if (message.value !== undefined) {
-        obj.value = JournalEntry.toJSON(message.value);
-      }
-      return obj;
-    },
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
 
-    create<
-      I extends Exact<DeepPartial<JournalEntriesResponse_EntriesEntry>, I>
-    >(base?: I): JournalEntriesResponse_EntriesEntry {
-      return JournalEntriesResponse_EntriesEntry.fromPartial(
-        base ?? ({} as any)
-      );
-    },
-    fromPartial<
-      I extends Exact<DeepPartial<JournalEntriesResponse_EntriesEntry>, I>
-    >(object: I): JournalEntriesResponse_EntriesEntry {
-      const message = createBaseJournalEntriesResponse_EntriesEntry();
-      message.key = object.key ?? 0;
-      message.value =
-        object.value !== undefined && object.value !== null
-          ? JournalEntry.fromPartial(object.value)
-          : undefined;
-      return message;
-    },
-  };
+  fromJSON(object: any): JournalEntriesResponse_EntriesEntry {
+    return {
+      key: isSet(object.key) ? globalThis.Number(object.key) : 0,
+      value: isSet(object.value) ? JournalEntry.fromJSON(object.value) : undefined,
+    };
+  },
+
+  toJSON(message: JournalEntriesResponse_EntriesEntry): unknown {
+    const obj: any = {};
+    if (message.key !== 0) {
+      obj.key = Math.round(message.key);
+    }
+    if (message.value !== undefined) {
+      obj.value = JournalEntry.toJSON(message.value);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<JournalEntriesResponse_EntriesEntry>, I>>(
+    base?: I,
+  ): JournalEntriesResponse_EntriesEntry {
+    return JournalEntriesResponse_EntriesEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<JournalEntriesResponse_EntriesEntry>, I>>(
+    object: I,
+  ): JournalEntriesResponse_EntriesEntry {
+    const message = createBaseJournalEntriesResponse_EntriesEntry();
+    message.key = object.key ?? 0;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? JournalEntry.fromPartial(object.value)
+      : undefined;
+    return message;
+  },
+};
 
 function createBaseJournalEntry(): JournalEntry {
-  return {
-    ts: 0,
-    level: 0,
-    workspace: undefined,
-    service: undefined,
-    message: undefined,
-    fields: new Uint8Array(0),
-  };
+  return { ts: 0, level: 0, workspace: undefined, service: undefined, message: undefined, fields: new Uint8Array(0) };
 }
 
 export const JournalEntry: MessageFns<JournalEntry> = {
-  encode(
-    message: JournalEntry,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JournalEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.ts !== 0) {
       writer.uint32(8).uint64(message.ts);
     }
@@ -898,8 +834,7 @@ export const JournalEntry: MessageFns<JournalEntry> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): JournalEntry {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJournalEntry();
     while (reader.pos < end) {
@@ -966,18 +901,10 @@ export const JournalEntry: MessageFns<JournalEntry> = {
     return {
       ts: isSet(object.ts) ? globalThis.Number(object.ts) : 0,
       level: isSet(object.level) ? globalThis.Number(object.level) : 0,
-      workspace: isSet(object.workspace)
-        ? globalThis.String(object.workspace)
-        : undefined,
-      service: isSet(object.service)
-        ? globalThis.String(object.service)
-        : undefined,
-      message: isSet(object.message)
-        ? globalThis.String(object.message)
-        : undefined,
-      fields: isSet(object.fields)
-        ? bytesFromBase64(object.fields)
-        : new Uint8Array(0),
+      workspace: isSet(object.workspace) ? globalThis.String(object.workspace) : undefined,
+      service: isSet(object.service) ? globalThis.String(object.service) : undefined,
+      message: isSet(object.message) ? globalThis.String(object.message) : undefined,
+      fields: isSet(object.fields) ? bytesFromBase64(object.fields) : new Uint8Array(0),
     };
   },
 
@@ -1004,14 +931,10 @@ export const JournalEntry: MessageFns<JournalEntry> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<JournalEntry>, I>>(
-    base?: I
-  ): JournalEntry {
+  create<I extends Exact<DeepPartial<JournalEntry>, I>>(base?: I): JournalEntry {
     return JournalEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JournalEntry>, I>>(
-    object: I
-  ): JournalEntry {
+  fromPartial<I extends Exact<DeepPartial<JournalEntry>, I>>(object: I): JournalEntry {
     const message = createBaseJournalEntry();
     message.ts = object.ts ?? 0;
     message.level = object.level ?? 0;
@@ -1028,10 +951,7 @@ function createBaseJournalRequest(): JournalRequest {
 }
 
 export const JournalRequest: MessageFns<JournalRequest> = {
-  encode(
-    message: JournalRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JournalRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.workspace !== "") {
       writer.uint32(10).string(message.workspace);
     }
@@ -1045,8 +965,7 @@ export const JournalRequest: MessageFns<JournalRequest> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): JournalRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJournalRequest();
     while (reader.pos < end) {
@@ -1087,12 +1006,8 @@ export const JournalRequest: MessageFns<JournalRequest> = {
 
   fromJSON(object: any): JournalRequest {
     return {
-      workspace: isSet(object.workspace)
-        ? globalThis.String(object.workspace)
-        : "",
-      service: isSet(object.service)
-        ? globalThis.String(object.service)
-        : undefined,
+      workspace: isSet(object.workspace) ? globalThis.String(object.workspace) : "",
+      service: isSet(object.service) ? globalThis.String(object.service) : undefined,
       query: isSet(object.query) ? globalThis.String(object.query) : undefined,
     };
   },
@@ -1111,14 +1026,10 @@ export const JournalRequest: MessageFns<JournalRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<JournalRequest>, I>>(
-    base?: I
-  ): JournalRequest {
+  create<I extends Exact<DeepPartial<JournalRequest>, I>>(base?: I): JournalRequest {
     return JournalRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JournalRequest>, I>>(
-    object: I
-  ): JournalRequest {
+  fromPartial<I extends Exact<DeepPartial<JournalRequest>, I>>(object: I): JournalRequest {
     const message = createBaseJournalRequest();
     message.workspace = object.workspace ?? "";
     message.service = object.service ?? undefined;
@@ -1132,10 +1043,7 @@ function createBaseJournalRecord(): JournalRecord {
 }
 
 export const JournalRecord: MessageFns<JournalRecord> = {
-  encode(
-    message: JournalRecord,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JournalRecord, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.uuid !== "") {
       writer.uint32(10).string(message.uuid);
     }
@@ -1146,8 +1054,7 @@ export const JournalRecord: MessageFns<JournalRecord> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): JournalRecord {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJournalRecord();
     while (reader.pos < end) {
@@ -1196,14 +1103,10 @@ export const JournalRecord: MessageFns<JournalRecord> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<JournalRecord>, I>>(
-    base?: I
-  ): JournalRecord {
+  create<I extends Exact<DeepPartial<JournalRecord>, I>>(base?: I): JournalRecord {
     return JournalRecord.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JournalRecord>, I>>(
-    object: I
-  ): JournalRecord {
+  fromPartial<I extends Exact<DeepPartial<JournalRecord>, I>>(object: I): JournalRecord {
     const message = createBaseJournalRecord();
     message.uuid = object.uuid ?? "";
     message.length = object.length ?? 0;
@@ -1216,16 +1119,12 @@ function createBaseTreeRequest(): TreeRequest {
 }
 
 export const TreeRequest: MessageFns<TreeRequest> = {
-  encode(
-    _: TreeRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: TreeRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TreeRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTreeRequest();
     while (reader.pos < end) {
@@ -1263,10 +1162,7 @@ function createBaseTreeResponse(): TreeResponse {
 }
 
 export const TreeResponse: MessageFns<TreeResponse> = {
-  encode(
-    message: TreeResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: TreeResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.workspaces) {
       TreeWorkspace.encode(v!, writer.uint32(10).fork()).join();
     }
@@ -1274,8 +1170,7 @@ export const TreeResponse: MessageFns<TreeResponse> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TreeResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTreeResponse();
     while (reader.pos < end) {
@@ -1286,9 +1181,7 @@ export const TreeResponse: MessageFns<TreeResponse> = {
             break;
           }
 
-          message.workspaces.push(
-            TreeWorkspace.decode(reader, reader.uint32())
-          );
+          message.workspaces.push(TreeWorkspace.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -1316,17 +1209,12 @@ export const TreeResponse: MessageFns<TreeResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TreeResponse>, I>>(
-    base?: I
-  ): TreeResponse {
+  create<I extends Exact<DeepPartial<TreeResponse>, I>>(base?: I): TreeResponse {
     return TreeResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TreeResponse>, I>>(
-    object: I
-  ): TreeResponse {
+  fromPartial<I extends Exact<DeepPartial<TreeResponse>, I>>(object: I): TreeResponse {
     const message = createBaseTreeResponse();
-    message.workspaces =
-      object.workspaces?.map((e) => TreeWorkspace.fromPartial(e)) || [];
+    message.workspaces = object.workspaces?.map((e) => TreeWorkspace.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1336,10 +1224,7 @@ function createBaseTreeWorkspace(): TreeWorkspace {
 }
 
 export const TreeWorkspace: MessageFns<TreeWorkspace> = {
-  encode(
-    message: TreeWorkspace,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: TreeWorkspace, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -1353,8 +1238,7 @@ export const TreeWorkspace: MessageFns<TreeWorkspace> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TreeWorkspace {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTreeWorkspace();
     while (reader.pos < end) {
@@ -1419,20 +1303,14 @@ export const TreeWorkspace: MessageFns<TreeWorkspace> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TreeWorkspace>, I>>(
-    base?: I
-  ): TreeWorkspace {
+  create<I extends Exact<DeepPartial<TreeWorkspace>, I>>(base?: I): TreeWorkspace {
     return TreeWorkspace.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TreeWorkspace>, I>>(
-    object: I
-  ): TreeWorkspace {
+  fromPartial<I extends Exact<DeepPartial<TreeWorkspace>, I>>(object: I): TreeWorkspace {
     const message = createBaseTreeWorkspace();
     message.name = object.name ?? "";
-    message.processes =
-      object.processes?.map((e) => TreeProcess.fromPartial(e)) || [];
-    message.services =
-      object.services?.map((e) => TreeService.fromPartial(e)) || [];
+    message.processes = object.processes?.map((e) => TreeProcess.fromPartial(e)) || [];
+    message.services = object.services?.map((e) => TreeService.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1442,10 +1320,7 @@ function createBaseTreeService(): TreeService {
 }
 
 export const TreeService: MessageFns<TreeService> = {
-  encode(
-    message: TreeService,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: TreeService, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -1456,8 +1331,7 @@ export const TreeService: MessageFns<TreeService> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TreeService {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTreeService();
     while (reader.pos < end) {
@@ -1511,35 +1385,40 @@ export const TreeService: MessageFns<TreeService> = {
   create<I extends Exact<DeepPartial<TreeService>, I>>(base?: I): TreeService {
     return TreeService.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TreeService>, I>>(
-    object: I
-  ): TreeService {
+  fromPartial<I extends Exact<DeepPartial<TreeService>, I>>(object: I): TreeService {
     const message = createBaseTreeService();
     message.name = object.name ?? "";
-    message.processes =
-      object.processes?.map((e) => TreeProcess.fromPartial(e)) || [];
+    message.processes = object.processes?.map((e) => TreeProcess.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseTreeProcess(): TreeProcess {
-  return { name: "" };
+  return { name: "", pid: 0, restartCount: 0, lastRestart: undefined, state: 0 };
 }
 
 export const TreeProcess: MessageFns<TreeProcess> = {
-  encode(
-    message: TreeProcess,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: TreeProcess, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
+    }
+    if (message.pid !== 0) {
+      writer.uint32(16).uint64(message.pid);
+    }
+    if (message.restartCount !== 0) {
+      writer.uint32(24).uint64(message.restartCount);
+    }
+    if (message.lastRestart !== undefined) {
+      Timestamp.encode(toTimestamp(message.lastRestart), writer.uint32(34).fork()).join();
+    }
+    if (message.state !== 0) {
+      writer.uint32(40).int32(message.state);
     }
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TreeProcess {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTreeProcess();
     while (reader.pos < end) {
@@ -1553,6 +1432,38 @@ export const TreeProcess: MessageFns<TreeProcess> = {
           message.name = reader.string();
           continue;
         }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.pid = longToNumber(reader.uint64());
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.restartCount = longToNumber(reader.uint64());
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.lastRestart = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.state = reader.int32() as any;
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1563,7 +1474,13 @@ export const TreeProcess: MessageFns<TreeProcess> = {
   },
 
   fromJSON(object: any): TreeProcess {
-    return { name: isSet(object.name) ? globalThis.String(object.name) : "" };
+    return {
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      pid: isSet(object.pid) ? globalThis.Number(object.pid) : 0,
+      restartCount: isSet(object.restartCount) ? globalThis.Number(object.restartCount) : 0,
+      lastRestart: isSet(object.lastRestart) ? fromJsonTimestamp(object.lastRestart) : undefined,
+      state: isSet(object.state) ? treeProcessStateFromJSON(object.state) : 0,
+    };
   },
 
   toJSON(message: TreeProcess): unknown {
@@ -1571,17 +1488,31 @@ export const TreeProcess: MessageFns<TreeProcess> = {
     if (message.name !== "") {
       obj.name = message.name;
     }
+    if (message.pid !== 0) {
+      obj.pid = Math.round(message.pid);
+    }
+    if (message.restartCount !== 0) {
+      obj.restartCount = Math.round(message.restartCount);
+    }
+    if (message.lastRestart !== undefined) {
+      obj.lastRestart = message.lastRestart.toISOString();
+    }
+    if (message.state !== 0) {
+      obj.state = treeProcessStateToJSON(message.state);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<TreeProcess>, I>>(base?: I): TreeProcess {
     return TreeProcess.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TreeProcess>, I>>(
-    object: I
-  ): TreeProcess {
+  fromPartial<I extends Exact<DeepPartial<TreeProcess>, I>>(object: I): TreeProcess {
     const message = createBaseTreeProcess();
     message.name = object.name ?? "";
+    message.pid = object.pid ?? 0;
+    message.restartCount = object.restartCount ?? 0;
+    message.lastRestart = object.lastRestart ?? undefined;
+    message.state = object.state ?? 0;
     return message;
   },
 };
@@ -1591,10 +1522,7 @@ function createBaseFlag(): Flag {
 }
 
 export const Flag: MessageFns<Flag> = {
-  encode(
-    message: Flag,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: Flag, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.label !== "") {
       writer.uint32(10).string(message.label);
     }
@@ -1605,8 +1533,7 @@ export const Flag: MessageFns<Flag> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Flag {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlag();
     while (reader.pos < end) {
@@ -1667,20 +1594,11 @@ export const Flag: MessageFns<Flag> = {
 };
 
 function createBaseExecRequest(): ExecRequest {
-  return {
-    folder: "",
-    watch: false,
-    uuid: undefined,
-    extra: undefined,
-    start: undefined,
-  };
+  return { folder: "", watch: false, uuid: undefined, extra: undefined, start: undefined };
 }
 
 export const ExecRequest: MessageFns<ExecRequest> = {
-  encode(
-    message: ExecRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: ExecRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.folder !== "") {
       writer.uint32(10).string(message.folder);
     }
@@ -1700,8 +1618,7 @@ export const ExecRequest: MessageFns<ExecRequest> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): ExecRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExecRequest();
     while (reader.pos < end) {
@@ -1762,9 +1679,7 @@ export const ExecRequest: MessageFns<ExecRequest> = {
       watch: isSet(object.watch) ? globalThis.Boolean(object.watch) : false,
       uuid: isSet(object.uuid) ? globalThis.String(object.uuid) : undefined,
       extra: isSet(object.extra) ? bytesFromBase64(object.extra) : undefined,
-      start: isSet(object.start)
-        ? StartCommand.fromJSON(object.start)
-        : undefined,
+      start: isSet(object.start) ? StartCommand.fromJSON(object.start) : undefined,
     };
   },
 
@@ -1791,18 +1706,15 @@ export const ExecRequest: MessageFns<ExecRequest> = {
   create<I extends Exact<DeepPartial<ExecRequest>, I>>(base?: I): ExecRequest {
     return ExecRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ExecRequest>, I>>(
-    object: I
-  ): ExecRequest {
+  fromPartial<I extends Exact<DeepPartial<ExecRequest>, I>>(object: I): ExecRequest {
     const message = createBaseExecRequest();
     message.folder = object.folder ?? "";
     message.watch = object.watch ?? false;
     message.uuid = object.uuid ?? undefined;
     message.extra = object.extra ?? undefined;
-    message.start =
-      object.start !== undefined && object.start !== null
-        ? StartCommand.fromPartial(object.start)
-        : undefined;
+    message.start = (object.start !== undefined && object.start !== null)
+      ? StartCommand.fromPartial(object.start)
+      : undefined;
     return message;
   },
 };
@@ -1812,15 +1724,9 @@ function createBaseStartCommand(): StartCommand {
 }
 
 export const StartCommand: MessageFns<StartCommand> = {
-  encode(
-    message: StartCommand,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: StartCommand, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.workspace !== undefined) {
-      WorkspaceMetadata.encode(
-        message.workspace,
-        writer.uint32(18).fork()
-      ).join();
+      WorkspaceMetadata.encode(message.workspace, writer.uint32(18).fork()).join();
     }
     if (message.process !== undefined) {
       ProcessMetadata.encode(message.process, writer.uint32(26).fork()).join();
@@ -1829,8 +1735,7 @@ export const StartCommand: MessageFns<StartCommand> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): StartCommand {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStartCommand();
     while (reader.pos < end) {
@@ -1863,12 +1768,8 @@ export const StartCommand: MessageFns<StartCommand> = {
 
   fromJSON(object: any): StartCommand {
     return {
-      workspace: isSet(object.workspace)
-        ? WorkspaceMetadata.fromJSON(object.workspace)
-        : undefined,
-      process: isSet(object.process)
-        ? ProcessMetadata.fromJSON(object.process)
-        : undefined,
+      workspace: isSet(object.workspace) ? WorkspaceMetadata.fromJSON(object.workspace) : undefined,
+      process: isSet(object.process) ? ProcessMetadata.fromJSON(object.process) : undefined,
     };
   },
 
@@ -1883,23 +1784,17 @@ export const StartCommand: MessageFns<StartCommand> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<StartCommand>, I>>(
-    base?: I
-  ): StartCommand {
+  create<I extends Exact<DeepPartial<StartCommand>, I>>(base?: I): StartCommand {
     return StartCommand.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<StartCommand>, I>>(
-    object: I
-  ): StartCommand {
+  fromPartial<I extends Exact<DeepPartial<StartCommand>, I>>(object: I): StartCommand {
     const message = createBaseStartCommand();
-    message.workspace =
-      object.workspace !== undefined && object.workspace !== null
-        ? WorkspaceMetadata.fromPartial(object.workspace)
-        : undefined;
-    message.process =
-      object.process !== undefined && object.process !== null
-        ? ProcessMetadata.fromPartial(object.process)
-        : undefined;
+    message.workspace = (object.workspace !== undefined && object.workspace !== null)
+      ? WorkspaceMetadata.fromPartial(object.workspace)
+      : undefined;
+    message.process = (object.process !== undefined && object.process !== null)
+      ? ProcessMetadata.fromPartial(object.process)
+      : undefined;
     return message;
   },
 };
@@ -1909,19 +1804,12 @@ function createBaseClearJournalRequest(): ClearJournalRequest {
 }
 
 export const ClearJournalRequest: MessageFns<ClearJournalRequest> = {
-  encode(
-    _: ClearJournalRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: ClearJournalRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): ClearJournalRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ClearJournalRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClearJournalRequest();
     while (reader.pos < end) {
@@ -1945,14 +1833,10 @@ export const ClearJournalRequest: MessageFns<ClearJournalRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ClearJournalRequest>, I>>(
-    base?: I
-  ): ClearJournalRequest {
+  create<I extends Exact<DeepPartial<ClearJournalRequest>, I>>(base?: I): ClearJournalRequest {
     return ClearJournalRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ClearJournalRequest>, I>>(
-    _: I
-  ): ClearJournalRequest {
+  fromPartial<I extends Exact<DeepPartial<ClearJournalRequest>, I>>(_: I): ClearJournalRequest {
     const message = createBaseClearJournalRequest();
     return message;
   },
@@ -1963,19 +1847,12 @@ function createBaseClearJournalResponse(): ClearJournalResponse {
 }
 
 export const ClearJournalResponse: MessageFns<ClearJournalResponse> = {
-  encode(
-    _: ClearJournalResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: ClearJournalResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): ClearJournalResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ClearJournalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClearJournalResponse();
     while (reader.pos < end) {
@@ -1999,14 +1876,10 @@ export const ClearJournalResponse: MessageFns<ClearJournalResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ClearJournalResponse>, I>>(
-    base?: I
-  ): ClearJournalResponse {
+  create<I extends Exact<DeepPartial<ClearJournalResponse>, I>>(base?: I): ClearJournalResponse {
     return ClearJournalResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ClearJournalResponse>, I>>(
-    _: I
-  ): ClearJournalResponse {
+  fromPartial<I extends Exact<DeepPartial<ClearJournalResponse>, I>>(_: I): ClearJournalResponse {
     const message = createBaseClearJournalResponse();
     return message;
   },
@@ -2017,16 +1890,12 @@ function createBaseTerminateRequest(): TerminateRequest {
 }
 
 export const TerminateRequest: MessageFns<TerminateRequest> = {
-  encode(
-    _: TerminateRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: TerminateRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TerminateRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTerminateRequest();
     while (reader.pos < end) {
@@ -2050,14 +1919,10 @@ export const TerminateRequest: MessageFns<TerminateRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TerminateRequest>, I>>(
-    base?: I
-  ): TerminateRequest {
+  create<I extends Exact<DeepPartial<TerminateRequest>, I>>(base?: I): TerminateRequest {
     return TerminateRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TerminateRequest>, I>>(
-    _: I
-  ): TerminateRequest {
+  fromPartial<I extends Exact<DeepPartial<TerminateRequest>, I>>(_: I): TerminateRequest {
     const message = createBaseTerminateRequest();
     return message;
   },
@@ -2068,16 +1933,12 @@ function createBaseTerminateResponse(): TerminateResponse {
 }
 
 export const TerminateResponse: MessageFns<TerminateResponse> = {
-  encode(
-    _: TerminateResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: TerminateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): TerminateResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTerminateResponse();
     while (reader.pos < end) {
@@ -2101,14 +1962,10 @@ export const TerminateResponse: MessageFns<TerminateResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TerminateResponse>, I>>(
-    base?: I
-  ): TerminateResponse {
+  create<I extends Exact<DeepPartial<TerminateResponse>, I>>(base?: I): TerminateResponse {
     return TerminateResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TerminateResponse>, I>>(
-    _: I
-  ): TerminateResponse {
+  fromPartial<I extends Exact<DeepPartial<TerminateResponse>, I>>(_: I): TerminateResponse {
     const message = createBaseTerminateResponse();
     return message;
   },
@@ -2119,16 +1976,12 @@ function createBaseVersionRequest(): VersionRequest {
 }
 
 export const VersionRequest: MessageFns<VersionRequest> = {
-  encode(
-    _: VersionRequest,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(_: VersionRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): VersionRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVersionRequest();
     while (reader.pos < end) {
@@ -2152,14 +2005,10 @@ export const VersionRequest: MessageFns<VersionRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<VersionRequest>, I>>(
-    base?: I
-  ): VersionRequest {
+  create<I extends Exact<DeepPartial<VersionRequest>, I>>(base?: I): VersionRequest {
     return VersionRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<VersionRequest>, I>>(
-    _: I
-  ): VersionRequest {
+  fromPartial<I extends Exact<DeepPartial<VersionRequest>, I>>(_: I): VersionRequest {
     const message = createBaseVersionRequest();
     return message;
   },
@@ -2170,10 +2019,7 @@ function createBaseCommandRecord(): CommandRecord {
 }
 
 export const CommandRecord: MessageFns<CommandRecord> = {
-  encode(
-    message: CommandRecord,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: CommandRecord, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.metadata !== undefined) {
       Metadata.encode(message.metadata, writer.uint32(10).fork()).join();
     }
@@ -2187,8 +2033,7 @@ export const CommandRecord: MessageFns<CommandRecord> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): CommandRecord {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommandRecord();
     while (reader.pos < end) {
@@ -2229,13 +2074,9 @@ export const CommandRecord: MessageFns<CommandRecord> = {
 
   fromJSON(object: any): CommandRecord {
     return {
-      metadata: isSet(object.metadata)
-        ? Metadata.fromJSON(object.metadata)
-        : undefined,
+      metadata: isSet(object.metadata) ? Metadata.fromJSON(object.metadata) : undefined,
       log: isSet(object.log) ? LogEntry.fromJSON(object.log) : undefined,
-      result: isSet(object.result)
-        ? JsonResult.fromJSON(object.result)
-        : undefined,
+      result: isSet(object.result) ? JsonResult.fromJSON(object.result) : undefined,
     };
   },
 
@@ -2253,27 +2094,18 @@ export const CommandRecord: MessageFns<CommandRecord> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<CommandRecord>, I>>(
-    base?: I
-  ): CommandRecord {
+  create<I extends Exact<DeepPartial<CommandRecord>, I>>(base?: I): CommandRecord {
     return CommandRecord.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<CommandRecord>, I>>(
-    object: I
-  ): CommandRecord {
+  fromPartial<I extends Exact<DeepPartial<CommandRecord>, I>>(object: I): CommandRecord {
     const message = createBaseCommandRecord();
-    message.metadata =
-      object.metadata !== undefined && object.metadata !== null
-        ? Metadata.fromPartial(object.metadata)
-        : undefined;
-    message.log =
-      object.log !== undefined && object.log !== null
-        ? LogEntry.fromPartial(object.log)
-        : undefined;
-    message.result =
-      object.result !== undefined && object.result !== null
-        ? JsonResult.fromPartial(object.result)
-        : undefined;
+    message.metadata = (object.metadata !== undefined && object.metadata !== null)
+      ? Metadata.fromPartial(object.metadata)
+      : undefined;
+    message.log = (object.log !== undefined && object.log !== null) ? LogEntry.fromPartial(object.log) : undefined;
+    message.result = (object.result !== undefined && object.result !== null)
+      ? JsonResult.fromPartial(object.result)
+      : undefined;
     return message;
   },
 };
@@ -2283,10 +2115,7 @@ function createBaseJsonResult(): JsonResult {
 }
 
 export const JsonResult: MessageFns<JsonResult> = {
-  encode(
-    message: JsonResult,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JsonResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.value.length !== 0) {
       writer.uint32(10).bytes(message.value);
     }
@@ -2297,8 +2126,7 @@ export const JsonResult: MessageFns<JsonResult> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): JsonResult {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJsonResult();
     while (reader.pos < end) {
@@ -2331,9 +2159,7 @@ export const JsonResult: MessageFns<JsonResult> = {
 
   fromJSON(object: any): JsonResult {
     return {
-      value: isSet(object.value)
-        ? bytesFromBase64(object.value)
-        : new Uint8Array(0),
+      value: isSet(object.value) ? bytesFromBase64(object.value) : new Uint8Array(0),
       error: isSet(object.error) ? JsonError.fromJSON(object.error) : undefined,
     };
   },
@@ -2352,15 +2178,12 @@ export const JsonResult: MessageFns<JsonResult> = {
   create<I extends Exact<DeepPartial<JsonResult>, I>>(base?: I): JsonResult {
     return JsonResult.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JsonResult>, I>>(
-    object: I
-  ): JsonResult {
+  fromPartial<I extends Exact<DeepPartial<JsonResult>, I>>(object: I): JsonResult {
     const message = createBaseJsonResult();
     message.value = object.value ?? new Uint8Array(0);
-    message.error =
-      object.error !== undefined && object.error !== null
-        ? JsonError.fromPartial(object.error)
-        : undefined;
+    message.error = (object.error !== undefined && object.error !== null)
+      ? JsonError.fromPartial(object.error)
+      : undefined;
     return message;
   },
 };
@@ -2370,10 +2193,7 @@ function createBaseJsonError(): JsonError {
 }
 
 export const JsonError: MessageFns<JsonError> = {
-  encode(
-    message: JsonError,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: JsonError, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2390,8 +2210,7 @@ export const JsonError: MessageFns<JsonError> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): JsonError {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseJsonError();
     while (reader.pos < end) {
@@ -2442,9 +2261,7 @@ export const JsonError: MessageFns<JsonError> = {
     return {
       code: isSet(object.code) ? globalThis.String(object.code) : "",
       message: isSet(object.message) ? globalThis.String(object.message) : "",
-      source: isSet(object.source)
-        ? JsonError.fromJSON(object.source)
-        : undefined,
+      source: isSet(object.source) ? JsonError.fromJSON(object.source) : undefined,
       backtrace: globalThis.Array.isArray(object?.backtrace)
         ? object.backtrace.map((e: any) => globalThis.String(e))
         : [],
@@ -2471,16 +2288,13 @@ export const JsonError: MessageFns<JsonError> = {
   create<I extends Exact<DeepPartial<JsonError>, I>>(base?: I): JsonError {
     return JsonError.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<JsonError>, I>>(
-    object: I
-  ): JsonError {
+  fromPartial<I extends Exact<DeepPartial<JsonError>, I>>(object: I): JsonError {
     const message = createBaseJsonError();
     message.code = object.code ?? "";
     message.message = object.message ?? "";
-    message.source =
-      object.source !== undefined && object.source !== null
-        ? JsonError.fromPartial(object.source)
-        : undefined;
+    message.source = (object.source !== undefined && object.source !== null)
+      ? JsonError.fromPartial(object.source)
+      : undefined;
     message.backtrace = object.backtrace?.map((e) => e) || [];
     return message;
   },
@@ -2496,8 +2310,7 @@ export const Metadata: MessageFns<Metadata> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Metadata {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMetadata();
     while (reader.pos < end) {
@@ -2540,8 +2353,7 @@ export const LogEntry: MessageFns<LogEntry> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): LogEntry {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseLogEntry();
     while (reader.pos < end) {
@@ -2579,10 +2391,7 @@ function createBaseVersionResponse(): VersionResponse {
 }
 
 export const VersionResponse: MessageFns<VersionResponse> = {
-  encode(
-    message: VersionResponse,
-    writer: BinaryWriter = new BinaryWriter()
-  ): BinaryWriter {
+  encode(message: VersionResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
     }
@@ -2590,8 +2399,7 @@ export const VersionResponse: MessageFns<VersionResponse> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): VersionResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVersionResponse();
     while (reader.pos < end) {
@@ -2615,9 +2423,7 @@ export const VersionResponse: MessageFns<VersionResponse> = {
   },
 
   fromJSON(object: any): VersionResponse {
-    return {
-      version: isSet(object.version) ? globalThis.String(object.version) : "",
-    };
+    return { version: isSet(object.version) ? globalThis.String(object.version) : "" };
   },
 
   toJSON(message: VersionResponse): unknown {
@@ -2628,14 +2434,10 @@ export const VersionResponse: MessageFns<VersionResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<VersionResponse>, I>>(
-    base?: I
-  ): VersionResponse {
+  create<I extends Exact<DeepPartial<VersionResponse>, I>>(base?: I): VersionResponse {
     return VersionResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<VersionResponse>, I>>(
-    object: I
-  ): VersionResponse {
+  fromPartial<I extends Exact<DeepPartial<VersionResponse>, I>>(object: I): VersionResponse {
     const message = createBaseVersionResponse();
     message.version = object.version ?? "";
     return message;
@@ -2649,79 +2451,56 @@ export const RunyService = {
     path: "/runy.Runy/Terminate",
     requestStream: false,
     responseStream: false,
-    requestSerialize: (value: TerminateRequest): Buffer =>
-      Buffer.from(TerminateRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): TerminateRequest =>
-      TerminateRequest.decode(value),
-    responseSerialize: (value: TerminateResponse): Buffer =>
-      Buffer.from(TerminateResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): TerminateResponse =>
-      TerminateResponse.decode(value),
+    requestSerialize: (value: TerminateRequest): Buffer => Buffer.from(TerminateRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): TerminateRequest => TerminateRequest.decode(value),
+    responseSerialize: (value: TerminateResponse): Buffer => Buffer.from(TerminateResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): TerminateResponse => TerminateResponse.decode(value),
   },
   version: {
     path: "/runy.Runy/Version",
     requestStream: false,
     responseStream: false,
-    requestSerialize: (value: VersionRequest): Buffer =>
-      Buffer.from(VersionRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): VersionRequest =>
-      VersionRequest.decode(value),
-    responseSerialize: (value: VersionResponse): Buffer =>
-      Buffer.from(VersionResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): VersionResponse =>
-      VersionResponse.decode(value),
+    requestSerialize: (value: VersionRequest): Buffer => Buffer.from(VersionRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): VersionRequest => VersionRequest.decode(value),
+    responseSerialize: (value: VersionResponse): Buffer => Buffer.from(VersionResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): VersionResponse => VersionResponse.decode(value),
   },
   command: {
     path: "/runy.Runy/Command",
     requestStream: false,
     responseStream: true,
-    requestSerialize: (value: ExecRequest): Buffer =>
-      Buffer.from(ExecRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): ExecRequest =>
-      ExecRequest.decode(value),
-    responseSerialize: (value: CommandRecord): Buffer =>
-      Buffer.from(CommandRecord.encode(value).finish()),
-    responseDeserialize: (value: Buffer): CommandRecord =>
-      CommandRecord.decode(value),
+    requestSerialize: (value: ExecRequest): Buffer => Buffer.from(ExecRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): ExecRequest => ExecRequest.decode(value),
+    responseSerialize: (value: CommandRecord): Buffer => Buffer.from(CommandRecord.encode(value).finish()),
+    responseDeserialize: (value: Buffer): CommandRecord => CommandRecord.decode(value),
   },
   clearJournal: {
     path: "/runy.Runy/ClearJournal",
     requestStream: false,
     responseStream: false,
-    requestSerialize: (value: ClearJournalRequest): Buffer =>
-      Buffer.from(ClearJournalRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): ClearJournalRequest =>
-      ClearJournalRequest.decode(value),
+    requestSerialize: (value: ClearJournalRequest): Buffer => Buffer.from(ClearJournalRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): ClearJournalRequest => ClearJournalRequest.decode(value),
     responseSerialize: (value: ClearJournalResponse): Buffer =>
       Buffer.from(ClearJournalResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): ClearJournalResponse =>
-      ClearJournalResponse.decode(value),
+    responseDeserialize: (value: Buffer): ClearJournalResponse => ClearJournalResponse.decode(value),
   },
   tree: {
     path: "/runy.Runy/Tree",
     requestStream: false,
     responseStream: true,
-    requestSerialize: (value: TreeRequest): Buffer =>
-      Buffer.from(TreeRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): TreeRequest =>
-      TreeRequest.decode(value),
-    responseSerialize: (value: TreeResponse): Buffer =>
-      Buffer.from(TreeResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): TreeResponse =>
-      TreeResponse.decode(value),
+    requestSerialize: (value: TreeRequest): Buffer => Buffer.from(TreeRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): TreeRequest => TreeRequest.decode(value),
+    responseSerialize: (value: TreeResponse): Buffer => Buffer.from(TreeResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): TreeResponse => TreeResponse.decode(value),
   },
   journal: {
     path: "/runy.Runy/Journal",
     requestStream: false,
     responseStream: true,
-    requestSerialize: (value: JournalRequest): Buffer =>
-      Buffer.from(JournalRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): JournalRequest =>
-      JournalRequest.decode(value),
-    responseSerialize: (value: JournalRecord): Buffer =>
-      Buffer.from(JournalRecord.encode(value).finish()),
-    responseDeserialize: (value: Buffer): JournalRecord =>
-      JournalRecord.decode(value),
+    requestSerialize: (value: JournalRequest): Buffer => Buffer.from(JournalRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): JournalRequest => JournalRequest.decode(value),
+    responseSerialize: (value: JournalRecord): Buffer => Buffer.from(JournalRecord.encode(value).finish()),
+    responseDeserialize: (value: Buffer): JournalRecord => JournalRecord.decode(value),
   },
   journalEntries: {
     path: "/runy.Runy/JournalEntries",
@@ -2729,12 +2508,10 @@ export const RunyService = {
     responseStream: false,
     requestSerialize: (value: JournalEntriesRequest): Buffer =>
       Buffer.from(JournalEntriesRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): JournalEntriesRequest =>
-      JournalEntriesRequest.decode(value),
+    requestDeserialize: (value: Buffer): JournalEntriesRequest => JournalEntriesRequest.decode(value),
     responseSerialize: (value: JournalEntriesResponse): Buffer =>
       Buffer.from(JournalEntriesResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): JournalEntriesResponse =>
-      JournalEntriesResponse.decode(value),
+    responseDeserialize: (value: Buffer): JournalEntriesResponse => JournalEntriesResponse.decode(value),
   },
   workspaceCreate: {
     path: "/runy.Runy/WorkspaceCreate",
@@ -2742,12 +2519,10 @@ export const RunyService = {
     responseStream: false,
     requestSerialize: (value: WorkspaceCreateRequest): Buffer =>
       Buffer.from(WorkspaceCreateRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): WorkspaceCreateRequest =>
-      WorkspaceCreateRequest.decode(value),
+    requestDeserialize: (value: Buffer): WorkspaceCreateRequest => WorkspaceCreateRequest.decode(value),
     responseSerialize: (value: WorkspaceCreateResponse): Buffer =>
       Buffer.from(WorkspaceCreateResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): WorkspaceCreateResponse =>
-      WorkspaceCreateResponse.decode(value),
+    responseDeserialize: (value: Buffer): WorkspaceCreateResponse => WorkspaceCreateResponse.decode(value),
   },
   workspaceRemove: {
     path: "/runy.Runy/WorkspaceRemove",
@@ -2755,12 +2530,10 @@ export const RunyService = {
     responseStream: false,
     requestSerialize: (value: WorkspaceRemoveRequest): Buffer =>
       Buffer.from(WorkspaceRemoveRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): WorkspaceRemoveRequest =>
-      WorkspaceRemoveRequest.decode(value),
+    requestDeserialize: (value: Buffer): WorkspaceRemoveRequest => WorkspaceRemoveRequest.decode(value),
     responseSerialize: (value: WorkspaceRemoveResponse): Buffer =>
       Buffer.from(WorkspaceRemoveResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): WorkspaceRemoveResponse =>
-      WorkspaceRemoveResponse.decode(value),
+    responseDeserialize: (value: Buffer): WorkspaceRemoveResponse => WorkspaceRemoveResponse.decode(value),
   },
 } as const;
 
@@ -2771,185 +2544,120 @@ export interface RunyServer extends UntypedServiceImplementation {
   clearJournal: handleUnaryCall<ClearJournalRequest, ClearJournalResponse>;
   tree: handleServerStreamingCall<TreeRequest, TreeResponse>;
   journal: handleServerStreamingCall<JournalRequest, JournalRecord>;
-  journalEntries: handleUnaryCall<
-    JournalEntriesRequest,
-    JournalEntriesResponse
-  >;
-  workspaceCreate: handleUnaryCall<
-    WorkspaceCreateRequest,
-    WorkspaceCreateResponse
-  >;
-  workspaceRemove: handleUnaryCall<
-    WorkspaceRemoveRequest,
-    WorkspaceRemoveResponse
-  >;
+  journalEntries: handleUnaryCall<JournalEntriesRequest, JournalEntriesResponse>;
+  workspaceCreate: handleUnaryCall<WorkspaceCreateRequest, WorkspaceCreateResponse>;
+  workspaceRemove: handleUnaryCall<WorkspaceRemoveRequest, WorkspaceRemoveResponse>;
 }
 
 export interface RunyClient extends Client {
   terminate(
     request: TerminateRequest,
-    callback: (error: ServiceError | null, response: TerminateResponse) => void
+    callback: (error: ServiceError | null, response: TerminateResponse) => void,
   ): ClientUnaryCall;
   terminate(
     request: TerminateRequest,
     metadata: Metadata1,
-    callback: (error: ServiceError | null, response: TerminateResponse) => void
+    callback: (error: ServiceError | null, response: TerminateResponse) => void,
   ): ClientUnaryCall;
   terminate(
     request: TerminateRequest,
     metadata: Metadata1,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: TerminateResponse) => void
+    callback: (error: ServiceError | null, response: TerminateResponse) => void,
   ): ClientUnaryCall;
   version(
     request: VersionRequest,
-    callback: (error: ServiceError | null, response: VersionResponse) => void
+    callback: (error: ServiceError | null, response: VersionResponse) => void,
   ): ClientUnaryCall;
   version(
     request: VersionRequest,
     metadata: Metadata1,
-    callback: (error: ServiceError | null, response: VersionResponse) => void
+    callback: (error: ServiceError | null, response: VersionResponse) => void,
   ): ClientUnaryCall;
   version(
     request: VersionRequest,
     metadata: Metadata1,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: VersionResponse) => void
+    callback: (error: ServiceError | null, response: VersionResponse) => void,
   ): ClientUnaryCall;
-  command(
-    request: ExecRequest,
-    options?: Partial<CallOptions>
-  ): ClientReadableStream<CommandRecord>;
+  command(request: ExecRequest, options?: Partial<CallOptions>): ClientReadableStream<CommandRecord>;
   command(
     request: ExecRequest,
     metadata?: Metadata1,
-    options?: Partial<CallOptions>
+    options?: Partial<CallOptions>,
   ): ClientReadableStream<CommandRecord>;
   clearJournal(
     request: ClearJournalRequest,
-    callback: (
-      error: ServiceError | null,
-      response: ClearJournalResponse
-    ) => void
+    callback: (error: ServiceError | null, response: ClearJournalResponse) => void,
   ): ClientUnaryCall;
   clearJournal(
     request: ClearJournalRequest,
     metadata: Metadata1,
-    callback: (
-      error: ServiceError | null,
-      response: ClearJournalResponse
-    ) => void
+    callback: (error: ServiceError | null, response: ClearJournalResponse) => void,
   ): ClientUnaryCall;
   clearJournal(
     request: ClearJournalRequest,
     metadata: Metadata1,
     options: Partial<CallOptions>,
-    callback: (
-      error: ServiceError | null,
-      response: ClearJournalResponse
-    ) => void
+    callback: (error: ServiceError | null, response: ClearJournalResponse) => void,
   ): ClientUnaryCall;
-  tree(
-    request: TreeRequest,
-    options?: Partial<CallOptions>
-  ): ClientReadableStream<TreeResponse>;
-  tree(
-    request: TreeRequest,
-    metadata?: Metadata1,
-    options?: Partial<CallOptions>
-  ): ClientReadableStream<TreeResponse>;
-  journal(
-    request: JournalRequest,
-    options?: Partial<CallOptions>
-  ): ClientReadableStream<JournalRecord>;
+  tree(request: TreeRequest, options?: Partial<CallOptions>): ClientReadableStream<TreeResponse>;
+  tree(request: TreeRequest, metadata?: Metadata1, options?: Partial<CallOptions>): ClientReadableStream<TreeResponse>;
+  journal(request: JournalRequest, options?: Partial<CallOptions>): ClientReadableStream<JournalRecord>;
   journal(
     request: JournalRequest,
     metadata?: Metadata1,
-    options?: Partial<CallOptions>
+    options?: Partial<CallOptions>,
   ): ClientReadableStream<JournalRecord>;
   journalEntries(
     request: JournalEntriesRequest,
-    callback: (
-      error: ServiceError | null,
-      response: JournalEntriesResponse
-    ) => void
+    callback: (error: ServiceError | null, response: JournalEntriesResponse) => void,
   ): ClientUnaryCall;
   journalEntries(
     request: JournalEntriesRequest,
     metadata: Metadata1,
-    callback: (
-      error: ServiceError | null,
-      response: JournalEntriesResponse
-    ) => void
+    callback: (error: ServiceError | null, response: JournalEntriesResponse) => void,
   ): ClientUnaryCall;
   journalEntries(
     request: JournalEntriesRequest,
     metadata: Metadata1,
     options: Partial<CallOptions>,
-    callback: (
-      error: ServiceError | null,
-      response: JournalEntriesResponse
-    ) => void
+    callback: (error: ServiceError | null, response: JournalEntriesResponse) => void,
   ): ClientUnaryCall;
   workspaceCreate(
     request: WorkspaceCreateRequest,
-    callback: (
-      error: ServiceError | null,
-      response: WorkspaceCreateResponse
-    ) => void
+    callback: (error: ServiceError | null, response: WorkspaceCreateResponse) => void,
   ): ClientUnaryCall;
   workspaceCreate(
     request: WorkspaceCreateRequest,
     metadata: Metadata1,
-    callback: (
-      error: ServiceError | null,
-      response: WorkspaceCreateResponse
-    ) => void
+    callback: (error: ServiceError | null, response: WorkspaceCreateResponse) => void,
   ): ClientUnaryCall;
   workspaceCreate(
     request: WorkspaceCreateRequest,
     metadata: Metadata1,
     options: Partial<CallOptions>,
-    callback: (
-      error: ServiceError | null,
-      response: WorkspaceCreateResponse
-    ) => void
+    callback: (error: ServiceError | null, response: WorkspaceCreateResponse) => void,
   ): ClientUnaryCall;
   workspaceRemove(
     request: WorkspaceRemoveRequest,
-    callback: (
-      error: ServiceError | null,
-      response: WorkspaceRemoveResponse
-    ) => void
+    callback: (error: ServiceError | null, response: WorkspaceRemoveResponse) => void,
   ): ClientUnaryCall;
   workspaceRemove(
     request: WorkspaceRemoveRequest,
     metadata: Metadata1,
-    callback: (
-      error: ServiceError | null,
-      response: WorkspaceRemoveResponse
-    ) => void
+    callback: (error: ServiceError | null, response: WorkspaceRemoveResponse) => void,
   ): ClientUnaryCall;
   workspaceRemove(
     request: WorkspaceRemoveRequest,
     metadata: Metadata1,
     options: Partial<CallOptions>,
-    callback: (
-      error: ServiceError | null,
-      response: WorkspaceRemoveResponse
-    ) => void
+    callback: (error: ServiceError | null, response: WorkspaceRemoveResponse) => void,
   ): ClientUnaryCall;
 }
 
-export const RunyClient = makeGenericClientConstructor(
-  RunyService,
-  "runy.Runy"
-) as unknown as {
-  new (
-    address: string,
-    credentials: ChannelCredentials,
-    options?: Partial<ClientOptions>
-  ): RunyClient;
+export const RunyClient = makeGenericClientConstructor(RunyService, "runy.Runy") as unknown as {
+  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): RunyClient;
   service: typeof RunyService;
   serviceName: string;
 };
@@ -2979,31 +2687,39 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-  ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = Math.trunc(date.getTime() / 1_000);
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new globalThis.Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof globalThis.Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new globalThis.Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function longToNumber(int64: { toString(): string }): number {
   const num = globalThis.Number(int64.toString());

@@ -1,6 +1,7 @@
 import * as jspb from 'google-protobuf'
 
 import * as google_protobuf_struct_pb from 'google-protobuf/google/protobuf/struct_pb'; // proto import: "google/protobuf/struct.proto"
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 import * as process_pb from './process_pb'; // proto import: "process.proto"
 
 
@@ -378,6 +379,20 @@ export class TreeProcess extends jspb.Message {
   getName(): string;
   setName(value: string): TreeProcess;
 
+  getPid(): number;
+  setPid(value: number): TreeProcess;
+
+  getRestartCount(): number;
+  setRestartCount(value: number): TreeProcess;
+
+  getLastRestart(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLastRestart(value?: google_protobuf_timestamp_pb.Timestamp): TreeProcess;
+  hasLastRestart(): boolean;
+  clearLastRestart(): TreeProcess;
+
+  getState(): TreeProcessState;
+  setState(value: TreeProcessState): TreeProcess;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TreeProcess.AsObject;
   static toObject(includeInstance: boolean, msg: TreeProcess): TreeProcess.AsObject;
@@ -389,6 +404,15 @@ export class TreeProcess extends jspb.Message {
 export namespace TreeProcess {
   export type AsObject = {
     name: string,
+    pid: number,
+    restartCount: number,
+    lastRestart?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    state: TreeProcessState,
+  }
+
+  export enum LastRestartCase { 
+    _LAST_RESTART_NOT_SET = 0,
+    LAST_RESTART = 4,
   }
 }
 
@@ -723,3 +747,8 @@ export namespace VersionResponse {
   }
 }
 
+export enum TreeProcessState { 
+  TREE_PROCESS_STATE_UNSPECIFIED = 0,
+  TREE_PROCESS_STATE_RUNNING = 1,
+  TREE_PROCESS_STATE_FAILED = 2,
+}

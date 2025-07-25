@@ -2,6 +2,12 @@ syntax = "proto3";
 
 package process;
 
+message Watch {
+  string prefix = 1;
+  repeated string include = 2;
+  repeated string exclude = 3;
+}
+
 message ProcessMetadata {
   string service = 1;
   string alias = 2;
@@ -10,6 +16,7 @@ message ProcessMetadata {
   RestartStrategy restart = 5;
   repeated string args = 6;
   map<string, string> env = 7;
+  optional process.Watch watch = 8;
 }
 
 message RestartStrategy {
@@ -21,13 +28,9 @@ message RestartStrategy {
   }
 }
 
-message NeverRestart {
+message NeverRestart {}
 
-}
-
-message AlwaysRestart {
-
-}
+message AlwaysRestart {}
 
 message ExponentialRestart {
   uint64 initial_delay = 1;

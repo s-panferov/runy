@@ -23,6 +23,8 @@ var global =
 
 var google_protobuf_struct_pb = require('google-protobuf/google/protobuf/struct_pb.js');
 goog.object.extend(proto, google_protobuf_struct_pb);
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
+goog.object.extend(proto, google_protobuf_timestamp_pb);
 var process_pb = require('./process_pb.js');
 goog.object.extend(proto, process_pb);
 goog.exportSymbol('proto.runy.ClearJournalRequest', null, global);
@@ -46,6 +48,7 @@ goog.exportSymbol('proto.runy.StartCommand', null, global);
 goog.exportSymbol('proto.runy.TerminateRequest', null, global);
 goog.exportSymbol('proto.runy.TerminateResponse', null, global);
 goog.exportSymbol('proto.runy.TreeProcess', null, global);
+goog.exportSymbol('proto.runy.TreeProcessState', null, global);
 goog.exportSymbol('proto.runy.TreeRequest', null, global);
 goog.exportSymbol('proto.runy.TreeResponse', null, global);
 goog.exportSymbol('proto.runy.TreeService', null, global);
@@ -3302,7 +3305,11 @@ proto.runy.TreeProcess.prototype.toObject = function(opt_includeInstance) {
  */
 proto.runy.TreeProcess.toObject = function(includeInstance, msg) {
   var f, obj = {
-name: jspb.Message.getFieldWithDefault(msg, 1, "")
+name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+pid: jspb.Message.getFieldWithDefault(msg, 2, 0),
+restartCount: jspb.Message.getFieldWithDefault(msg, 3, 0),
+lastRestart: (f = msg.getLastRestart()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+state: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -3343,6 +3350,23 @@ proto.runy.TreeProcess.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setPid(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setRestartCount(value);
+      break;
+    case 4:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setLastRestart(value);
+      break;
+    case 5:
+      var value = /** @type {!proto.runy.TreeProcessState} */ (reader.readEnum());
+      msg.setState(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -3379,6 +3403,35 @@ proto.runy.TreeProcess.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getPid();
+  if (f !== 0) {
+    writer.writeUint64(
+      2,
+      f
+    );
+  }
+  f = message.getRestartCount();
+  if (f !== 0) {
+    writer.writeUint64(
+      3,
+      f
+    );
+  }
+  f = message.getLastRestart();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getState();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      5,
+      f
+    );
+  }
 };
 
 
@@ -3397,6 +3450,97 @@ proto.runy.TreeProcess.prototype.getName = function() {
  */
 proto.runy.TreeProcess.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 pid = 2;
+ * @return {number}
+ */
+proto.runy.TreeProcess.prototype.getPid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.runy.TreeProcess} returns this
+ */
+proto.runy.TreeProcess.prototype.setPid = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional uint64 restart_count = 3;
+ * @return {number}
+ */
+proto.runy.TreeProcess.prototype.getRestartCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.runy.TreeProcess} returns this
+ */
+proto.runy.TreeProcess.prototype.setRestartCount = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp last_restart = 4;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.runy.TreeProcess.prototype.getLastRestart = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 4));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.runy.TreeProcess} returns this
+*/
+proto.runy.TreeProcess.prototype.setLastRestart = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.runy.TreeProcess} returns this
+ */
+proto.runy.TreeProcess.prototype.clearLastRestart = function() {
+  return this.setLastRestart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.runy.TreeProcess.prototype.hasLastRestart = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional TreeProcessState state = 5;
+ * @return {!proto.runy.TreeProcessState}
+ */
+proto.runy.TreeProcess.prototype.getState = function() {
+  return /** @type {!proto.runy.TreeProcessState} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {!proto.runy.TreeProcessState} value
+ * @return {!proto.runy.TreeProcess} returns this
+ */
+proto.runy.TreeProcess.prototype.setState = function(value) {
+  return jspb.Message.setProto3EnumField(this, 5, value);
 };
 
 
@@ -5727,5 +5871,14 @@ proto.runy.VersionResponse.prototype.setVersion = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
+
+/**
+ * @enum {number}
+ */
+proto.runy.TreeProcessState = {
+  TREE_PROCESS_STATE_UNSPECIFIED: 0,
+  TREE_PROCESS_STATE_RUNNING: 1,
+  TREE_PROCESS_STATE_FAILED: 2
+};
 
 goog.object.extend(exports, proto.runy);
