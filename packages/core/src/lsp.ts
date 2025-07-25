@@ -9,6 +9,7 @@ import { RpcRequest } from "./proto.ts";
 import { logger } from "./logger.ts";
 import { ProcessMetadata, RestartStrategy } from "@runy-dev/proto/process";
 import { RenderService } from "@runy-dev/proto/rpc";
+import path from "node:path";
 
 let __init = false;
 export async function init() {
@@ -248,6 +249,16 @@ export class LspServiceContext implements ServiceContext {
       }
     }
 
+    let watch = Array.isArray(process.watch)
+      ? { include: process.watch }
+      : process.watch;
+
+    if (watch) {
+      watch.prefix = watch.prefix
+        ? path.join(this.cwd, watch.prefix)
+        : this.cwd;
+    }
+
     await this.service.module.proto.notify(
       RpcRequest.create({
         process: ProcessMetadata.create({
@@ -258,6 +269,7 @@ export class LspServiceContext implements ServiceContext {
           alias: process.alias,
           restart: restart,
           env: process.env || {},
+          watch: watch,
         }),
       })
     );

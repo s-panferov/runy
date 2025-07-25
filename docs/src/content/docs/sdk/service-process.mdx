@@ -1,0 +1,122 @@
+---
+title: Service Process Management
+description: Learn how to define and manage service processes in your Runy applications
+---
+
+# Service Process Management
+
+Runy provides powerful process management capabilities through the `ctx.process()` method, allowing you to define long-running services with automatic restarts, file watching, and lifecycle management.
+
+## Basic Process Definition
+
+Use `ctx.process()` to define a service process within your service's `run` method:
+
+```javascript
+await ctx.process({
+  alias: "server",
+  cmd: "python3",
+  args: ["-m", "http.server", "8500"],
+});
+```
+
+## Process Configuration Options
+
+### Command and Arguments
+
+- **`cmd`**: The executable command to run
+- **`args`**: Array of command-line arguments
+- **`alias`**: Unique identifier for the process
+
+### Restart Policies
+
+Configure automatic restart behavior when the process exits. Runy supports four different restart strategies:
+
+#### Never Restart
+
+Prevents the process from restarting automatically:
+
+```javascript
+restart: {
+  kind: "never";
+}
+```
+
+#### Always Restart
+
+Restarts the process immediately after it exits (no delay):
+
+```javascript
+restart: {
+  kind: "always";
+}
+```
+
+#### Fixed Restart
+
+Restarts with a consistent delay between attempts:
+
+```javascript
+restart: {
+  kind: "fixed",
+  delay: 1000,        // Milliseconds to wait before restart
+  maxRestarts: 5      // Optional: maximum restart attempts
+}
+```
+
+#### Exponential Backoff Restart
+
+Increases the delay between restart attempts exponentially:
+
+```javascript
+restart: {
+  kind: "exponential",
+  initialDelay: 1000,   // Starting delay in milliseconds
+  maxDelay: 30000,      // Maximum delay cap in milliseconds
+  multiplier: 2.0,      // Factor to multiply delay by each attempt
+  maxRestarts: 10       // Optional: maximum restart attempts
+}
+```
+
+**Example exponential backoff sequence:**
+
+- 1st restart: 1 second delay
+- 2nd restart: 2 seconds delay
+- 3rd restart: 4 seconds delay
+- 4th restart: 8 seconds delay
+- ...up to maxDelay
+
+### File Watching
+
+Monitor files and restart the process when changes are detected:
+
+```javascript
+watch: ["*.txt", "config.json", "src/**/*.py"];
+```
+
+## Complete Example
+
+```javascript
+s.run(async (ctx) => {
+  await ctx.process({
+    alias: "web-server",
+    cmd: "python3",
+    args: ["-m", "http.server", "8500"],
+    restart: {
+      kind: "exponential",
+      initialDelay: 1000,
+      maxDelay: 30000,
+      multiplier: 2.0,
+      maxRestarts: 10,
+    },
+    watch: ["*.py", "config/**/*.json"],
+  });
+});
+```
+
+This example creates a Python HTTP server that:
+
+- Runs on port 8500
+- Uses exponential backoff restart strategy (1s, 2s, 4s, 8s... up to 30s delays)
+- Attempts up to 10 restarts before giving up
+- Restarts when Python files or config JSON files change
+- Can be referenced by the alias "web-server"

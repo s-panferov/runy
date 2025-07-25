@@ -16,6 +16,7 @@ ws.service("test", (s) => {
         delay: 1000,
         maxRestarts: 5,
       },
+      watch: ["*.txt"],
       args: ["-m", "http.server", "8500"],
     });
   });

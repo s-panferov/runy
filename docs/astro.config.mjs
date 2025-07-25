@@ -46,6 +46,7 @@ export default defineConfig({
           items: [
             { label: "Getting Started", slug: "sdk/getting-started" },
             { label: "Service Lifecycle", slug: "sdk/service-lifecycle" },
+            { label: "Service Process", slug: "sdk/service-process" },
           ],
         },
       ],

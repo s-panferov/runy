@@ -41,6 +41,13 @@ export interface ProcessSpec {
   env?: Partial<{ [key in string]: string }> | null;
   cwd?: string | null;
   restart?: RestartStrategy;
+  watch?:
+    | string[]
+    | {
+        include: string[];
+        exclude?: string[];
+        prefix?: string;
+      };
 }
 
 export interface ServiceContext {
