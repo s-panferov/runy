@@ -363,5 +363,48 @@ export class RunyClient {
     this.methodDescriptorWorkspaceRemove);
   }
 
+  methodDescriptorSignal = new grpcWeb.MethodDescriptor(
+    '/runy.Runy/Signal',
+    grpcWeb.MethodType.UNARY,
+    runy_pb.SignalRequest,
+    runy_pb.SignalResponse,
+    (request: runy_pb.SignalRequest) => {
+      return request.serializeBinary();
+    },
+    runy_pb.SignalResponse.deserializeBinary
+  );
+
+  signal(
+    request: runy_pb.SignalRequest,
+    metadata?: grpcWeb.Metadata | null): Promise<runy_pb.SignalResponse>;
+
+  signal(
+    request: runy_pb.SignalRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: runy_pb.SignalResponse) => void): grpcWeb.ClientReadableStream<runy_pb.SignalResponse>;
+
+  signal(
+    request: runy_pb.SignalRequest,
+    metadata?: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: runy_pb.SignalResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/runy.Runy/Signal',
+        request,
+        metadata || {},
+        this.methodDescriptorSignal,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/runy.Runy/Signal',
+    request,
+    metadata || {},
+    this.methodDescriptorSignal);
+  }
+
 }
 

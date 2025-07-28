@@ -28,6 +28,22 @@ export async function init() {
     ],
   });
 
+  process.stdin.on("end", function () {
+    process.exit();
+  });
+
+  process.stdin.on("error", function () {
+    process.exit();
+  });
+
+  process.stdout.on("end", function () {
+    process.exit();
+  });
+
+  process.stdout.on("error", function () {
+    process.exit();
+  });
+
   // setTimeout(async () => {
   //   await proto.notify("runy/metadata", collectServices());
   // }, 10);

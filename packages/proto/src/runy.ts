@@ -26,43 +26,13 @@ import { ProcessMetadata } from "./process.ts";
 
 export const protobufPackage = "runy";
 
-export enum TreeProcessState {
-  TREE_PROCESS_STATE_UNSPECIFIED = 0,
-  TREE_PROCESS_STATE_RUNNING = 1,
-  TREE_PROCESS_STATE_FAILED = 2,
-  UNRECOGNIZED = -1,
+export interface SignalRequest {
+  workspace: string;
+  resource: string;
+  signal: string;
 }
 
-export function treeProcessStateFromJSON(object: any): TreeProcessState {
-  switch (object) {
-    case 0:
-    case "TREE_PROCESS_STATE_UNSPECIFIED":
-      return TreeProcessState.TREE_PROCESS_STATE_UNSPECIFIED;
-    case 1:
-    case "TREE_PROCESS_STATE_RUNNING":
-      return TreeProcessState.TREE_PROCESS_STATE_RUNNING;
-    case 2:
-    case "TREE_PROCESS_STATE_FAILED":
-      return TreeProcessState.TREE_PROCESS_STATE_FAILED;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return TreeProcessState.UNRECOGNIZED;
-  }
-}
-
-export function treeProcessStateToJSON(object: TreeProcessState): string {
-  switch (object) {
-    case TreeProcessState.TREE_PROCESS_STATE_UNSPECIFIED:
-      return "TREE_PROCESS_STATE_UNSPECIFIED";
-    case TreeProcessState.TREE_PROCESS_STATE_RUNNING:
-      return "TREE_PROCESS_STATE_RUNNING";
-    case TreeProcessState.TREE_PROCESS_STATE_FAILED:
-      return "TREE_PROCESS_STATE_FAILED";
-    case TreeProcessState.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
+export interface SignalResponse {
 }
 
 export interface WorkspaceCreateRequest {
@@ -138,6 +108,7 @@ export interface TreeWorkspace {
 
 export interface TreeService {
   name: string;
+  flags: number;
   processes: TreeProcess[];
 }
 
@@ -146,7 +117,7 @@ export interface TreeProcess {
   pid: number;
   restartCount: number;
   lastRestart?: Date | undefined;
-  state: TreeProcessState;
+  flags: number;
 }
 
 export interface Flag {
@@ -209,6 +180,141 @@ export interface LogEntry {
 export interface VersionResponse {
   version: string;
 }
+
+function createBaseSignalRequest(): SignalRequest {
+  return { workspace: "", resource: "", signal: "" };
+}
+
+export const SignalRequest: MessageFns<SignalRequest> = {
+  encode(message: SignalRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.workspace !== "") {
+      writer.uint32(10).string(message.workspace);
+    }
+    if (message.resource !== "") {
+      writer.uint32(18).string(message.resource);
+    }
+    if (message.signal !== "") {
+      writer.uint32(26).string(message.signal);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SignalRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSignalRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.workspace = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.resource = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.signal = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SignalRequest {
+    return {
+      workspace: isSet(object.workspace) ? globalThis.String(object.workspace) : "",
+      resource: isSet(object.resource) ? globalThis.String(object.resource) : "",
+      signal: isSet(object.signal) ? globalThis.String(object.signal) : "",
+    };
+  },
+
+  toJSON(message: SignalRequest): unknown {
+    const obj: any = {};
+    if (message.workspace !== "") {
+      obj.workspace = message.workspace;
+    }
+    if (message.resource !== "") {
+      obj.resource = message.resource;
+    }
+    if (message.signal !== "") {
+      obj.signal = message.signal;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SignalRequest>, I>>(base?: I): SignalRequest {
+    return SignalRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SignalRequest>, I>>(object: I): SignalRequest {
+    const message = createBaseSignalRequest();
+    message.workspace = object.workspace ?? "";
+    message.resource = object.resource ?? "";
+    message.signal = object.signal ?? "";
+    return message;
+  },
+};
+
+function createBaseSignalResponse(): SignalResponse {
+  return {};
+}
+
+export const SignalResponse: MessageFns<SignalResponse> = {
+  encode(_: SignalResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SignalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSignalResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): SignalResponse {
+    return {};
+  },
+
+  toJSON(_: SignalResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SignalResponse>, I>>(base?: I): SignalResponse {
+    return SignalResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SignalResponse>, I>>(_: I): SignalResponse {
+    const message = createBaseSignalResponse();
+    return message;
+  },
+};
 
 function createBaseWorkspaceCreateRequest(): WorkspaceCreateRequest {
   return { workspace: undefined };
@@ -1316,7 +1422,7 @@ export const TreeWorkspace: MessageFns<TreeWorkspace> = {
 };
 
 function createBaseTreeService(): TreeService {
-  return { name: "", processes: [] };
+  return { name: "", flags: 0, processes: [] };
 }
 
 export const TreeService: MessageFns<TreeService> = {
@@ -1324,8 +1430,11 @@ export const TreeService: MessageFns<TreeService> = {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
+    if (message.flags !== 0) {
+      writer.uint32(16).uint64(message.flags);
+    }
     for (const v of message.processes) {
-      TreeProcess.encode(v!, writer.uint32(18).fork()).join();
+      TreeProcess.encode(v!, writer.uint32(26).fork()).join();
     }
     return writer;
   },
@@ -1346,7 +1455,15 @@ export const TreeService: MessageFns<TreeService> = {
           continue;
         }
         case 2: {
-          if (tag !== 18) {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.flags = longToNumber(reader.uint64());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
             break;
           }
 
@@ -1365,6 +1482,7 @@ export const TreeService: MessageFns<TreeService> = {
   fromJSON(object: any): TreeService {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
+      flags: isSet(object.flags) ? globalThis.Number(object.flags) : 0,
       processes: globalThis.Array.isArray(object?.processes)
         ? object.processes.map((e: any) => TreeProcess.fromJSON(e))
         : [],
@@ -1375,6 +1493,9 @@ export const TreeService: MessageFns<TreeService> = {
     const obj: any = {};
     if (message.name !== "") {
       obj.name = message.name;
+    }
+    if (message.flags !== 0) {
+      obj.flags = Math.round(message.flags);
     }
     if (message.processes?.length) {
       obj.processes = message.processes.map((e) => TreeProcess.toJSON(e));
@@ -1388,13 +1509,14 @@ export const TreeService: MessageFns<TreeService> = {
   fromPartial<I extends Exact<DeepPartial<TreeService>, I>>(object: I): TreeService {
     const message = createBaseTreeService();
     message.name = object.name ?? "";
+    message.flags = object.flags ?? 0;
     message.processes = object.processes?.map((e) => TreeProcess.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseTreeProcess(): TreeProcess {
-  return { name: "", pid: 0, restartCount: 0, lastRestart: undefined, state: 0 };
+  return { name: "", pid: 0, restartCount: 0, lastRestart: undefined, flags: 0 };
 }
 
 export const TreeProcess: MessageFns<TreeProcess> = {
@@ -1411,8 +1533,8 @@ export const TreeProcess: MessageFns<TreeProcess> = {
     if (message.lastRestart !== undefined) {
       Timestamp.encode(toTimestamp(message.lastRestart), writer.uint32(34).fork()).join();
     }
-    if (message.state !== 0) {
-      writer.uint32(40).int32(message.state);
+    if (message.flags !== 0) {
+      writer.uint32(40).uint64(message.flags);
     }
     return writer;
   },
@@ -1461,7 +1583,7 @@ export const TreeProcess: MessageFns<TreeProcess> = {
             break;
           }
 
-          message.state = reader.int32() as any;
+          message.flags = longToNumber(reader.uint64());
           continue;
         }
       }
@@ -1479,7 +1601,7 @@ export const TreeProcess: MessageFns<TreeProcess> = {
       pid: isSet(object.pid) ? globalThis.Number(object.pid) : 0,
       restartCount: isSet(object.restartCount) ? globalThis.Number(object.restartCount) : 0,
       lastRestart: isSet(object.lastRestart) ? fromJsonTimestamp(object.lastRestart) : undefined,
-      state: isSet(object.state) ? treeProcessStateFromJSON(object.state) : 0,
+      flags: isSet(object.flags) ? globalThis.Number(object.flags) : 0,
     };
   },
 
@@ -1497,8 +1619,8 @@ export const TreeProcess: MessageFns<TreeProcess> = {
     if (message.lastRestart !== undefined) {
       obj.lastRestart = message.lastRestart.toISOString();
     }
-    if (message.state !== 0) {
-      obj.state = treeProcessStateToJSON(message.state);
+    if (message.flags !== 0) {
+      obj.flags = Math.round(message.flags);
     }
     return obj;
   },
@@ -1512,7 +1634,7 @@ export const TreeProcess: MessageFns<TreeProcess> = {
     message.pid = object.pid ?? 0;
     message.restartCount = object.restartCount ?? 0;
     message.lastRestart = object.lastRestart ?? undefined;
-    message.state = object.state ?? 0;
+    message.flags = object.flags ?? 0;
     return message;
   },
 };
@@ -2535,6 +2657,15 @@ export const RunyService = {
       Buffer.from(WorkspaceRemoveResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): WorkspaceRemoveResponse => WorkspaceRemoveResponse.decode(value),
   },
+  signal: {
+    path: "/runy.Runy/Signal",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: SignalRequest): Buffer => Buffer.from(SignalRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): SignalRequest => SignalRequest.decode(value),
+    responseSerialize: (value: SignalResponse): Buffer => Buffer.from(SignalResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): SignalResponse => SignalResponse.decode(value),
+  },
 } as const;
 
 export interface RunyServer extends UntypedServiceImplementation {
@@ -2547,6 +2678,7 @@ export interface RunyServer extends UntypedServiceImplementation {
   journalEntries: handleUnaryCall<JournalEntriesRequest, JournalEntriesResponse>;
   workspaceCreate: handleUnaryCall<WorkspaceCreateRequest, WorkspaceCreateResponse>;
   workspaceRemove: handleUnaryCall<WorkspaceRemoveRequest, WorkspaceRemoveResponse>;
+  signal: handleUnaryCall<SignalRequest, SignalResponse>;
 }
 
 export interface RunyClient extends Client {
@@ -2653,6 +2785,21 @@ export interface RunyClient extends Client {
     metadata: Metadata1,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: WorkspaceRemoveResponse) => void,
+  ): ClientUnaryCall;
+  signal(
+    request: SignalRequest,
+    callback: (error: ServiceError | null, response: SignalResponse) => void,
+  ): ClientUnaryCall;
+  signal(
+    request: SignalRequest,
+    metadata: Metadata1,
+    callback: (error: ServiceError | null, response: SignalResponse) => void,
+  ): ClientUnaryCall;
+  signal(
+    request: SignalRequest,
+    metadata: Metadata1,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: SignalResponse) => void,
   ): ClientUnaryCall;
 }
 

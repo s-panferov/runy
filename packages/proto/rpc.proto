@@ -17,7 +17,13 @@ message RpcRequest {
     RenderService render = 4;
     StopService stop = 5;
     process.ProcessMetadata process = 6;
+    SignalRequest signal = 7;
   }
+}
+
+message SignalRequest {
+  string resource = 1;
+  string signal = 2;
 }
 
 message Initialize {

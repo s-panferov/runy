@@ -29,6 +29,12 @@ export interface RpcRequest {
   render?: RenderService | undefined;
   stop?: StopService | undefined;
   process?: ProcessMetadata | undefined;
+  signal?: SignalRequest | undefined;
+}
+
+export interface SignalRequest {
+  resource: string;
+  signal: string;
 }
 
 export interface Initialize {
@@ -93,6 +99,7 @@ function createBaseRpcRequest(): RpcRequest {
     render: undefined,
     stop: undefined,
     process: undefined,
+    signal: undefined,
   };
 }
 
@@ -115,6 +122,9 @@ export const RpcRequest: MessageFns<RpcRequest> = {
     }
     if (message.process !== undefined) {
       ProcessMetadata.encode(message.process, writer.uint32(50).fork()).join();
+    }
+    if (message.signal !== undefined) {
+      SignalRequest.encode(message.signal, writer.uint32(58).fork()).join();
     }
     return writer;
   },
@@ -174,6 +184,14 @@ export const RpcRequest: MessageFns<RpcRequest> = {
           message.process = ProcessMetadata.decode(reader, reader.uint32());
           continue;
         }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.signal = SignalRequest.decode(reader, reader.uint32());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -191,6 +209,7 @@ export const RpcRequest: MessageFns<RpcRequest> = {
       render: isSet(object.render) ? RenderService.fromJSON(object.render) : undefined,
       stop: isSet(object.stop) ? StopService.fromJSON(object.stop) : undefined,
       process: isSet(object.process) ? ProcessMetadata.fromJSON(object.process) : undefined,
+      signal: isSet(object.signal) ? SignalRequest.fromJSON(object.signal) : undefined,
     };
   },
 
@@ -213,6 +232,9 @@ export const RpcRequest: MessageFns<RpcRequest> = {
     }
     if (message.process !== undefined) {
       obj.process = ProcessMetadata.toJSON(message.process);
+    }
+    if (message.signal !== undefined) {
+      obj.signal = SignalRequest.toJSON(message.signal);
     }
     return obj;
   },
@@ -238,6 +260,85 @@ export const RpcRequest: MessageFns<RpcRequest> = {
     message.process = (object.process !== undefined && object.process !== null)
       ? ProcessMetadata.fromPartial(object.process)
       : undefined;
+    message.signal = (object.signal !== undefined && object.signal !== null)
+      ? SignalRequest.fromPartial(object.signal)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseSignalRequest(): SignalRequest {
+  return { resource: "", signal: "" };
+}
+
+export const SignalRequest: MessageFns<SignalRequest> = {
+  encode(message: SignalRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.resource !== "") {
+      writer.uint32(10).string(message.resource);
+    }
+    if (message.signal !== "") {
+      writer.uint32(18).string(message.signal);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SignalRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSignalRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.resource = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.signal = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SignalRequest {
+    return {
+      resource: isSet(object.resource) ? globalThis.String(object.resource) : "",
+      signal: isSet(object.signal) ? globalThis.String(object.signal) : "",
+    };
+  },
+
+  toJSON(message: SignalRequest): unknown {
+    const obj: any = {};
+    if (message.resource !== "") {
+      obj.resource = message.resource;
+    }
+    if (message.signal !== "") {
+      obj.signal = message.signal;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SignalRequest>, I>>(base?: I): SignalRequest {
+    return SignalRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SignalRequest>, I>>(object: I): SignalRequest {
+    const message = createBaseSignalRequest();
+    message.resource = object.resource ?? "";
+    message.signal = object.signal ?? "";
     return message;
   },
 };

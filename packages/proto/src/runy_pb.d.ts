@@ -5,6 +5,46 @@ import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/t
 import * as process_pb from './process_pb'; // proto import: "process.proto"
 
 
+export class SignalRequest extends jspb.Message {
+  getWorkspace(): string;
+  setWorkspace(value: string): SignalRequest;
+
+  getResource(): string;
+  setResource(value: string): SignalRequest;
+
+  getSignal(): string;
+  setSignal(value: string): SignalRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SignalRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: SignalRequest): SignalRequest.AsObject;
+  static serializeBinaryToWriter(message: SignalRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SignalRequest;
+  static deserializeBinaryFromReader(message: SignalRequest, reader: jspb.BinaryReader): SignalRequest;
+}
+
+export namespace SignalRequest {
+  export type AsObject = {
+    workspace: string,
+    resource: string,
+    signal: string,
+  }
+}
+
+export class SignalResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SignalResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: SignalResponse): SignalResponse.AsObject;
+  static serializeBinaryToWriter(message: SignalResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SignalResponse;
+  static deserializeBinaryFromReader(message: SignalResponse, reader: jspb.BinaryReader): SignalResponse;
+}
+
+export namespace SignalResponse {
+  export type AsObject = {
+  }
+}
+
 export class WorkspaceCreateRequest extends jspb.Message {
   getWorkspace(): WorkspaceMetadata | undefined;
   setWorkspace(value?: WorkspaceMetadata): WorkspaceCreateRequest;
@@ -355,6 +395,9 @@ export class TreeService extends jspb.Message {
   getName(): string;
   setName(value: string): TreeService;
 
+  getFlags(): number;
+  setFlags(value: number): TreeService;
+
   getProcessesList(): Array<TreeProcess>;
   setProcessesList(value: Array<TreeProcess>): TreeService;
   clearProcessesList(): TreeService;
@@ -371,6 +414,7 @@ export class TreeService extends jspb.Message {
 export namespace TreeService {
   export type AsObject = {
     name: string,
+    flags: number,
     processesList: Array<TreeProcess.AsObject>,
   }
 }
@@ -390,8 +434,8 @@ export class TreeProcess extends jspb.Message {
   hasLastRestart(): boolean;
   clearLastRestart(): TreeProcess;
 
-  getState(): TreeProcessState;
-  setState(value: TreeProcessState): TreeProcess;
+  getFlags(): number;
+  setFlags(value: number): TreeProcess;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TreeProcess.AsObject;
@@ -407,7 +451,7 @@ export namespace TreeProcess {
     pid: number,
     restartCount: number,
     lastRestart?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    state: TreeProcessState,
+    flags: number,
   }
 
   export enum LastRestartCase { 
@@ -747,8 +791,3 @@ export namespace VersionResponse {
   }
 }
 
-export enum TreeProcessState { 
-  TREE_PROCESS_STATE_UNSPECIFIED = 0,
-  TREE_PROCESS_STATE_RUNNING = 1,
-  TREE_PROCESS_STATE_FAILED = 2,
-}

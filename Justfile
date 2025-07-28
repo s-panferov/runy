@@ -4,3 +4,8 @@ proto:
 
 core:
   cd packages/core && pnpm exec rollup -c rollup.config.js
+
+release:
+  pnpm changeset version
+  git commit -am "chore: release"
+  pnpm changeset publish

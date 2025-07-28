@@ -17,7 +17,16 @@ service Runy {
   rpc JournalEntries(JournalEntriesRequest) returns (JournalEntriesResponse);
   rpc WorkspaceCreate(WorkspaceCreateRequest) returns (WorkspaceCreateResponse);
   rpc WorkspaceRemove(WorkspaceRemoveRequest) returns (WorkspaceRemoveResponse);
+  rpc Signal(SignalRequest) returns (SignalResponse);
 }
+
+message SignalRequest {
+  string workspace = 1;
+  string resource = 2;
+  string signal = 3;
+}
+
+message SignalResponse {}
 
 message WorkspaceCreateRequest {
   WorkspaceMetadata workspace = 1;
@@ -84,13 +93,8 @@ message TreeWorkspace {
 
 message TreeService {
   string name = 1;
-  repeated TreeProcess processes = 2;
-}
-
-enum TreeProcessState {
-  TREE_PROCESS_STATE_UNSPECIFIED = 0;
-  TREE_PROCESS_STATE_RUNNING = 1;
-  TREE_PROCESS_STATE_FAILED = 2;
+  uint64 flags = 2;
+  repeated TreeProcess processes = 3;
 }
 
 message TreeProcess {
@@ -98,7 +102,7 @@ message TreeProcess {
   uint64 pid = 2;
   uint64 restart_count = 3;
   optional google.protobuf.Timestamp last_restart = 4;
-  TreeProcessState state = 5;
+  uint64 flags = 5;
 }
 
 message Flag {

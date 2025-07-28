@@ -1,5 +1,11 @@
 # @runy-dev/proto
 
+## 0.0.4
+
+### Patch Changes
+
+- Sync proto with the runtime
+
 ## 0.0.3
 
 ### Patch Changes
