@@ -15,6 +15,7 @@ export default defineConfig({
     icon(),
     starlight({
       title: "RUNY",
+      favicon: "./public/favicon.png",
       logo: {
         src: "./src/assets/runy.png",
         replacesTitle: true,

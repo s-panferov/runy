@@ -9,3 +9,6 @@ release:
   pnpm changeset version
   git commit -am "chore: release"
   pnpm changeset publish
+
+docs:
+  cd docs && pnpm dev
