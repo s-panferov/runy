@@ -406,5 +406,48 @@ export class RunyClient {
     this.methodDescriptorSignal);
   }
 
+  methodDescriptorGetResource = new grpcWeb.MethodDescriptor(
+    '/runy.Runy/GetResource',
+    grpcWeb.MethodType.UNARY,
+    runy_pb.GetResourceRequest,
+    runy_pb.GetResourceResponse,
+    (request: runy_pb.GetResourceRequest) => {
+      return request.serializeBinary();
+    },
+    runy_pb.GetResourceResponse.deserializeBinary
+  );
+
+  getResource(
+    request: runy_pb.GetResourceRequest,
+    metadata?: grpcWeb.Metadata | null): Promise<runy_pb.GetResourceResponse>;
+
+  getResource(
+    request: runy_pb.GetResourceRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: runy_pb.GetResourceResponse) => void): grpcWeb.ClientReadableStream<runy_pb.GetResourceResponse>;
+
+  getResource(
+    request: runy_pb.GetResourceRequest,
+    metadata?: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: runy_pb.GetResourceResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/runy.Runy/GetResource',
+        request,
+        metadata || {},
+        this.methodDescriptorGetResource,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/runy.Runy/GetResource',
+    request,
+    metadata || {},
+    this.methodDescriptorGetResource);
+  }
+
 }
 

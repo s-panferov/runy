@@ -4,12 +4,12 @@ import {
   RpcRequest,
   RpcResponse,
   RpcError,
-} from "@runy-dev/proto/rpc";
+} from "@runy-dev/proto/native/rpc.ts";
 
-import { ChannelCredentials } from "@runy-dev/proto";
+import { ChannelCredentials } from "@runy-dev/proto/native";
 import { logger } from "./logger.ts";
 
-export { RpcRequest } from "@runy-dev/proto/rpc";
+export { RpcRequest } from "@runy-dev/proto/native/rpc.ts";
 
 type RequestHandler = (request: RpcRequest) => Promise<RpcResponse>;
 

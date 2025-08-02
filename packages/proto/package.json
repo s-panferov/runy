@@ -16,17 +16,14 @@
     "rxjs": "^7.8.2"
   },
   "exports": {
-    "./rpc": {
-      "default": "./src/rpc.ts"
+    "./web/*": {
+      "default": "./web/*"
     },
-    "./browser": {
-      "default": "./src/browser.ts"
+    "./native": {
+      "default": "./src/native.ts"
     },
-    "./process": {
-      "default": "./src/process.ts"
-    },
-    ".": {
-      "default": "./src/index.ts"
+    "./native/*": {
+      "default": "./native/*"
     }
   }
 }

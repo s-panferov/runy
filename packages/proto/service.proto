@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package service;
+
+message ServiceMetadata {
+  string name = 1;
+  string cwd = 2;
+  bool autorun = 3;
+  repeated ServiceConfig configs = 4;
+}
+
+message ServiceConfig {
+  oneof config {
+    Select select = 1;
+  }
+}
+
+message Select {
+  string name = 1;
+  string default = 2;
+  repeated string options = 3;
+}

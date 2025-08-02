@@ -19,6 +19,7 @@ import {
 } from "@grpc/grpc-js";
 import { ProcessMetadata } from "./process.ts";
 import { WorkspaceMetadata } from "./runy.ts";
+import { ServiceMetadata } from "./service.ts";
 
 export const protobufPackage = "rpc";
 
@@ -46,12 +47,6 @@ export interface Metadata {
   source: string;
   services: ServiceMetadata[];
   alive: string[];
-}
-
-export interface ServiceMetadata {
-  name: string;
-  cwd: string;
-  autorun: boolean;
 }
 
 export interface RenderService {
@@ -509,98 +504,6 @@ export const Metadata: MessageFns<Metadata> = {
     message.source = object.source ?? "";
     message.services = object.services?.map((e) => ServiceMetadata.fromPartial(e)) || [];
     message.alive = object.alive?.map((e) => e) || [];
-    return message;
-  },
-};
-
-function createBaseServiceMetadata(): ServiceMetadata {
-  return { name: "", cwd: "", autorun: false };
-}
-
-export const ServiceMetadata: MessageFns<ServiceMetadata> = {
-  encode(message: ServiceMetadata, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
-    }
-    if (message.cwd !== "") {
-      writer.uint32(18).string(message.cwd);
-    }
-    if (message.autorun !== false) {
-      writer.uint32(24).bool(message.autorun);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): ServiceMetadata {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseServiceMetadata();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
-        }
-        case 2: {
-          if (tag !== 18) {
-            break;
-          }
-
-          message.cwd = reader.string();
-          continue;
-        }
-        case 3: {
-          if (tag !== 24) {
-            break;
-          }
-
-          message.autorun = reader.bool();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ServiceMetadata {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      cwd: isSet(object.cwd) ? globalThis.String(object.cwd) : "",
-      autorun: isSet(object.autorun) ? globalThis.Boolean(object.autorun) : false,
-    };
-  },
-
-  toJSON(message: ServiceMetadata): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.cwd !== "") {
-      obj.cwd = message.cwd;
-    }
-    if (message.autorun !== false) {
-      obj.autorun = message.autorun;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ServiceMetadata>, I>>(base?: I): ServiceMetadata {
-    return ServiceMetadata.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ServiceMetadata>, I>>(object: I): ServiceMetadata {
-    const message = createBaseServiceMetadata();
-    message.name = object.name ?? "";
-    message.cwd = object.cwd ?? "";
-    message.autorun = object.autorun ?? false;
     return message;
   },
 };

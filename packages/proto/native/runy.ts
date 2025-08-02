@@ -23,8 +23,19 @@ import {
 import { Value } from "./google/protobuf/struct.ts";
 import { Timestamp } from "./google/protobuf/timestamp.ts";
 import { ProcessMetadata } from "./process.ts";
+import { ServiceMetadata } from "./service.ts";
 
 export const protobufPackage = "runy";
+
+export interface GetResourceRequest {
+  workspace: string;
+  resource: string;
+}
+
+export interface GetResourceResponse {
+  process?: ProcessMetadata | undefined;
+  service?: ServiceMetadata | undefined;
+}
 
 export interface SignalRequest {
   workspace: string;
@@ -180,6 +191,162 @@ export interface LogEntry {
 export interface VersionResponse {
   version: string;
 }
+
+function createBaseGetResourceRequest(): GetResourceRequest {
+  return { workspace: "", resource: "" };
+}
+
+export const GetResourceRequest: MessageFns<GetResourceRequest> = {
+  encode(message: GetResourceRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.workspace !== "") {
+      writer.uint32(10).string(message.workspace);
+    }
+    if (message.resource !== "") {
+      writer.uint32(18).string(message.resource);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetResourceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetResourceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.workspace = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.resource = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetResourceRequest {
+    return {
+      workspace: isSet(object.workspace) ? globalThis.String(object.workspace) : "",
+      resource: isSet(object.resource) ? globalThis.String(object.resource) : "",
+    };
+  },
+
+  toJSON(message: GetResourceRequest): unknown {
+    const obj: any = {};
+    if (message.workspace !== "") {
+      obj.workspace = message.workspace;
+    }
+    if (message.resource !== "") {
+      obj.resource = message.resource;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetResourceRequest>, I>>(base?: I): GetResourceRequest {
+    return GetResourceRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetResourceRequest>, I>>(object: I): GetResourceRequest {
+    const message = createBaseGetResourceRequest();
+    message.workspace = object.workspace ?? "";
+    message.resource = object.resource ?? "";
+    return message;
+  },
+};
+
+function createBaseGetResourceResponse(): GetResourceResponse {
+  return { process: undefined, service: undefined };
+}
+
+export const GetResourceResponse: MessageFns<GetResourceResponse> = {
+  encode(message: GetResourceResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.process !== undefined) {
+      ProcessMetadata.encode(message.process, writer.uint32(10).fork()).join();
+    }
+    if (message.service !== undefined) {
+      ServiceMetadata.encode(message.service, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetResourceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetResourceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.process = ProcessMetadata.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.service = ServiceMetadata.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetResourceResponse {
+    return {
+      process: isSet(object.process) ? ProcessMetadata.fromJSON(object.process) : undefined,
+      service: isSet(object.service) ? ServiceMetadata.fromJSON(object.service) : undefined,
+    };
+  },
+
+  toJSON(message: GetResourceResponse): unknown {
+    const obj: any = {};
+    if (message.process !== undefined) {
+      obj.process = ProcessMetadata.toJSON(message.process);
+    }
+    if (message.service !== undefined) {
+      obj.service = ServiceMetadata.toJSON(message.service);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetResourceResponse>, I>>(base?: I): GetResourceResponse {
+    return GetResourceResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetResourceResponse>, I>>(object: I): GetResourceResponse {
+    const message = createBaseGetResourceResponse();
+    message.process = (object.process !== undefined && object.process !== null)
+      ? ProcessMetadata.fromPartial(object.process)
+      : undefined;
+    message.service = (object.service !== undefined && object.service !== null)
+      ? ServiceMetadata.fromPartial(object.service)
+      : undefined;
+    return message;
+  },
+};
 
 function createBaseSignalRequest(): SignalRequest {
   return { workspace: "", resource: "", signal: "" };
@@ -2666,6 +2833,15 @@ export const RunyService = {
     responseSerialize: (value: SignalResponse): Buffer => Buffer.from(SignalResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): SignalResponse => SignalResponse.decode(value),
   },
+  getResource: {
+    path: "/runy.Runy/GetResource",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetResourceRequest): Buffer => Buffer.from(GetResourceRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetResourceRequest => GetResourceRequest.decode(value),
+    responseSerialize: (value: GetResourceResponse): Buffer => Buffer.from(GetResourceResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetResourceResponse => GetResourceResponse.decode(value),
+  },
 } as const;
 
 export interface RunyServer extends UntypedServiceImplementation {
@@ -2679,6 +2855,7 @@ export interface RunyServer extends UntypedServiceImplementation {
   workspaceCreate: handleUnaryCall<WorkspaceCreateRequest, WorkspaceCreateResponse>;
   workspaceRemove: handleUnaryCall<WorkspaceRemoveRequest, WorkspaceRemoveResponse>;
   signal: handleUnaryCall<SignalRequest, SignalResponse>;
+  getResource: handleUnaryCall<GetResourceRequest, GetResourceResponse>;
 }
 
 export interface RunyClient extends Client {
@@ -2800,6 +2977,21 @@ export interface RunyClient extends Client {
     metadata: Metadata1,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: SignalResponse) => void,
+  ): ClientUnaryCall;
+  getResource(
+    request: GetResourceRequest,
+    callback: (error: ServiceError | null, response: GetResourceResponse) => void,
+  ): ClientUnaryCall;
+  getResource(
+    request: GetResourceRequest,
+    metadata: Metadata1,
+    callback: (error: ServiceError | null, response: GetResourceResponse) => void,
+  ): ClientUnaryCall;
+  getResource(
+    request: GetResourceRequest,
+    metadata: Metadata1,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetResourceResponse) => void,
   ): ClientUnaryCall;
 }
 

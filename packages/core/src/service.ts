@@ -2,7 +2,11 @@ import "./lsp.ts";
 
 import { Workspace } from "./module.ts";
 import { RunningService } from "./lsp.ts";
-import { RestartStrategy as ProtoRestartStrategy } from "@runy-dev/proto/process";
+import { RestartStrategy as ProtoRestartStrategy } from "@runy-dev/proto/native/process.ts";
+import {
+  ServiceConfig,
+  ServiceMetadata,
+} from "@runy-dev/proto/native/service.ts";
 
 export interface ServiceRunFunc<A, R> {
   (ctx: ServiceContext, args: A): Promise<R>;
@@ -81,6 +85,8 @@ export class Service implements IService {
   name: string;
   module: Workspace;
 
+  options: Map<string, ServiceConfig> = new Map();
+
   static isAutorun(service: Service): boolean {
     return service[$autorun];
   }
@@ -91,6 +97,15 @@ export class Service implements IService {
 
   static getCwd(service: Service): string | undefined {
     return service.#cwd;
+  }
+
+  static toMetadata(service: Service): ServiceMetadata {
+    return ServiceMetadata.create({
+      name: service.name,
+      cwd: Service.getCwd(service),
+      autorun: Service.isAutorun(service),
+      configs: Array.from(service.options.values()),
+    });
   }
 
   constructor(module: Workspace, name: string) {
@@ -112,6 +127,13 @@ export class Service implements IService {
       default: string;
     }
   ) {
+    this.options.set(name, {
+      select: {
+        name,
+        options,
+        default: defaultOption,
+      },
+    });
     // Implement the selection logic here
   }
 

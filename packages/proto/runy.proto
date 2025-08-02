@@ -5,6 +5,7 @@ package runy;
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "process.proto";
+import "service.proto";
 
 // Service mapping the GraphQL RunySubscription
 service Runy {
@@ -18,6 +19,19 @@ service Runy {
   rpc WorkspaceCreate(WorkspaceCreateRequest) returns (WorkspaceCreateResponse);
   rpc WorkspaceRemove(WorkspaceRemoveRequest) returns (WorkspaceRemoveResponse);
   rpc Signal(SignalRequest) returns (SignalResponse);
+  rpc GetResource(GetResourceRequest) returns (GetResourceResponse);
+}
+
+message GetResourceRequest {
+  string workspace = 1;
+  string resource = 2;
+}
+
+message GetResourceResponse {
+  oneof resource {
+    process.ProcessMetadata process = 1;
+    service.ServiceMetadata service = 2;
+  }
 }
 
 message SignalRequest {

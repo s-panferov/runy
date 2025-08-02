@@ -3,7 +3,64 @@ import * as jspb from 'google-protobuf'
 import * as google_protobuf_struct_pb from 'google-protobuf/google/protobuf/struct_pb'; // proto import: "google/protobuf/struct.proto"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 import * as process_pb from './process_pb'; // proto import: "process.proto"
+import * as service_pb from './service_pb'; // proto import: "service.proto"
 
+
+export class GetResourceRequest extends jspb.Message {
+  getWorkspace(): string;
+  setWorkspace(value: string): GetResourceRequest;
+
+  getResource(): string;
+  setResource(value: string): GetResourceRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetResourceRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetResourceRequest): GetResourceRequest.AsObject;
+  static serializeBinaryToWriter(message: GetResourceRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetResourceRequest;
+  static deserializeBinaryFromReader(message: GetResourceRequest, reader: jspb.BinaryReader): GetResourceRequest;
+}
+
+export namespace GetResourceRequest {
+  export type AsObject = {
+    workspace: string,
+    resource: string,
+  }
+}
+
+export class GetResourceResponse extends jspb.Message {
+  getProcess(): process_pb.ProcessMetadata | undefined;
+  setProcess(value?: process_pb.ProcessMetadata): GetResourceResponse;
+  hasProcess(): boolean;
+  clearProcess(): GetResourceResponse;
+
+  getService(): service_pb.ServiceMetadata | undefined;
+  setService(value?: service_pb.ServiceMetadata): GetResourceResponse;
+  hasService(): boolean;
+  clearService(): GetResourceResponse;
+
+  getResourceCase(): GetResourceResponse.ResourceCase;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetResourceResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetResourceResponse): GetResourceResponse.AsObject;
+  static serializeBinaryToWriter(message: GetResourceResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetResourceResponse;
+  static deserializeBinaryFromReader(message: GetResourceResponse, reader: jspb.BinaryReader): GetResourceResponse;
+}
+
+export namespace GetResourceResponse {
+  export type AsObject = {
+    process?: process_pb.ProcessMetadata.AsObject,
+    service?: service_pb.ServiceMetadata.AsObject,
+  }
+
+  export enum ResourceCase { 
+    RESOURCE_NOT_SET = 0,
+    PROCESS = 1,
+    SERVICE = 2,
+  }
+}
 
 export class SignalRequest extends jspb.Message {
   getWorkspace(): string;

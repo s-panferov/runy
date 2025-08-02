@@ -3,7 +3,7 @@ import { Service, ServiceSpecFunc } from "./service.ts";
 import { Protocol } from "./proto.ts";
 import { logger } from "./logger.ts";
 
-import { RpcRequest, RpcResponse, ServiceMetadata } from "@runy-dev/proto/rpc";
+import { RpcRequest, RpcResponse } from "@runy-dev/proto/native/rpc.ts";
 import { LspServiceContext, RunningService } from "./lsp.ts";
 
 import { basename, dirname } from "node:path";
@@ -76,12 +76,8 @@ export class Workspace {
         RpcRequest.create({
           metadata: {
             workspace: this.workspace,
-            services: Array.from(this.services.values()).map((service) =>
-              ServiceMetadata.create({
-                name: service.name,
-                cwd: Service.getCwd(service),
-                autorun: Service.isAutorun(service),
-              })
+            services: Array.from(this.services.values()).map(
+              Service.toMetadata
             ),
             alive: Array.from(this.services.keys()),
           },

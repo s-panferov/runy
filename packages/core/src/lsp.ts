@@ -7,8 +7,11 @@ import type { JsonRpcFilesetRequest } from "./rpc.ts";
 
 import { RpcRequest } from "./proto.ts";
 import { logger } from "./logger.ts";
-import { ProcessMetadata, RestartStrategy } from "@runy-dev/proto/process";
-import { RenderService } from "@runy-dev/proto/rpc";
+import {
+  ProcessMetadata,
+  RestartStrategy,
+} from "@runy-dev/proto/native/process.ts";
+import { RenderService } from "@runy-dev/proto/native/rpc.ts";
 import path from "node:path";
 
 let __init = false;

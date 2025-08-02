@@ -4,6 +4,7 @@ package rpc;
 
 import "process.proto";
 import "runy.proto";
+import "service.proto";
 
 service RpcService {
   rpc StreamRpc(stream RpcEnvelope) returns (stream RpcEnvelope);
@@ -33,14 +34,8 @@ message Initialize {
 message Metadata {
   string workspace = 1;
   string source = 2;
-  repeated ServiceMetadata services = 3;
+  repeated service.ServiceMetadata services = 3;
   repeated string alive = 4;
-}
-
-message ServiceMetadata {
-  string name = 1;
-  string cwd = 2;
-  bool autorun = 3;
 }
 
 message RenderService {
