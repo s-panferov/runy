@@ -1,0 +1,111 @@
+---
+title: Service configuration
+description: Learn about configuring services in Runy.
+---
+
+## Service Configuration with `select`
+
+The `select` method allows you to create configurable parameters for your services, providing options that can be selected when running the service.
+
+### Basic Usage
+
+```typescript
+const env = s.select("environment", {
+  options: ["development", "production"],
+  default: "development",
+});
+```
+
+### Parameters
+
+- **`name`** (string): The name/identifier for the configuration parameter
+- **`options`** (object):
+  - `options` (array): Available values to choose from
+  - `default` (string): Default value if none is selected
+
+### Example: Rspack Service Configuration
+
+```typescript
+const rspack = ws.service("rspack", (s) => {
+  s.autorun();
+  s.cwd("client/ui");
+
+  const env = s.select("environment", {
+    options: ["development", "production"],
+    default: "development",
+  });
+
+  const port = s.select("port", {
+    options: ["3010", "3020"],
+    default: "3010",
+  });
+
+  s.run(async (ctx) => {
+    let envValue = ctx.get(env);
+    let portValue = ctx.get(port);
+
+    await ctx.process({
+      alias: "rspack",
+      cmd: "./node_modules/.bin/rsbuild",
+      args: ["dev", "--port", portValue],
+      env: {
+        NODE_ENV: envValue,
+        RSPACK_DEV_SERVER_PORT: portValue,
+        RSPACK_DEV_SERVER_HOST: "localhost",
+      },
+    });
+  });
+});
+```
+
+### Accessing Selected Values
+
+Use `ctx.get(configVariable)` within the `s.run()` callback to retrieve the selected value:
+
+```typescript
+s.run(async (ctx) => {
+  let selectedEnv = ctx.get(env);
+  let selectedPort = ctx.get(port);
+
+  // Use the values in your process configuration
+});
+```
+
+This allows for flexible service configuration without hardcoding values, making services adaptable to different environments and requirements.
+
+## Service UI Configuration Editor
+
+The Runy service UI provides an interactive interface for editing service configurations. When you define configuration parameters using `select`, they become editable through the web interface.
+
+<br />
+
+import screen from "../../../assets/configuration.png";
+import { Image } from "astro:assets";
+
+<Image
+  src={screen}
+  alt="Service Configuration UI"
+  class="border block mt-00 border-gray-200 shadow-sm rounded"
+  style={{ display: "block", margin: "0 auto" }}
+/>
+
+_Configuration editor in the Runy service UI_
+
+### Persistent Configuration
+
+Configuration changes made through the UI are automatically persisted to a JSON file. This ensures that your selected values are maintained across service restarts and system reboots.
+
+The configuration file is stored in the workspace directory and contains all the selected values for your service parameters:
+
+```json
+{
+  "services": {
+    "rspack": {
+      "environment": "production",
+      "port": "3020"
+    }
+  }
+}
+```
+
+Changes made through the UI take effect immediately and override the default values specified in your service definition.
