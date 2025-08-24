@@ -1,5 +1,13 @@
 # @runy-dev/core
 
+## 0.0.5
+
+### Patch Changes
+
+- a3d80c9: Support service configuration in Runtime and SDK
+- Updated dependencies [a3d80c9]
+  - @runy-dev/proto@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
