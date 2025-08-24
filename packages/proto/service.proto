@@ -6,7 +6,7 @@ message ServiceMetadata {
   string name = 1;
   string cwd = 2;
   bool autorun = 3;
-  repeated ServiceConfig configs = 4;
+  repeated ServiceConfig configs = 5;
 }
 
 message ServiceConfig {

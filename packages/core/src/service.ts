@@ -56,22 +56,46 @@ export interface ProcessSpec {
 
 export interface ServiceContext {
   cwd: string;
-  fileset(glob: string[]): Promise<string[]>;
-  ready(): Promise<void>;
+  get<T>(key: ConfigValue<T>): T;
   process(process: ProcessSpec): Promise<void>;
   // $: ExecaScriptMethod;
 }
 
 export const $autorun = Symbol("Autorun");
 
+export interface ConfigValue<T> {
+  name: string;
+  defaultValue: T;
+}
+
 export interface IService {
+  /**
+   * Set the working directory for the service.
+   * @param path The path to the working directory, relative to the current file.
+   */
   cwd(path: string): void;
+
+  /**
+   * Declare an option for the service.
+   * @param name The name of the option.
+   * @param options The options for the select input.
+   */
   select(name: string, options: { options: string[]; default: string }): void;
+
   action(
     name: string,
     options?: { label?: string; icon?: string; description?: string }
   ): void;
+
+  /**
+   * Enable automatic running of the service.
+   */
   autorun(): void;
+
+  /**
+   * Run the service with the given function.
+   * @param func The function to run the service.
+   */
   run<A, R>(func: ServiceRunFunc<A, R>): void;
 }
 
@@ -126,7 +150,7 @@ export class Service implements IService {
       options: string[];
       default: string;
     }
-  ) {
+  ): ConfigValue<string> {
     this.options.set(name, {
       select: {
         name,
@@ -134,6 +158,11 @@ export class Service implements IService {
         default: defaultOption,
       },
     });
+
+    return {
+      name,
+      defaultValue: defaultOption,
+    } as ConfigValue<string>;
     // Implement the selection logic here
   }
 

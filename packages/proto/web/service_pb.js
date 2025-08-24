@@ -94,7 +94,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.service.ServiceMetadata.repeatedFields_ = [4];
+proto.service.ServiceMetadata.repeatedFields_ = [5];
 
 
 
@@ -180,7 +180,7 @@ proto.service.ServiceMetadata.deserializeBinaryFromReader = function(msg, reader
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAutorun(value);
       break;
-    case 4:
+    case 5:
       var value = new proto.service.ServiceConfig;
       reader.readMessage(value,proto.service.ServiceConfig.deserializeBinaryFromReader);
       msg.addConfigs(value);
@@ -238,7 +238,7 @@ proto.service.ServiceMetadata.serializeBinaryToWriter = function(message, writer
   f = message.getConfigsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      4,
+      5,
       f,
       proto.service.ServiceConfig.serializeBinaryToWriter
     );
@@ -301,12 +301,12 @@ proto.service.ServiceMetadata.prototype.setAutorun = function(value) {
 
 
 /**
- * repeated ServiceConfig configs = 4;
+ * repeated ServiceConfig configs = 5;
  * @return {!Array<!proto.service.ServiceConfig>}
  */
 proto.service.ServiceMetadata.prototype.getConfigsList = function() {
   return /** @type{!Array<!proto.service.ServiceConfig>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.service.ServiceConfig, 4));
+    jspb.Message.getRepeatedWrapperField(this, proto.service.ServiceConfig, 5));
 };
 
 
@@ -315,7 +315,7 @@ proto.service.ServiceMetadata.prototype.getConfigsList = function() {
  * @return {!proto.service.ServiceMetadata} returns this
 */
 proto.service.ServiceMetadata.prototype.setConfigsList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 4, value);
+  return jspb.Message.setRepeatedWrapperField(this, 5, value);
 };
 
 
@@ -325,7 +325,7 @@ proto.service.ServiceMetadata.prototype.setConfigsList = function(value) {
  * @return {!proto.service.ServiceConfig}
  */
 proto.service.ServiceMetadata.prototype.addConfigs = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.service.ServiceConfig, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.service.ServiceConfig, opt_index);
 };
 
 

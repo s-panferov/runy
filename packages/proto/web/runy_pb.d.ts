@@ -6,6 +6,48 @@ import * as process_pb from './process_pb'; // proto import: "process.proto"
 import * as service_pb from './service_pb'; // proto import: "service.proto"
 
 
+export class ReconfigureRequest extends jspb.Message {
+  getWorkspace(): string;
+  setWorkspace(value: string): ReconfigureRequest;
+
+  getResource(): string;
+  setResource(value: string): ReconfigureRequest;
+
+  getConfig(): google_protobuf_struct_pb.Struct | undefined;
+  setConfig(value?: google_protobuf_struct_pb.Struct): ReconfigureRequest;
+  hasConfig(): boolean;
+  clearConfig(): ReconfigureRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReconfigureRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReconfigureRequest): ReconfigureRequest.AsObject;
+  static serializeBinaryToWriter(message: ReconfigureRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReconfigureRequest;
+  static deserializeBinaryFromReader(message: ReconfigureRequest, reader: jspb.BinaryReader): ReconfigureRequest;
+}
+
+export namespace ReconfigureRequest {
+  export type AsObject = {
+    workspace: string,
+    resource: string,
+    config?: google_protobuf_struct_pb.Struct.AsObject,
+  }
+}
+
+export class ReconfigureResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReconfigureResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReconfigureResponse): ReconfigureResponse.AsObject;
+  static serializeBinaryToWriter(message: ReconfigureResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReconfigureResponse;
+  static deserializeBinaryFromReader(message: ReconfigureResponse, reader: jspb.BinaryReader): ReconfigureResponse;
+}
+
+export namespace ReconfigureResponse {
+  export type AsObject = {
+  }
+}
+
 export class GetResourceRequest extends jspb.Message {
   getWorkspace(): string;
   setWorkspace(value: string): GetResourceRequest;
@@ -39,6 +81,11 @@ export class GetResourceResponse extends jspb.Message {
   hasService(): boolean;
   clearService(): GetResourceResponse;
 
+  getConfig(): google_protobuf_struct_pb.Struct | undefined;
+  setConfig(value?: google_protobuf_struct_pb.Struct): GetResourceResponse;
+  hasConfig(): boolean;
+  clearConfig(): GetResourceResponse;
+
   getResourceCase(): GetResourceResponse.ResourceCase;
 
   serializeBinary(): Uint8Array;
@@ -53,6 +100,7 @@ export namespace GetResourceResponse {
   export type AsObject = {
     process?: process_pb.ProcessMetadata.AsObject,
     service?: service_pb.ServiceMetadata.AsObject,
+    config?: google_protobuf_struct_pb.Struct.AsObject,
   }
 
   export enum ResourceCase { 
@@ -521,8 +569,8 @@ export class Flag extends jspb.Message {
   getLabel(): string;
   setLabel(value: string): Flag;
 
-  getValue(): google_protobuf_struct_pb.Value | undefined;
-  setValue(value?: google_protobuf_struct_pb.Value): Flag;
+  getValue(): google_protobuf_struct_pb.Struct | undefined;
+  setValue(value?: google_protobuf_struct_pb.Struct): Flag;
   hasValue(): boolean;
   clearValue(): Flag;
 
@@ -537,7 +585,7 @@ export class Flag extends jspb.Message {
 export namespace Flag {
   export type AsObject = {
     label: string,
-    value?: google_protobuf_struct_pb.Value.AsObject,
+    value?: google_protobuf_struct_pb.Struct.AsObject,
   }
 }
 

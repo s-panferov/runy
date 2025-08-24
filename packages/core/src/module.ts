@@ -109,7 +109,7 @@ export class Workspace {
         service.running = running;
       }
 
-      await service.running.cycle();
+      await service.running.cycle(req.render);
 
       logger.error("Render request processed for service:", req.render.service);
 

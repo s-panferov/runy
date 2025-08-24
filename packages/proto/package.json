@@ -6,14 +6,14 @@
     "generate": "sh ./gen.sh"
   },
   "devDependencies": {
-    "ts-proto": "^2.7.5",
-    "@bufbuild/protobuf": "^2.6.1",
-    "@grpc/grpc-js": "^1.13.4",
-    "grpc-web": "^1.5.0",
-    "protoc-gen-js": "^3.21.4-4",
-    "@types/google-protobuf": "^3.15.12",
-    "google-protobuf": "^3.21.4",
-    "rxjs": "^7.8.2"
+    "ts-proto": "catalog:",
+    "@bufbuild/protobuf": "catalog:",
+    "@grpc/grpc-js": "catalog:",
+    "grpc-web": "catalog:",
+    "protoc-gen-js": "catalog:",
+    "@types/google-protobuf": "catalog:",
+    "google-protobuf": "catalog:",
+    "rxjs": "catalog:"
   },
   "exports": {
     "./web/*": {

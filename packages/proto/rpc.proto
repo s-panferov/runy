@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package rpc;
 
+import "google/protobuf/struct.proto";
 import "process.proto";
 import "runy.proto";
 import "service.proto";
@@ -41,6 +42,7 @@ message Metadata {
 message RenderService {
   string service = 1;
   string cwd = 2;
+  google.protobuf.Struct config = 3;
 }
 
 message StopService {

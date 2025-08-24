@@ -449,5 +449,48 @@ export class RunyClient {
     this.methodDescriptorGetResource);
   }
 
+  methodDescriptorReconfigure = new grpcWeb.MethodDescriptor(
+    '/runy.Runy/Reconfigure',
+    grpcWeb.MethodType.UNARY,
+    runy_pb.ReconfigureRequest,
+    runy_pb.ReconfigureResponse,
+    (request: runy_pb.ReconfigureRequest) => {
+      return request.serializeBinary();
+    },
+    runy_pb.ReconfigureResponse.deserializeBinary
+  );
+
+  reconfigure(
+    request: runy_pb.ReconfigureRequest,
+    metadata?: grpcWeb.Metadata | null): Promise<runy_pb.ReconfigureResponse>;
+
+  reconfigure(
+    request: runy_pb.ReconfigureRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: runy_pb.ReconfigureResponse) => void): grpcWeb.ClientReadableStream<runy_pb.ReconfigureResponse>;
+
+  reconfigure(
+    request: runy_pb.ReconfigureRequest,
+    metadata?: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: runy_pb.ReconfigureResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/runy.Runy/Reconfigure',
+        request,
+        metadata || {},
+        this.methodDescriptorReconfigure,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/runy.Runy/Reconfigure',
+    request,
+    metadata || {},
+    this.methodDescriptorReconfigure);
+  }
+
 }
 

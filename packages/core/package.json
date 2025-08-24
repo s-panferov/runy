@@ -4,9 +4,9 @@
   "private": false,
   "dependencies": {
     "@runy-dev/proto": "workspace:*",
-    "@types/node": "^24.0.15",
-    "execa": "^9.6.0",
-    "winston": "^3.17.0"
+    "@types/node": "catalog:",
+    "execa": "catalog:",
+    "winston": "catalog:"
   },
   "exports": {
     ".": {

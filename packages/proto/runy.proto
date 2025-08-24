@@ -20,7 +20,16 @@ service Runy {
   rpc WorkspaceRemove(WorkspaceRemoveRequest) returns (WorkspaceRemoveResponse);
   rpc Signal(SignalRequest) returns (SignalResponse);
   rpc GetResource(GetResourceRequest) returns (GetResourceResponse);
+  rpc Reconfigure(ReconfigureRequest) returns (ReconfigureResponse);
 }
+
+message ReconfigureRequest {
+  string workspace = 1;
+  string resource = 2;
+  google.protobuf.Struct config = 3;
+}
+
+message ReconfigureResponse {}
 
 message GetResourceRequest {
   string workspace = 1;
@@ -32,6 +41,7 @@ message GetResourceResponse {
     process.ProcessMetadata process = 1;
     service.ServiceMetadata service = 2;
   }
+  google.protobuf.Struct config = 3;
 }
 
 message SignalRequest {
@@ -121,7 +131,7 @@ message TreeProcess {
 
 message Flag {
   string label = 1;
-  google.protobuf.Value value = 2;
+  google.protobuf.Struct value = 2;
 }
 
 message ExecRequest {

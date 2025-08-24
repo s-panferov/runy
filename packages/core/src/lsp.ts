@@ -1,6 +1,11 @@
 import winston from "winston";
 
-import { ProcessSpec, Service, ServiceContext } from "./service.ts";
+import {
+  ConfigValue,
+  ProcessSpec,
+  Service,
+  ServiceContext,
+} from "./service.ts";
 import * as ex from "execa";
 
 import type { JsonRpcFilesetRequest } from "./rpc.ts";
@@ -136,7 +141,8 @@ export class RunningService {
     await this.context.dispose();
   }
 
-  async cycle() {
+  async cycle(req: RenderService) {
+    this.context.req = req;
     this.context.controller.abort();
     this.context.controller = new AbortController();
 
@@ -231,6 +237,10 @@ export class LspServiceContext implements ServiceContext {
     }) as any;
   }
 
+  get<T>(key: ConfigValue<T>): T {
+    return this.req.config?.[key.name] ?? key.defaultValue;
+  }
+
   async process(process: ProcessSpec): Promise<void> {
     if (!process.cwd) {
       process.cwd = this.cwd;
@@ -306,18 +316,5 @@ export class LspServiceContext implements ServiceContext {
     await Promise.allSettled(disposables.map((d) => d.dispose()));
 
     this.controller = new AbortController();
-  }
-
-  async ready() {
-    await lsp.notify("runy/service/ready", {
-      service: this.req.service,
-    });
-  }
-
-  async fileset(glob: string[]): Promise<string[]> {
-    return await lsp.request("runy/service/fileset", {
-      glob,
-      service: this.req.service,
-    } satisfies JsonRpcFilesetRequest);
   }
 }
